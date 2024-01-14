@@ -41,7 +41,7 @@ const LoginForm = () => {
         </span>
       </h3>
       <div className="mt-4 hidden lg:block">
-        <div className="flex justify-between gap-5">
+        <div className="flex justify-between gap-5 font-semibold">
           <span className="flex-1 inline-block border-b-2 h-2 w-full border-black translate-y-[50%]"></span>
           <span className="text-black">New to ThinkSave?</span>
           <span className="flex-1 inline-block border-b-2 h-2 w-full border-black translate-y-[50%]"></span>
