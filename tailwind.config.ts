@@ -16,6 +16,9 @@ const config: Config = {
       colors: {
         "main-blue": "#0E12A2",
         "main-red": "#FE3032",
+        "main-red-accent": "#FFC8C8",
+        "input-bg": "#EDF1FC",
+        black: "#1E1E1E",
       },
     },
   },
