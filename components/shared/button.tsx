@@ -14,7 +14,7 @@ type Props = {
 export const Button: React.FC<Props> = ({ children, color }) => {
   return (
     <button
-      className={`py-1 flex items-center justify-center gap-1 xl:py-2 px-2 lg:px-4 w-fullh rounded-md font-semibold hover:opacity-75 duration-200 text-sm lg:text-base ${buttonColors[color]}`}
+      className={`py-1 flex items-center justify-center gap-1 xl:py-2 px-2 lg:px-4 w-full rounded-md font-semibold hover:opacity-75 duration-200 text-sm lg:text-base ${buttonColors[color]}`}
     >
       {children}
     </button>

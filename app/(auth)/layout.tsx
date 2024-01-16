@@ -4,8 +4,8 @@ import Image from "next/image";
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <section className="grid lg:grid-cols-8">
-      <aside className="hidden lg:block lg:col-span-2">
+    <section className="grid lg:grid-cols-8 items-stretch">
+      <aside className="hidden lg:block lg:col-span-2 h-full">
         <AuthSidebar />
       </aside>
       <main className="lg:col-span-6 min-h-screen">
