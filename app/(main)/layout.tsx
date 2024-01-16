@@ -9,7 +9,9 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           <MainHeader />
         </Container>
       </header>
-      <section className="bg-input-bg flex-1 py-4 lg:py-6">{children}</section>
+      <section className="bg-accent-blue flex-1 py-4 lg:py-6">
+        {children}
+      </section>
     </main>
   );
 };

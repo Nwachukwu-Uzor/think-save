@@ -5,6 +5,8 @@ const buttonColors = {
   "light-red":
     "bg-main-red-accent text-main-red active:ring active:ring-main-red-accent",
   "white-red": "bg-white text-main-red active:ring active:ring-white",
+  "accent-blue": "bg-accent-blue text-main-blue active:ring active:ring-accent-blue",
+  "main-blue": "bg-main-blue text-white active:ring active:ring-main-blue",
 };
 
 type Props = {

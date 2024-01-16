@@ -21,7 +21,7 @@ export const MainHeader = () => {
     <nav className="h-16 lg:h-20 flex items-center justify-center relative">
       <div className="w-full flex justify-between items-center">
         <Image
-          src="/logo.png"
+          src="/assets/images/logo.png"
           alt="logo"
           height={40}
           width={100}
@@ -50,11 +50,11 @@ export const MainHeader = () => {
           </li>
         </ul>
         <ul className="flex items-center gap-2">
-          <li className="p-1.5 rounded-md bg-input-bg">
+          <li className="p-1.5 rounded-md bg-accent-blue">
             <FaRegBell className="text-xl text-main-blue" />
           </li>
           <li
-            className="p-1.5 rounded-md bg-input-bg lg:hidden"
+            className="p-1.5 rounded-md bg-accent-blue lg:hidden"
             onClick={toggleNav}
           >
             <FaBars className="text-xl text-main-blue" />
@@ -62,7 +62,7 @@ export const MainHeader = () => {
           <li className="dropdown dropdown-end hidden lg:list-item">
             <div tabIndex={0} role="button">
               <Image
-                src="/dummy-avatar.png"
+                src="/assets/images/dummy-avatar.png"
                 alt="User"
                 height={20}
                 width={20}
@@ -76,7 +76,7 @@ export const MainHeader = () => {
               <li className=" px-2 py-1.5 border-b border-b-gray-300 rounded-0">
                 <div className="flex items-center gap-2 w-full p-0">
                   <Image
-                    src="/dummy-avatar.png"
+                    src="/assets/images/dummy-avatar.png"
                     alt="User"
                     height={20}
                     width={20}

@@ -1,1 +1,1 @@
-export {} from "./formatNumberWithComma";
+export { formatNumberWithCommas } from "./formatNumberWithCommas";
