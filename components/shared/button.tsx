@@ -10,14 +10,12 @@ type Props = {
   color: keyof typeof buttonColors;
 } & ComponentProps<"button">;
 
-const Button: React.FC<Props> = ({ children, color }) => {
+export const Button: React.FC<Props> = ({ children, color }) => {
   return (
     <button
-      className={`py-1 w-full rounded-md font-semibold hover:opacity-75 duration-100 ${buttonColors[color]}`}
+      className={`py-1 xl:py-2 w-full rounded-md font-semibold hover:opacity-75 duration-100 ${buttonColors[color]}`}
     >
       {children}
     </button>
   );
 };
-
-export default Button;

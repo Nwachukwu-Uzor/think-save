@@ -1,5 +1,5 @@
 import React from "react";
-import TextInput from "../shared/input";
+import { TextInput } from "../shared/input";
 import {
   MdOutlineEmail,
   MdOutlineLock,
@@ -7,13 +7,13 @@ import {
 } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa6";
 import Link from "next/link";
-import Button from "../shared/button";
+import { Button } from "../shared/button";
 
 const RegisterForm = () => {
   return (
     <>
-      <form>
-        <h2 className="hidden lg:block text-xl font-bold mb-3 text-black">
+      <form className="w-full">
+        <h2 className="hidden lg:block text-xl xl:text-3xl font-bold mb-3 text-black">
           Get started on ThinkSave today
         </h2>
         <div className="flex flex-col gap-4 lg:gap-4">
@@ -64,13 +64,15 @@ const RegisterForm = () => {
           <Link href="/login">Login</Link>
         </span>
       </h3>
-      <div className="mt-4 hidden lg:block">
+      <div className="mt-4 hidden lg:block w-full">
         <div className="flex justify-between gap-5">
           <span className="flex-1 inline-block border-b-2 h-2 w-full border-black translate-y-[50%]"></span>
-          <span className="text-black text-sm font-semibold">Already have an account?</span>
+          <span className="text-black text-sm font-semibold">
+            Already have an account?
+          </span>
           <span className="flex-1 inline-block border-b-2 h-2 w-full border-black translate-y-[50%]"></span>
         </div>
-        <div className="mt-4 hidden lg:block">
+        <div className="mt-4 hidden lg:block w-full">
           <Button color="light-red">
             <Link href="/login">Login</Link>
           </Button>

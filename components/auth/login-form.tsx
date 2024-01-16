@@ -1,18 +1,18 @@
 import React from "react";
-import TextInput from "../shared/input";
+import {TextInput} from "../shared/input";
 import {
   MdOutlineEmail,
   MdOutlineLock,
   MdOutlineRemoveRedEye,
 } from "react-icons/md";
 import Link from "next/link";
-import Button from "../shared/button";
+import { Button } from "../shared/button";
 
 const LoginForm = () => {
   return (
     <>
-      <form>
-        <h2 className="hidden lg:block text-xl font-bold mb-3 text-black">
+      <form className="w-full">
+        <h2 className="hidden lg:block text-xl xl:text-3xl font-bold mb-3 text-black">
           Log in to your account
         </h2>
         <div className="flex flex-col gap-4 lg:gap-6">

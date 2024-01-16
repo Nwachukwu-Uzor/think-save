@@ -6,7 +6,7 @@ type Props = {
   rightIcon?: React.ReactNode;
 } & ComponentProps<"input">;
 
-const TextInput: React.FC<Props> = ({
+export const TextInput: React.FC<Props> = ({
   label,
   id,
   rightIcon,
@@ -16,7 +16,7 @@ const TextInput: React.FC<Props> = ({
   return (
     <div className="flex flex-col gap-1.5">
       {label ? (
-        <label htmlFor={id} className="font-semibold text-sm">
+        <label htmlFor={id} className="font-semibold text-sm xl:text-base">
           {label}
         </label>
       ) : null}
@@ -41,5 +41,3 @@ const TextInput: React.FC<Props> = ({
     </div>
   );
 };
-
-export default TextInput;
