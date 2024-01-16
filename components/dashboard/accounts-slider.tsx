@@ -2,7 +2,6 @@
 import React from "react";
 import { AccountSlider } from "./";
 import { Carousel, CarouselItem } from "../shared";
-import Slider from "react-slick";
 
 export const AccountsSlider = () => {
   const savingsArray = [
@@ -28,21 +27,15 @@ export const AccountsSlider = () => {
     { id: 5, type: "Target Saving", title: "Emergency Fund", amount: 1500 },
   ];
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-  };
-
   return (
-    <div>
-      <Slider {...settings}>
+    <div className="relative">
+      <Carousel speed={5000}>
         {savingsArray.map((item) => (
-          <AccountSlider {...item} key={item.id} />
+          <CarouselItem key={item.id}>
+            <AccountSlider {...item} />
+          </CarouselItem>
         ))}
-      </Slider>
+      </Carousel>
     </div>
   );
 };

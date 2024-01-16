@@ -43,10 +43,7 @@ export const Carousel: FC<CarouselProps> = ({ children, speed }) => {
     };
   });
 
-  const handlers = useSwipeable({
-    onSwipedLeft: () => updateIndex(activeIndex + 1),
-    onSwipedRight: () => updateIndex(activeIndex - 1),
-  });
+  const handlers = useSwipeable({});
 
   return (
     <div
@@ -63,7 +60,7 @@ export const Carousel: FC<CarouselProps> = ({ children, speed }) => {
           return React.cloneElement(child, { width: "100%" });
         })}
       </div>
-      {/* <div className="indicators">
+      <div className="indicators">
         {React.Children.map(children, (_child, index) => {
           return (
             <>
@@ -78,7 +75,7 @@ export const Carousel: FC<CarouselProps> = ({ children, speed }) => {
             </>
           );
         })}
-      </div> */}
+      </div>
     </div>
   );
 };

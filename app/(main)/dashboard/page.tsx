@@ -13,8 +13,8 @@ const Dashboard = () => {
         <p className="text-fade my-1 font-medium">
           Hi William Stone, Welcome Back.
         </p>
-        <section className="my-3 lg:my-8 grid lg:grid-cols-5 gap-2 lg:gap-12 w">
-          <article className="col-span-1 lg:col-span-3">
+        <section className="my-3 lg:my-8 grid lg:grid-cols-5 gap-2 lg:gap-12 overflow-hidden">
+          <article className=" lg:col-span-3 overflow-hidden">
             <Card>
               <div className="flex justify-between items-center">
                 <h2 className="text-black text-base lg:text-xl font-bold">
@@ -24,7 +24,7 @@ const Dashboard = () => {
                   View All
                 </button>
               </div>
-              <div className="mt-2 lg:mt-3">
+              <div className="mt-2 lg:mt-3 w-full overflow-hidden">
                 <AccountsSlider />
               </div>
             </Card>
