@@ -28,9 +28,9 @@ export const MainHeader = () => {
           className="h-4 lg:h-6 w-auto"
         />
         <ul
-          className={`fixed top-16 left-0 bottom-0 bg-main-blue lg:bg-transparent ${
+          className={`fixed top-16 z-50 left-0 bottom-0 bg-main-blue lg:bg-transparent ${
             navOpen ? "w-full" : "w-0"
-          } overflow-x-hidden lg:w-full lg:static flex flex-col lg:flex-row justify-center items-center gap-6 lg:gap-3 xl:gap-6 font-semibold text-black text-2xl xl:text-lg duration-50`}
+          } overflow-x-hidden lg:w-full lg:static flex flex-col lg:flex-row justify-center items-center gap-6 lg:gap-3 xl:gap-6 font-semibold text-black text-2xl xl:text-sm duration-50`}
         >
           {navLinks.map(({ id, href, content }) => (
             <li key={id} className="w-full lg:w-auto pl-6 lg:pl-0">

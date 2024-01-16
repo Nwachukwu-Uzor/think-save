@@ -6,12 +6,8 @@ interface CarouselItemProps {
   children: ReactNode;
 }
 
-export const CarouselItem: FC<CarouselItemProps> = ({ children}) => {
-  return (
-    <div className="carousel-item h-full w-full">
-      {children}
-    </div>
-  );
+export const CarouselItem: FC<CarouselItemProps> = ({ children }) => {
+  return <div className="carousel-item h-full w-full">{children}</div>;
 };
 
 interface CarouselProps {
@@ -67,15 +63,13 @@ export const Carousel: FC<CarouselProps> = ({ children, speed }) => {
           return React.cloneElement(child, { width: "100%" });
         })}
       </div>
-      <div className="indicators">
+      {/* <div className="indicators">
         {React.Children.map(children, (_child, index) => {
           return (
             <>
               <span
                 className={`h-[10px] w-[10px] rounded-full cursor-pointer ${
-                  index === activeIndex
-                    ? "bg-white"
-                    : "bg-fade"
+                  index === activeIndex ? "bg-white" : "bg-fade"
                 } duration-150`}
                 onClick={() => {
                   updateIndex(index);
@@ -84,7 +78,7 @@ export const Carousel: FC<CarouselProps> = ({ children, speed }) => {
             </>
           );
         })}
-      </div>
+      </div> */}
     </div>
   );
 };

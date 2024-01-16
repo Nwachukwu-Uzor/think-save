@@ -18,7 +18,7 @@ export const AccountSlider: React.FC<Props> = ({
 }) => {
   return (
     <div
-      className="text-white bg-main-red rounded-md px-2 lg:px-3 py-3 lg:py-6 w-full"
+      className="text-white bg-main-red rounded-md px-2 lg:px-3 py-3 lg:py-6"
       {...rest}
     >
       <p className="text-sm lg:text-base text-fade font-semibold text-right">
@@ -28,7 +28,7 @@ export const AccountSlider: React.FC<Props> = ({
       <h3 className="text-lg lg:text-2xl xl:text-3xl font-bold mt-1 mb-3 lg:mb-5">
         N {amount}
       </h3>
-      <div className="flex justify-between items-center">
+      <div className="max-w-[200px]">
         <Button color="white-red">
           <FaPlus /> Add Account
         </Button>
