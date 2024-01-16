@@ -1,5 +1,5 @@
-import { MainHeader } from "@/components/main/main-header";
-import { Container } from "@/components/shared/container";
+import { MainHeader } from "@/components/main/";
+import { Container } from "@/components/shared/";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (

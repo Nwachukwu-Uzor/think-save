@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 
-const AuthSidebar = () => {
+export const AuthSidebar = () => {
   return (
     <div className="w-full bg-main-blue h-screen relative">
       <div className="absolute bottom-0 left-2 right-2">
@@ -21,5 +21,3 @@ const AuthSidebar = () => {
     </div>
   );
 };
-
-export default AuthSidebar;

@@ -1,6 +1,6 @@
-import AuthSidebar from "@/components/auth/auth-sidebar";
-import Image from "next/image";
 import React from "react";
+import { AuthSidebar } from "@/components/auth/";
+import Image from "next/image";
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (

@@ -1,14 +1,14 @@
 import React from "react";
-import {TextInput} from "../shared/input";
+import {TextInput} from "../shared/";
 import {
   MdOutlineEmail,
   MdOutlineLock,
   MdOutlineRemoveRedEye,
 } from "react-icons/md";
 import Link from "next/link";
-import { Button } from "../shared/button";
+import { Button } from "../shared/";
 
-const LoginForm = () => {
+export const LoginForm = () => {
   return (
     <>
       <form className="w-full">
@@ -60,5 +60,3 @@ const LoginForm = () => {
     </>
   );
 };
-
-export default LoginForm;

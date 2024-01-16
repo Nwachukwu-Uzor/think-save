@@ -1,5 +1,5 @@
 import React from "react";
-import { TextInput } from "../shared/input";
+import { TextInput } from "../shared/";
 import {
   MdOutlineEmail,
   MdOutlineLock,
@@ -7,9 +7,9 @@ import {
 } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa6";
 import Link from "next/link";
-import { Button } from "../shared/button";
+import { Button } from "../shared/";
 
-const RegisterForm = () => {
+export const RegisterForm = () => {
   return (
     <>
       <form className="w-full">
@@ -86,5 +86,3 @@ const RegisterForm = () => {
     </>
   );
 };
-
-export default RegisterForm;

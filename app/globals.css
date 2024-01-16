@@ -2,7 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
   min-height: 100vh;
+}
+
+.carousel {
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.inner {
+  white-space: nowrap;
+  transition: transform 0.3s;
+  height: 100%;
+  width: 100%;
+}
+
+.carousel-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.indicators {
+  display: flex;
+  justify-content: flex-end;
+  position: absolute;
+  gap: 4px;
+  right: 10px;
+  bottom: 10px;
+}
+
+.indicators > button {
+  margin: 5px;
 }
