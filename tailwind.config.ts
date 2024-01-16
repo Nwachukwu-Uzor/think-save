@@ -19,6 +19,7 @@ const config: Config = {
         "main-red-accent": "#FFC8C8",
         "input-bg": "#EDF1FC",
         black: "#1E1E1E",
+        fade: "#B7B7B7"
       },
     },
   },

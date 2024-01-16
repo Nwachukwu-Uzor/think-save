@@ -18,7 +18,7 @@ export const MainHeader = () => {
     setNavOpen((opened) => !opened);
   };
   return (
-    <nav className="h-16 flex items-center justify-center relative">
+    <nav className="h-16 lg:h-20 flex items-center justify-center relative">
       <div className="w-full flex justify-between items-center">
         <Image
           src="/logo.png"
