@@ -9,7 +9,7 @@ const Register = () => {
           Get started today
         </h2>
       </div>
-      <div className="flex-1 flex flex-col lg:justify-center items-center pt-20 lg:pt-12 xl:pt-15 w-[95%] max-w-[400px] xl:max-w-[600px]">
+      <div className="flex-1 flex flex-col lg:justify-center items-center pt-20 lg:pt-12 xl:pt-15 w-[95%] max-w-[400px]">
         <RegisterForm />
       </div>
     </article>

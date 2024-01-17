@@ -16,7 +16,7 @@ export const TextInput: React.FC<Props> = ({
   return (
     <div className="flex flex-col gap-1.5">
       {label ? (
-        <label htmlFor={id} className="font-semibold text-sm xl:text-base">
+        <label htmlFor={id} className="font-semibold text-sm">
           {label}
         </label>
       ) : null}
@@ -28,7 +28,7 @@ export const TextInput: React.FC<Props> = ({
         ) : null}
         <input
           {...props}
-          className={`relative w-full bg-accent-blue py-2 px-2 focus:border-none focus:outline-none focus:ring-[0.5px] focus:ring-main-blue rounded-md duration-50 ${
+          className={`relative w-full bg-accent-blue py-1.5 px-2 focus:border-none focus:outline-none focus:ring-[0.5px] focus:ring-main-blue rounded-md duration-50 ${
             rightIcon ? "pr-6" : ""
           } ${leftIcon ? "pl-6" : ""}`}
         />
@@ -41,3 +41,5 @@ export const TextInput: React.FC<Props> = ({
     </div>
   );
 };
+
+

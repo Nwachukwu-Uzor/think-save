@@ -1,6 +1,11 @@
-import React from "react";
+"use client";
+import React, { useRef } from "react";
 import { FaPlus } from "react-icons/fa";
-import { InvestmentAccounts, UserDetails } from "@/components/profile";
+import {
+  EditProfileModalContent,
+  InvestmentAccounts,
+  UserDetails,
+} from "@/components/profile";
 import { Button, Card, Container } from "@/components/shared";
 
 const Profile = () => {
@@ -89,13 +94,34 @@ const Profile = () => {
     },
   ];
 
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const handleEditBtnClick = () => {
+    const element = document.getElementById("my_modal_1") as HTMLElement & {
+      showModal: () => void;
+    };
+
+    if (element) {
+      element.showModal();
+    }
+  };
+
+  const handleCloseModal = () => {
+    if (buttonRef.current) {
+      buttonRef.current.click();
+    }
+  };
+
   return (
     <>
       <Container>
         <section className="grid lg:grid-cols-7 xl:grid-cols-8 gap-2 lg:gap-3 items-start justify-between">
           <div className="lg:col-span-3">
             <Card>
-              <UserDetails user={dummyUser} />
+              <UserDetails
+                user={dummyUser}
+                handleEditBtnClick={handleEditBtnClick}
+              />
             </Card>
           </div>
           <div className="lg:col-span-4 xl:col-span-5">
@@ -120,6 +146,19 @@ const Profile = () => {
           </div>
         </section>
       </Container>
+      <dialog id="my_modal_1" className="modal">
+        <div className="modal-box w-[90%] max-w-[800px] overflow-y-scroll no-scrollbar">
+          <EditProfileModalContent
+            userDetails={dummyUser}
+            handleClose={handleCloseModal}
+          />
+          <div className="modal-action">
+            <form method="dialog" className="hidden">
+              <button ref={buttonRef}>close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </>
   );
 };

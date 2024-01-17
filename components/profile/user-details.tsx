@@ -5,8 +5,9 @@ import { UserType } from "@/types/shared";
 import { Button } from "../shared";
 import { Detail } from ".";
 
-type Props = { user: UserType };
-export const UserDetails: React.FC<Props> = ({ user }) => {
+type Props = { user: UserType; handleEditBtnClick: () => void };
+
+export const UserDetails: React.FC<Props> = ({ user, handleEditBtnClick }) => {
   const {
     avatarUrl,
     firstName,
@@ -37,7 +38,7 @@ export const UserDetails: React.FC<Props> = ({ user }) => {
         } ${lastName}`}</h3>
         <p className="text-xs lg:text-sm text-fade font-semibold">{email}</p>
         <div className="w-full max-w-[200px] mt-2">
-          <Button color="main-blue">
+          <Button color="main-blue" onClick={handleEditBtnClick}>
             <MdOutlineEdit /> Edit Profile
           </Button>
         </div>

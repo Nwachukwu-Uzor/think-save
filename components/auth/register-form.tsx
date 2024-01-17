@@ -13,7 +13,7 @@ export const RegisterForm = () => {
   return (
     <>
       <form className="w-full">
-        <h2 className="hidden lg:block text-xl xl:text-3xl font-bold mb-3 text-black">
+        <h2 className="hidden lg:block  lg:text-lg xl:text-2xl font-bold mb-3 text-black">
           Get started on ThinkSave today
         </h2>
         <div className="flex flex-col gap-4 lg:gap-4">
