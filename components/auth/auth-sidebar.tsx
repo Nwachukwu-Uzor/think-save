@@ -11,7 +11,7 @@ export const AuthSidebar = () => {
           Save
         </h2>
         <Image
-          src="/think-save.png"
+          src="/assets/images/think-save.png"
           alt="Think Save"
           width={200}
           height={200}
