@@ -1,6 +1,6 @@
 import React from "react";
 import { Transaction } from ".";
-import { Transaction as TransactionType } from "@/utils/types/dashboard";
+import { Transaction as TransactionType } from "@/types/dashboard";
 
 type Props = {
   transactions: TransactionType[];
