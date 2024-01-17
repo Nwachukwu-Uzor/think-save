@@ -2,14 +2,15 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FaRegBell, FaBars } from "react-icons/fa6";
+import { FaRegBell, FaBars, FaRegUser } from "react-icons/fa6";
+import { IoLogOutOutline } from "react-icons/io5";
 
 export const MainHeader = () => {
   const navLinks = [
-    { id: 1, content: <>Dashboard</>, href: "" },
-    { id: 2, content: <>Accounts</>, href: "" },
-    { id: 3, content: <>Plans</>, href: "" },
-    { id: 4, content: <>Transactions</>, href: "" },
+    { id: 1, content: <>Dashboard</>, href: "/dashboard" },
+    { id: 2, content: <>Accounts</>, href: "/accounts" },
+    { id: 3, content: <>Plans</>, href: "/plans" },
+    { id: 4, content: <>Transactions</>, href: "/transactions" },
   ];
 
   const [navOpen, setNavOpen] = useState(false);
@@ -17,6 +18,8 @@ export const MainHeader = () => {
   const toggleNav = () => {
     setNavOpen((opened) => !opened);
   };
+
+  const handleLogout = () => {};
   return (
     <nav className="h-16 lg:h-20 flex items-center justify-center relative">
       <div className="w-full flex justify-between items-center">
@@ -43,10 +46,10 @@ export const MainHeader = () => {
             </li>
           ))}
           <li className="text-white lg:hidden hover:opacity-75 w-full pl-6">
-            <button>Profile</button>
+            <Link href="/profile">Profile</Link>
           </li>
           <li className="text-white lg:hidden hover:opacity-75 w-full pl-6">
-            <button>Logout</button>
+            <button onClick={handleLogout}>Logout</button>
           </li>
         </ul>
         <ul className="flex items-center gap-2">
@@ -71,7 +74,7 @@ export const MainHeader = () => {
             </div>
             <ul
               tabIndex={0}
-              className="dropdown-content z-[1] menu shadow px-0 border-[0.5px] bg-base-100 rounded-box min-w-56 w-fit"
+              className="dropdown-content z-[1] menu shadow px-0 border-[0.5px] bg-base-100 rounded-md min-w-56 w-fit"
             >
               <li className=" px-2 py-1.5 border-b border-b-gray-300 rounded-0">
                 <div className="flex items-center gap-2 w-full p-0">
@@ -88,8 +91,15 @@ export const MainHeader = () => {
                   </div>
                 </div>
               </li>
-              <li>
-                <a>Item 2</a>
+              <li className="font-semibold py-1 border-b border-b-gray-300">
+                <Link href="/profile">
+                  <FaRegUser /> Profile
+                </Link>
+              </li>
+              <li className="font-semibold py-1">
+                <button onClick={handleLogout}>
+                  <IoLogOutOutline className="text-xl" /> Logout
+                </button>
               </li>
             </ul>
           </li>
