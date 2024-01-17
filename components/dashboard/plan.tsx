@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Plan as PlanType } from "@/types/dashboard";
+import {  PlanType } from "@/types/dashboard";
 
 type Props = PlanType & {};
 export const Plan: React.FC<Props> = ({ name, iconSrc }) => {

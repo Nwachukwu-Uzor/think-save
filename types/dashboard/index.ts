@@ -1,2 +1,2 @@
-export type { Transaction } from "./transaction";
-export type { Plan } from "./plan";
+export type { TransactionType } from "./transaction-type";
+export type { PlanType } from "./plan-type";
