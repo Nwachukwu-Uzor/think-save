@@ -11,6 +11,7 @@ import { Button, Card, Container } from "@/components/shared";
 const Profile = () => {
   const dummyUser = {
     id: 1,
+    dateCreated: "6/29/2023",
     firstName: "John",
     email: "jeffwilson@example.com",
     middleName: "Doe",
