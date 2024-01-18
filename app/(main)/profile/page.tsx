@@ -115,8 +115,8 @@ const Profile = () => {
   return (
     <>
       <Container>
-        <section className="grid lg:grid-cols-7 xl:grid-cols-8 gap-2 lg:gap-3 items-start justify-between">
-          <div className="lg:col-span-3">
+        <section className="grid grid-cols-1 lg:grid-cols-7 xl:grid-cols-8 gap-2 lg:gap-3 items-start justify-between ">
+          <div className="col-span-1 lg:col-span-3">
             <Card>
               <UserDetails
                 user={dummyUser}
@@ -124,7 +124,7 @@ const Profile = () => {
               />
             </Card>
           </div>
-          <div className="lg:col-span-4 xl:col-span-5">
+          <div className="col-span-1 lg:col-span-4 xl:col-span-5">
             <Card>
               <div className="flex justify-between items-center">
                 <h2 className="text-black font-bold mb-2">

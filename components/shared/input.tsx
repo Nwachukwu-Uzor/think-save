@@ -28,7 +28,7 @@ export const TextInput: React.FC<Props> = ({
         ) : null}
         <input
           {...props}
-          className={`relative w-full bg-accent-blue py-1.5 px-2 focus:border-none focus:outline-none focus:ring-[0.5px] focus:ring-main-blue rounded-md duration-50 ${
+          className={`relative w-full bg-accent-blue py-1.5 px-2 focus:border-none focus:outline-none focus:ring-[0.5px] focus:ring-main-blue rounded-md duration-50 placeholder:opacity-70 placeholder:text-xs placeholder:text-fade ${
             rightIcon ? "pr-6" : ""
           } ${leftIcon ? "pl-6" : ""}`}
         />

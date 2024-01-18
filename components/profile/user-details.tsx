@@ -25,7 +25,7 @@ export const UserDetails: React.FC<Props> = ({ user, handleEditBtnClick }) => {
   } = user;
   return (
     <>
-      <div className="flex flex-col items-center justify-center gap-0.5">
+      <div className="w-full flex flex-col items-center justify-center gap-0.5">
         <Image
           src={avatarUrl}
           alt="Think Save"
