@@ -36,7 +36,9 @@ export const EditProfileModalContent: React.FC<Props> = ({
   return (
     <>
       <div className="flex justify-between items-center">
-        <h3 className="text-sm lg:text-base text-black font-bold">Edit Profile</h3>
+        <h3 className="text-sm lg:text-base text-black font-bold">
+          Edit Profile
+        </h3>
         <MdClose onClick={handleClose} className="text-xl cursor-pointer" />
       </div>
       <div className="grid lg:grid-cols-2 gap-2 lg:gap-4 mt-6">
@@ -94,10 +96,7 @@ export const EditProfileModalContent: React.FC<Props> = ({
               </div>
             </div>
             <TextInput label="State" value={state} />
-            <TextInput
-              label="Mother's Maiden Name"
-              value={userDetails["mother's-maiden-name"]}
-            />
+            <TextInput label="Mother's Maiden Name" value={userDetails.mmn} />
             <div className="max-w-[150px] ml-auto mt-4">
               <Button color="main-blue">Update</Button>
             </div>

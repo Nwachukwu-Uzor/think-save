@@ -9,9 +9,11 @@ export type UserType = {
   gender: string;
   dob: string;
   city: string;
-  "mother's-maiden-name": string;
+  mmn: string;
   address: string;
   avatarUrl: string;
   nationality: string;
   state: string;
+  joined?: string;
+  dateCreated: string;
 };

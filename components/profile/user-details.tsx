@@ -51,10 +51,7 @@ export const UserDetails: React.FC<Props> = ({ user, handleEditBtnClick }) => {
         <Detail title="Nationality" value={nationality} />
         <Detail title="State" value={state} />
         <Detail title="City" value={city} />
-        <Detail
-          title="Mother's Maiden Name"
-          value={user["mother's-maiden-name"]}
-        />
+        <Detail title="Mother's Maiden Name" value={user.mmn} />
         <div className="lg:col-span-2">
           <Detail title="Address" value={address} />
         </div>

@@ -20,7 +20,7 @@ const Profile = () => {
     gender: "Male",
     dob: "Jun., 03, 2023",
     city: "New York",
-    "mother's-maiden-name": "Johnson",
+    mmn: "Johnson",
     address: "123 Main Street",
     avatarUrl: "/assets/images/dummy-avatar.png",
     nationality: "Nigerian",
@@ -147,7 +147,7 @@ const Profile = () => {
         </section>
       </Container>
       <dialog id="my_modal_1" className="modal">
-        <div className="modal-box w-[90%] max-w-[800px] overflow-y-scroll no-scrollbar">
+        <div className="modal-box w-[90%] max-w-[800px] overflow-y-scroll no-scrollbar bg-white">
           <EditProfileModalContent
             userDetails={dummyUser}
             handleClose={handleCloseModal}
