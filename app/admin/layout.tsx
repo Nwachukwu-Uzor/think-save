@@ -42,6 +42,16 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     },
     {
       id: 4,
+      label: "Plans",
+      content: (
+        <>
+          <RxDashboard /> Plans
+        </>
+      ),
+      href: "/admin/plans",
+    },
+    {
+      id: 4,
       label: "Transactions",
       content: (
         <>
@@ -70,7 +80,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
             <li key={navItem.id}>
               <Link
                 href={navItem.href}
-                className="flex items-center gap-2 px-4 text-black lg:text-lg font-semibold"
+                className="flex items-center gap-2 px-4 text-black font-semibold"
               >
                 {navItem.content}
               </Link>

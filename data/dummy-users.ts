@@ -1,6 +1,4 @@
-import { UserType } from "@/types/shared";
-
-export const dummyUsers: UserType[] = [
+export const dummyUsers = [
   {
     id: 1,
     firstName: "Kenneth",

@@ -136,13 +136,6 @@ export function Table({ data, columns, searchPosition = "left" }: Props<any>) {
       <div className="flex items-center gap-2 mt-4">
         <button
           className="border rounded p-1"
-          onClick={() => setPageIndex(0)}
-          disabled={!getCanPreviousPage()}
-        >
-          {"<<"}
-        </button>
-        <button
-          className="border rounded p-1"
           onClick={() => previousPage()}
           disabled={!getCanPreviousPage()}
         >
@@ -159,13 +152,6 @@ export function Table({ data, columns, searchPosition = "left" }: Props<any>) {
           disabled={!getCanNextPage()}
         >
           {">"}
-        </button>
-        <button
-          className="border rounded p-1"
-          onClick={() => setPageIndex(getPageCount() - 1)}
-          disabled={!getCanNextPage()}
-        >
-          {">>"}
         </button>
         <select
           value={getState().pagination.pageSize}

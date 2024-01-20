@@ -31,7 +31,7 @@ export const Pagination: React.FC<Props> = ({
       return lastGroup;
     }
     lastGroup.unshift(totalPages - 1);
-    return lastGroup;
+    return lastGroup.filter((item) => !firstGroup.includes(item));
   };
 
   const getMiddleGroup = () => {
@@ -79,7 +79,11 @@ export const Pagination: React.FC<Props> = ({
 
     // Remove pages in the middle group that are in the first or last group
     const filteredMiddleGroup = middleGroup.filter(
-      (page) => page > firstGroup[firstGroup.length - 1] && page < lastGroup[0]
+      (page) =>
+        !firstGroup.includes(page) &&
+        !lastGroup.includes(page) &&
+        page <= totalPages &&
+        page > 0
     );
 
     return filteredMiddleGroup;
@@ -88,6 +92,8 @@ export const Pagination: React.FC<Props> = ({
   const firstGroup = getFirstGroup();
   const lastGroup = getLastGroup();
   const middleGroup = getMiddleGroup();
+  console.log({ firstGroup, middleGroup, lastGroup, totalPages });
+
   return (
     <div className="flex items-center gap-1">
       {firstGroup.map((page) => (
