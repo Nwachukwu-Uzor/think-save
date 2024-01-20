@@ -1,13 +1,13 @@
 import React from "react";
 import Image from "next/image";
-import {  PlanType } from "@/types/dashboard";
+import { PlanType } from "@/types/dashboard";
 
 type Props = PlanType & {};
 export const Plan: React.FC<Props> = ({ name, iconSrc }) => {
   return (
-    <div className="bg-accent-blue px-3 lg:px-4 py-2 py-4 text-black rounded-md flex flex-col gap-4 lg:gap-8">
+    <div className="bg-accent-blue px-3 lg:px-4 py-4 text-black rounded-md flex flex-col gap-4 lg:gap-8">
       <Image
-        src={iconSrc}
+        src={iconSrc ? iconSrc : " "}
         alt="Think Save"
         height={20}
         width={20}
