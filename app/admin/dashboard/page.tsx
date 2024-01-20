@@ -15,7 +15,7 @@ const Dashboard = () => {
     plans: 6,
   };
 
-  const columns = useMemo<ColumnDef<UserType>[]>(
+  const columns = useMemo<ColumnDef<UserType, any>[]>(
     () => [
       { header: "Name", accessorKey: "firstName" },
       { header: "Email", accessorKey: "email" },

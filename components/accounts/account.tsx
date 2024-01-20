@@ -3,7 +3,7 @@ import Image from "next/image";
 import { CgExpand } from "react-icons/cg";
 import { AccountType } from "@/types/shared";
 import { Card } from "../shared";
-import { formatNumberWithCommas } from "@/utils";
+import { formatNumberWithCommas } from "@/utils/shared";
 
 type Props = {
   account: AccountType;

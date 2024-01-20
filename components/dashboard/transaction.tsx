@@ -1,8 +1,8 @@
 import React from "react";
-import { TransactionType  } from "@/types/dashboard";
+import { TransactionType } from "@/types/dashboard";
 import { IoReceiptOutline } from "react-icons/io5";
 import Image from "next/image";
-import { formatNumberWithCommas } from "@/utils";
+import { formatNumberWithCommas } from "@/utils/shared";
 
 type Props = {} & TransactionType;
 

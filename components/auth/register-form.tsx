@@ -50,7 +50,7 @@ export const RegisterForm = () => {
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
-              className="rounded text-main-blue bg-accent-blue"
+              className="rounded text-main-blue bg-accent-blue border-0 outline-none cursor-pointer"
             />
             <h2 className="text-xs font-semibold text-black">
               I agree to the Terms of Service and Privacy Policy.

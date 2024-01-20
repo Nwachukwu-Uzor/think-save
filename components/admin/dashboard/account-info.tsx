@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { formatNumberWithCommas } from "@/utils";
+import { formatNumberWithCommas } from "@/utils/shared";
 
 type Props = {
   iconsUrl: string;

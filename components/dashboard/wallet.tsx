@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
-import { formatNumberWithCommas } from "@/utils";
+import { formatNumberWithCommas } from "@/utils/shared";
 import { Button } from "../shared";
 
 type Props = {

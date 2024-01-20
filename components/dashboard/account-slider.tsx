@@ -1,7 +1,7 @@
 import React, { ComponentProps } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { Button } from "../shared/";
-import { formatNumberWithCommas } from "@/utils";
+import { formatNumberWithCommas } from "@/utils/shared";
 
 type Props = {
   id: number;

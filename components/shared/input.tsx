@@ -22,18 +22,18 @@ export const TextInput: React.FC<Props> = ({
       ) : null}
       <div className="relative">
         {leftIcon ? (
-          <span className="absolute left-1 text-lg z-20 top-[50%] -translate-y-[50%] text-[#1C1B1F]">
+          <span className="absolute left-1 z-20 top-[50%] -translate-y-[50%] text-fade">
             {leftIcon}
           </span>
         ) : null}
         <input
           {...props}
-          className={`relative w-full bg-accent-blue py-1.5 px-2 focus:border-none focus:outline-none focus:ring-[0.5px] focus:ring-main-blue rounded-md duration-50 placeholder:opacity-70 placeholder:text-xs placeholder:text-fade ${
+          className={`relative w-full bg-accent-blue py-1.5 px-2 border-none outline-none focus:border-none focus:outline-none focus:ring-[0.5px] focus:ring-main-blue rounded-md duration-50 placeholder:opacity-70 placeholder:text-xs placeholder:text-fade ${
             rightIcon ? "pr-6" : ""
           } ${leftIcon ? "pl-6" : ""}`}
         />
         {rightIcon ? (
-          <span className="absolute right-1 text-lg z-20 top-[50%] -translate-y-[50%] text-[#1C1B1F]">
+          <span className="absolute right-1 z-20 top-[50%] -translate-y-[50%] text-fade">
             {rightIcon}
           </span>
         ) : null}
@@ -41,5 +41,3 @@ export const TextInput: React.FC<Props> = ({
     </div>
   );
 };
-
-
