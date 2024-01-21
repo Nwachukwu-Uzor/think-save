@@ -92,7 +92,6 @@ export const Pagination: React.FC<Props> = ({
   const firstGroup = getFirstGroup();
   const lastGroup = getLastGroup();
   const middleGroup = getMiddleGroup();
-  console.log({ firstGroup, middleGroup, lastGroup, totalPages });
 
   return (
     <div className="flex items-center gap-1">

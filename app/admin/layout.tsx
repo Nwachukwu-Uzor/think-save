@@ -1,13 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation"
 import Image from "next/image";
 import { RxDashboard } from "react-icons/rx";
-import { IoMenu } from "react-icons/io5";
 import { useSidebarContext } from "@/context/admin/sidebar";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const { open } = useSidebarContext();
+  const currentRoute = usePathname();
 
   const navItems = [
     {
@@ -77,10 +78,10 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
         />
         <ul className="flex-1 overflow-auto flex flex-col lg:px-8 gap-4 lg:gap-8">
           {navItems.map((navItem) => (
-            <li key={navItem.id}>
+            <li key={navItem.id} className={`${currentRoute === navItem.href ? "bg-accent-blue text-main-blue" : "bg-transparent text-black"} py-2 lg:rounded-md duration-200`}>
               <Link
                 href={navItem.href}
-                className="flex items-center gap-2 px-4 text-black font-semibold"
+                className="flex items-center gap-2 px-4 font-semibold"
               >
                 {navItem.content}
               </Link>

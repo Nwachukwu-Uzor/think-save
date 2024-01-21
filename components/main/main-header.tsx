@@ -2,10 +2,12 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { FaRegBell, FaBars, FaRegUser } from "react-icons/fa6";
 import { IoLogOutOutline } from "react-icons/io5";
 
 export const MainHeader = () => {
+  const currentRoute = usePathname();
   const navLinks = [
     { id: 1, content: <>Dashboard</>, href: "/dashboard" },
     { id: 2, content: <>Accounts</>, href: "/accounts" },
@@ -15,7 +17,7 @@ export const MainHeader = () => {
 
   const [navOpen, setNavOpen] = useState(false);
 
-  const toggleNav = () => {
+  const handleToggleNav = () => {
     setNavOpen((opened) => !opened);
   };
 
@@ -36,16 +38,30 @@ export const MainHeader = () => {
           } overflow-x-hidden lg:w-full lg:static flex flex-col lg:flex-row justify-center items-center gap-6 lg:gap-3 xl:gap-6 font-semibold text-black text-2xl xl:text-sm duration-50`}
         >
           {navLinks.map(({ id, href, content }) => (
-            <li key={id} className="w-full lg:w-auto pl-6 lg:pl-0">
+            <li
+              key={id}
+              className={`w-full py-2 lg:py-0 lg:w-auto pl-6 lg:pl-0 ${
+                href === currentRoute
+                  ? "bg-white text-main-blue"
+                  : "text-white lg:text-black"
+              }`}
+              onClick={handleToggleNav}
+            >
               <Link
                 href={href}
-                className="text-white lg:text-black hover:opacity-75 lg:hover:opacity-90 lg:hover:text-main-blue"
+                className="hover:opacity-75 lg:hover:opacity-90 lg:hover:text-main-blue"
               >
                 {content}
               </Link>
             </li>
           ))}
-          <li className="text-white lg:hidden hover:opacity-75 w-full pl-6">
+          <li
+            className={`py-2 lg:hidden hover:opacity-75 w-full pl-6 ${
+              currentRoute === "/profile"
+                ? "bg-white text-main-blue"
+                : "text-white lg:text-black"
+            }`}
+          >
             <Link href="/profile">Profile</Link>
           </li>
           <li className="text-white lg:hidden hover:opacity-75 w-full pl-6">
@@ -58,7 +74,7 @@ export const MainHeader = () => {
           </li>
           <li
             className="p-1.5 rounded-md bg-accent-blue lg:hidden"
-            onClick={toggleNav}
+            onClick={handleToggleNav}
           >
             <FaBars className="text-xl text-main-blue" />
           </li>
@@ -91,7 +107,13 @@ export const MainHeader = () => {
                   </div>
                 </div>
               </li>
-              <li className="font-semibold py-1 border-b border-b-gray-300">
+              <li
+                className={`font-semibold py-1 border-b border-b-gray-300 ${
+                  currentRoute === "/profile"
+                    ? "bg-white text-main-blue"
+                    : "text-white lg:text-black"
+                }`}
+              >
                 <Link href="/profile">
                   <FaRegUser /> Profile
                 </Link>

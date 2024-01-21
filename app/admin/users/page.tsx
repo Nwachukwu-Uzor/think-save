@@ -22,7 +22,7 @@ const Users = () => {
     <>
       <PageHeader title="Users" />
       <Container>
-        <div className="relative z-30 -translate-y-[40px]">
+        <div className="relative -translate-y-[40px]">
           <Card>
             <div className="">
               <Table data={dummyUsers} columns={columns} />

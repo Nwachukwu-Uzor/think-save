@@ -33,7 +33,7 @@ const Dashboard = () => {
         subTitle="Hi William Stone, Welcome Back."
       />
       <Container>
-        <div className="relative z-30 -translate-y-[40px]">
+        <div className="relative -translate-y-[40px]">
           <Card>
             <AccountsAndUsers stats={dummyAccountsAndUsers} />
           </Card>
