@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
+import { z } from "zod";
 import { TextInput } from "../shared/";
 import {
   MdOutlineEmail,
@@ -7,11 +9,43 @@ import {
 } from "react-icons/md";
 import Link from "next/link";
 import { Button } from "../shared/";
+import { IoEyeOffOutline } from "react-icons/io5";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const schema = z.object({
+  email: z
+    .string({
+      required_error: "Email is required",
+    })
+    .email({ message: "Please provide a valid email address" }),
+  password: z
+    .string()
+    .min(8, { message: "Password should be at least 8 characters" }),
+});
+
+type FormFields = z.infer<typeof schema>;
 
 export const LoginForm = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormFields>({
+    resolver: zodResolver(schema),
+  });
+
+  const handleToggleShowPassword = () => {
+    setShowPassword((shown) => !shown);
+  };
+  const onSubmit: SubmitHandler<FormFields> = (data) => {
+    console.log(data);
+  };
+
   return (
     <>
-      <form className="w-full">
+      <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
         <h2 className="hidden lg:block lg:text-lg xl:text-2xl font-bold mb-3 text-black">
           Log in to your account
         </h2>
@@ -21,15 +55,22 @@ export const LoginForm = () => {
             placeholder="Email"
             leftIcon={<MdOutlineEmail />}
             id="email"
-            name="email"
+            {...register("email")}
+            error={errors.email?.message}
           />
           <TextInput
             label="Password"
             placeholder="Password"
             leftIcon={<MdOutlineLock />}
-            rightIcon={<MdOutlineRemoveRedEye />}
+            type={showPassword ? "text" : "password"}
+            rightIcon={
+              <span onClick={handleToggleShowPassword}>
+                {showPassword ? <IoEyeOffOutline /> : <MdOutlineRemoveRedEye />}
+              </span>
+            }
             id="password"
-            name="password"
+            {...register("password")}
+            error={errors.password?.message}
           />
           <Button color="red">Login</Button>
         </div>

@@ -1,18 +1,20 @@
-import React, { ComponentProps } from "react";
+import React, {
+  forwardRef,
+  ForwardRefRenderFunction,
+  ComponentProps,
+} from "react";
 
 type Props = {
   label?: string;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
+  error?: string;
 } & ComponentProps<"input">;
 
-export const TextInput: React.FC<Props> = ({
-  label,
-  id,
-  rightIcon,
-  leftIcon,
-  ...props
-}) => {
+const TextInput: ForwardRefRenderFunction<HTMLInputElement, Props> = (
+  { label, id, rightIcon, leftIcon, error, ...props },
+  ref
+) => {
   return (
     <div className="flex flex-col gap-1.5">
       {label ? (
@@ -28,6 +30,7 @@ export const TextInput: React.FC<Props> = ({
         ) : null}
         <input
           {...props}
+          ref={ref} // Forward the ref to the input element
           className={`relative w-full bg-accent-blue py-1.5 px-2 border-none outline-none focus:border-none focus:outline-none focus:ring-[0.5px] focus:ring-main-blue rounded-md duration-50 placeholder:opacity-70 placeholder:text-xs placeholder:text-fade ${
             rightIcon ? "pr-6" : ""
           } ${leftIcon ? "pl-6" : ""}`}
@@ -38,6 +41,9 @@ export const TextInput: React.FC<Props> = ({
           </span>
         ) : null}
       </div>
+      <p className="h-1 mt-0.5 text-red-500 text-xs">{error}</p>
     </div>
   );
 };
+
+export default forwardRef(TextInput);
