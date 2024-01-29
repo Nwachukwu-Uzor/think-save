@@ -10,13 +10,14 @@ type Props = {
 };
 
 export const Account: React.FC<Props> = ({ account }) => {
+  const { accountName } = account;
   return (
     <Card>
       <div className="my-2 flex justify-end text-xl text-main-blue">
         <CgExpand />
       </div>
       <h3 className="text-sm lg:text-lg text-main-blue font-bold my-1">
-        {(account, accountName)}
+        {accountName}
       </h3>
       <p className="text-xs lg:text-sm text-fade font-semibold">
         {account.productName}
