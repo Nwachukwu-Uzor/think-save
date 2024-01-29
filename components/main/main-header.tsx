@@ -1,10 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaRegBell, FaBars, FaRegUser } from "react-icons/fa6";
 import { IoLogOutOutline } from "react-icons/io5";
+import { SESSION_STORAGE_KEY } from "@/config";
+import { UserType } from "@/types/shared";
+import { TextAvatar } from "../shared";
 
 export const MainHeader = () => {
   const currentRoute = usePathname();
@@ -16,6 +19,13 @@ export const MainHeader = () => {
   ];
 
   const [navOpen, setNavOpen] = useState(false);
+  const [user, setUser] = useState<UserType | null>(null);
+  useEffect(() => {
+    const userFromSessionStorage = JSON.parse(
+      sessionStorage.getItem(SESSION_STORAGE_KEY) as string
+    ) as unknown as UserType;
+    setUser(userFromSessionStorage);
+  }, []);
 
   const handleToggleNav = () => {
     setNavOpen((opened) => !opened);
@@ -80,13 +90,20 @@ export const MainHeader = () => {
           </li>
           <li className="dropdown dropdown-end hidden lg:list-item">
             <div tabIndex={0} role="button">
-              <Image
-                src="/assets/images/dummy-avatar.png"
-                alt="User"
-                height={20}
-                width={20}
-                className="h-auto w-12 object-center"
-              />
+              {user?.imagePath ? (
+                <Image
+                  src={user?.imagePath}
+                  alt="User"
+                  height={20}
+                  width={20}
+                  className="h-8 w-auto inline-block rounded-full object-cover"
+                />
+              ) : (
+                <TextAvatar
+                  text={user?.firstName?.charAt(0) ?? "T"}
+                  size="sm"
+                />
+              )}
             </div>
             <ul
               tabIndex={0}
@@ -94,16 +111,25 @@ export const MainHeader = () => {
             >
               <li className=" px-2 py-1.5 border-b border-b-gray-300 rounded-0">
                 <div className="flex items-center gap-2 w-full p-0">
-                  <Image
-                    src="/assets/images/dummy-avatar.png"
-                    alt="User"
-                    height={20}
-                    width={20}
-                    className="h-8 w-auto inline-block"
-                  />
+                  {user?.imagePath ? (
+                    <Image
+                      src={user?.imagePath}
+                      alt="User"
+                      height={20}
+                      width={20}
+                      className="h-8 w-auto inline-block rounded-full"
+                    />
+                  ) : (
+                    <TextAvatar
+                      text={user?.firstName?.charAt(0) ?? "T"}
+                      size="sm"
+                    />
+                  )}
                   <div className="flex flex-col gap-1">
-                    <h4 className="font-semibold">Jeff Wilson</h4>
-                    <p>jeffwilson@example.com</p>
+                    <h4 className="font-semibold">
+                      {user?.firstName} {user?.lastName}
+                    </h4>
+                    <p>{user?.email}</p>
                   </div>
                 </div>
               </li>

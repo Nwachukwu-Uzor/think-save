@@ -96,7 +96,10 @@ export const EditProfileModalContent: React.FC<Props> = ({
               </div>
             </div>
             <TextInput label="State" value={state} />
-            <TextInput label="Mother's Maiden Name" value={userDetails.mmn} />
+            <TextInput
+              label="Mother's Maiden Name"
+              value={userDetails.mothersMaidenName}
+            />
             <div className="max-w-[150px] ml-auto mt-4">
               <Button color="main-blue">Update</Button>
             </div>

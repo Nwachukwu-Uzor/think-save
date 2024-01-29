@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { TextInput } from "../shared/";
 import {
@@ -7,11 +8,17 @@ import {
   MdOutlineLock,
   MdOutlineRemoveRedEye,
 } from "react-icons/md";
+import { PulseLoader } from "react-spinners";
 import Link from "next/link";
 import { Button } from "../shared/";
 import { IoEyeOffOutline } from "react-icons/io5";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { ApiResponseType, UserType } from "@/types/shared";
+import { baseUrl, SESSION_STORAGE_KEY } from "@/config";
+import { formatValidationErrors, getLocalOS } from "@/utils/shared";
+import { toast } from "react-toastify";
 
 const schema = z.object({
   email: z
@@ -27,11 +34,13 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 export const LoginForm = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
+    setError,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<FormFields>({
     resolver: zodResolver(schema),
   });
@@ -39,8 +48,43 @@ export const LoginForm = () => {
   const handleToggleShowPassword = () => {
     setShowPassword((shown) => !shown);
   };
-  const onSubmit: SubmitHandler<FormFields> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    try {
+      const payload = {
+        username: data.email,
+        password: data.password,
+        OS: getLocalOS(),
+        Channel: "Web",
+        DeviceId: "192.168.1.1",
+        IpAddress: Date.now().toString(),
+      };
+      console.log({ payload });
+
+      const response = await axios.post<ApiResponseType<UserType>>(
+        `${baseUrl}/Auth/UserLogin`,
+        payload
+      );
+      if (!response.data?.status) {
+        setError("root", { type: "deps", message: response?.data?.message });
+        toast.error("Login Failed", { theme: "colored" });
+        return;
+      }
+      sessionStorage.setItem(
+        SESSION_STORAGE_KEY,
+        JSON.stringify(response.data?.data)
+      );
+      toast.success("Login Success", { theme: "colored" });
+      router.push("/dashboard");
+    } catch (error: any) {
+      console.log(error);
+      const errorData = error?.response?.data?.errors;
+      if (errorData) {
+        const formattedValidationErrors = formatValidationErrors(
+          errorData as Record<string, string[]>
+        );
+        setError("root", { type: "deps", message: formattedValidationErrors });
+      }
+    }
   };
 
   return (
@@ -49,7 +93,7 @@ export const LoginForm = () => {
         <h2 className="hidden lg:block lg:text-lg xl:text-2xl font-bold mb-3 text-black">
           Log in to your account
         </h2>
-        <div className="flex flex-col gap-4 lg:gap-6">
+        <div className="flex flex-col gap-3 lg:gap-4">
           <TextInput
             label="Email"
             placeholder="Email"
@@ -57,6 +101,7 @@ export const LoginForm = () => {
             id="email"
             {...register("email")}
             error={errors.email?.message}
+            disabled={isSubmitting}
           />
           <TextInput
             label="Password"
@@ -64,15 +109,28 @@ export const LoginForm = () => {
             leftIcon={<MdOutlineLock />}
             type={showPassword ? "text" : "password"}
             rightIcon={
-              <span onClick={handleToggleShowPassword}>
+              <span
+                onClick={handleToggleShowPassword}
+                className="cursor-pointer"
+              >
                 {showPassword ? <IoEyeOffOutline /> : <MdOutlineRemoveRedEye />}
               </span>
             }
             id="password"
             {...register("password")}
             error={errors.password?.message}
+            disabled={isSubmitting}
           />
-          <Button color="red">Login</Button>
+          <div className="flex flex-col gap-0.5">
+            {errors?.root?.message?.split(",").map((error) => (
+              <p key={error} className="text-sm text-main-red">
+                {error}
+              </p>
+            ))}
+          </div>
+          <Button color="red" disabled={isSubmitting}>
+            {isSubmitting ? <PulseLoader color="#fff" /> : "Login"}
+          </Button>
         </div>
       </form>
       <h3 className="mt-3 lg:hidden text-black text-semibold text-center">

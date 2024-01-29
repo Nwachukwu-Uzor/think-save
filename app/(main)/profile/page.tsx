@@ -21,7 +21,7 @@ const Profile = () => {
     gender: "Male",
     dob: "Jun., 03, 2023",
     city: "New York",
-    mmn: "Johnson",
+    mothersMaidenName: "Johnson",
     address: "123 Main Street",
     avatarUrl: "/assets/images/dummy-avatar.png",
     nationality: "Nigerian",

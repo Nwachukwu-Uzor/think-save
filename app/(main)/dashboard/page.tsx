@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import {
   AccountsSlider,
   Plans,
@@ -7,8 +8,18 @@ import {
 } from "@/components/dashboard/";
 import { Card } from "@/components/shared/";
 import { Container } from "@/components/shared/";
+import { UserType } from "@/types/shared";
+import { SESSION_STORAGE_KEY } from "@/config";
 
 const Dashboard = () => {
+  const [user, setUser] = useState<UserType | null>(null);
+  useEffect(() => {
+    const userFromSessionStorage = JSON.parse(
+      sessionStorage.getItem(SESSION_STORAGE_KEY) as string
+    ) as unknown as UserType;
+    setUser(userFromSessionStorage);
+  }, []);
+
   const transactions = [
     {
       id: 1,
@@ -34,12 +45,20 @@ const Dashboard = () => {
   ];
 
   const plans = [
-    {id: 1, name: "Target Saving", iconSrc: "/assets/images/target-icon.svg"},
-    {id: 2, name: "Project Saving", iconSrc: "/assets/images/project-icon.svg"},
-    {id: 3, name: "Entrepreneurial Saving", iconSrc: "/assets/images/work-icon.svg"},
-    {id: 4, name: "Kolo", iconSrc: "/assets/images/kolo-icon.svg"},
-    {id: 5, name: "Thrift Esusu", iconSrc: "/assets/images/thrift-icon.svg"},
-  ]
+    { id: 1, name: "Target Saving", iconSrc: "/assets/images/target-icon.svg" },
+    {
+      id: 2,
+      name: "Project Saving",
+      iconSrc: "/assets/images/project-icon.svg",
+    },
+    {
+      id: 3,
+      name: "Entrepreneurial Saving",
+      iconSrc: "/assets/images/work-icon.svg",
+    },
+    { id: 4, name: "Kolo", iconSrc: "/assets/images/kolo-icon.svg" },
+    { id: 5, name: "Thrift Esusu", iconSrc: "/assets/images/thrift-icon.svg" },
+  ];
 
   return (
     <>
@@ -48,7 +67,7 @@ const Dashboard = () => {
           Welcome to ThinkSave
         </h2>
         <p className="text-fade my-1 font-medium">
-          Hi William Stone, Welcome Back.
+          Hi {user?.firstName} {user?.lastName}, Welcome Back.
         </p>
         <section className="my-3 lg:my-8 grid lg:grid-cols-5 gap-2 lg:gap-4 overflow-hidden">
           <article className=" lg:col-span-3 overflow-hidden">
@@ -90,7 +109,7 @@ const Dashboard = () => {
                   View All
                 </button>
               </div>
-              <Plans plans={plans}/>
+              <Plans plans={plans} />
             </Card>
           </article>
         </section>
