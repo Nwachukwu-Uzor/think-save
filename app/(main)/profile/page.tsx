@@ -32,7 +32,7 @@ const Profile = () => {
     {
       id: 1,
       description: "Emergency Fund",
-      category: "target saving",
+      productName: "target saving",
       tenure: 12,
       currentAmount: 5000,
       target: 10000,
@@ -40,7 +40,7 @@ const Profile = () => {
     {
       id: 2,
       description: "Monthly Thrift",
-      category: "thrift esusu",
+      productName: "thrift esusu",
       tenure: 6,
       currentAmount: 2000,
       target: 12000,
@@ -48,7 +48,7 @@ const Profile = () => {
     {
       id: 3,
       description: "Vacation Fund",
-      category: "kolo",
+      productName: "kolo",
       tenure: 24,
       currentAmount: 3000,
       target: 8000,
@@ -56,7 +56,7 @@ const Profile = () => {
     {
       id: 4,
       description: "Business Startup",
-      category: "entrepreneurial saving",
+      productName: "entrepreneurial saving",
       tenure: 18,
       currentAmount: 10000,
       target: 50000,
@@ -64,7 +64,7 @@ const Profile = () => {
     {
       id: 5,
       description: "Home Renovation",
-      category: "project saving",
+      productName: "project saving",
       tenure: 36,
       currentAmount: 15000,
       target: 60000,
@@ -72,7 +72,7 @@ const Profile = () => {
     {
       id: 6,
       description: "Education Fund",
-      category: "target saving",
+      productName: "target saving",
       tenure: 24,
       currentAmount: 8000,
       target: 20000,
@@ -80,7 +80,7 @@ const Profile = () => {
     {
       id: 7,
       description: "Car Purchase",
-      category: "kolo",
+      productName: "kolo",
       tenure: 30,
       currentAmount: 12000,
       target: 30000,
@@ -88,7 +88,7 @@ const Profile = () => {
     {
       id: 8,
       description: "Retirement Plan",
-      category: "thrift esusu",
+      productName: "thrift esusu",
       tenure: 48,
       currentAmount: 25000,
       target: 100000,

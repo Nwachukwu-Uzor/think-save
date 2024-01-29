@@ -16,6 +16,7 @@ export const MainHeader = () => {
     { id: 2, content: <>Accounts</>, href: "/accounts" },
     { id: 3, content: <>Plans</>, href: "/plans" },
     { id: 4, content: <>Transactions</>, href: "/transactions" },
+    { id: 5, content: <>Products</>, href: "/products" },
   ];
 
   const [navOpen, setNavOpen] = useState(false);
@@ -96,7 +97,7 @@ export const MainHeader = () => {
                   alt="User"
                   height={20}
                   width={20}
-                  className="h-8 w-auto inline-block rounded-full object-cover"
+                  className="h-8 w-8 inline-block rounded-full object-cover"
                 />
               ) : (
                 <TextAvatar
@@ -117,7 +118,7 @@ export const MainHeader = () => {
                       alt="User"
                       height={20}
                       width={20}
-                      className="h-8 w-auto inline-block rounded-full"
+                      className="h-6 w-6 inline-block rounded-full"
                     />
                   ) : (
                     <TextAvatar

@@ -1,3 +1,5 @@
+import { AccountType } from ".";
+
 export type UserType = {
   id: number;
   firstName: string;
@@ -21,5 +23,7 @@ export type UserType = {
   imagePath?: string;
   dateOfBirth?: string;
   dateCreated?: string;
-  customerId?: string;
+  customerId: string;
+  accountId?: string;
+  accounts?: AccountType[];
 };

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import {
   AccountsSlider,
-  Plans,
+  Products,
   RecentTransactions,
   Wallet,
 } from "@/components/dashboard/";
@@ -26,21 +26,21 @@ const Dashboard = () => {
       amount: 5000,
       description: "Groceries",
       date: "25 Jun, 4:45pm",
-      type: "debit",
+      transactionType: "debit",
     },
     {
       id: 2,
       amount: 12000,
       description: "Salary",
       date: "26 Jun, 10:30am",
-      type: "credit",
+      transactionType: "credit",
     },
     {
       id: 3,
       amount: 800,
       description: "Dinner out",
       date: "27 Jun, 8:15pm",
-      type: "debit",
+      transactionType: "debit",
     },
   ];
 
@@ -66,7 +66,7 @@ const Dashboard = () => {
         <h2 className="text-xl lg:text-2xl xl:text-3xl font-bold text-black">
           Welcome to ThinkSave
         </h2>
-        <p className="text-fade my-1 font-medium">
+        <p className="text-[#B7B7B7] my-1 font-medium">
           Hi {user?.firstName} {user?.lastName}, Welcome Back.
         </p>
         <section className="my-3 lg:my-8 grid lg:grid-cols-5 gap-2 lg:gap-4 overflow-hidden">
@@ -79,7 +79,9 @@ const Dashboard = () => {
                 </button>
               </div>
               <div className="mt-2 lg:mt-3 w-full overflow-hidden rounded-md">
-                <AccountsSlider />
+                {user?.accounts ? (
+                  <AccountsSlider accounts={user?.accounts} />
+                ) : null}
               </div>
             </Card>
           </article>
@@ -89,7 +91,7 @@ const Dashboard = () => {
             </Card>
           </article>
         </section>
-        <section className="my-3 lg:my-8 grid lg:grid-cols-5 gap-2 lg:gap-4 overflow-hidden">
+        <section className="my-3 lg:my-8 grid lg:grid-cols-5 gap-2 lg:gap-4 overflow-hidden items-start">
           <article className="lg:col-span-2">
             <Card>
               <div className="flex justify-between items-center mb-3 lg:mb-4">
@@ -98,18 +100,23 @@ const Dashboard = () => {
                   View All
                 </button>
               </div>
-              <RecentTransactions transactions={transactions} />
+              {user ? (
+                <RecentTransactions
+                  transactions={transactions}
+                  customerId={user.customerId}
+                />
+              ) : null}
             </Card>
           </article>
           <article className=" lg:col-span-3 overflow-hidden">
             <Card>
               <div className="flex justify-between items-center mb-3 lg:mb-4">
-                <h2 className="text-black font-bold">Plans</h2>
+                <h2 className="text-black font-bold">Products</h2>
                 <button className="text-main-blue text-sm lg:text-base font-bold hover:opacity-80 active:scale-75 duration-100">
                   View All
                 </button>
               </div>
-              <Plans plans={plans} />
+              <Products />
             </Card>
           </article>
         </section>

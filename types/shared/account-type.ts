@@ -1,6 +1,19 @@
+import { AccountInvestment } from ".";
+
 export type AccountType = {
-  id: number;
-  category: string;
-  name: string;
+  id: string;
+  accountId: string;
+  accountName: string;
+  virtualAcountNumber: null;
+  customerId: string;
+  productId: string;
+  productName: string;
   balance: number;
+  interestRate: string;
+  dateCreated: string;
+  dateUpdated: null;
+  status: string;
+  investment: null;
+  accountInvestments: AccountInvestment[] | null;
+  accountPeers: null;
 };

@@ -1,13 +1,12 @@
 import React from "react";
 import { TransactionType } from "@/types/dashboard";
 import { IoReceiptOutline } from "react-icons/io5";
-import Image from "next/image";
 import { formatNumberWithCommas } from "@/utils/shared";
 
 type Props = {} & TransactionType;
 
 export const Transaction: React.FC<Props> = ({
-  type,
+  transactionType,
   description,
   date,
   amount,
@@ -17,7 +16,7 @@ export const Transaction: React.FC<Props> = ({
       <div className="flex gap-1 items-center">
         <span
           className={`h-8 w-8 lg:w-11 lg:h-11 font-bold inline-flex items-center justify-center rounded-full lg:text-xl  ${
-            type === "credit"
+            transactionType.toLowerCase() === "credit"
               ? "bg-[#D0FFC5] text-[#0FC90C]"
               : "bg-[#FFD0D1] text-[#FE3032]"
           }`}

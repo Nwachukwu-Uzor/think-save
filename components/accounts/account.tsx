@@ -16,10 +16,10 @@ export const Account: React.FC<Props> = ({ account }) => {
         <CgExpand />
       </div>
       <h3 className="text-sm lg:text-lg text-main-blue font-bold my-1">
-        {account.name}
+        {(account, accountName)}
       </h3>
       <p className="text-xs lg:text-sm text-fade font-semibold">
-        {account.category}
+        {account.productName}
       </p>
       <div className="p-2 lg:p-4 rounded-md bg-accent-blue mt-2 lg:mt-3 relative">
         <h2 className="text-sm lg:text-lg text-main-blue font-bold my-1">

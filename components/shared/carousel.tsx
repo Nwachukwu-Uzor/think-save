@@ -65,8 +65,8 @@ export const Carousel: FC<CarouselProps> = ({ children, speed }) => {
           return (
             <>
               <span
-                className={`h-[6px] w-[6px] lg:h-[10px] lg:w-[10px] rounded-full cursor-pointer ${
-                  index === activeIndex ? "bg-white" : "bg-fade"
+                className={`h-[6px] w-[6px] lg:h-[10px] lg:w-[10px] rounded-full cursor-pointer border border-white ${
+                  index === activeIndex ? "bg-white" : "bg-[#FF7C7E]"
                 } duration-150`}
                 onClick={() => {
                   updateIndex(index);

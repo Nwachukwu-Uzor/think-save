@@ -1,7 +1,7 @@
 export type InvestmentType = {
   id: number;
   description: string;
-  category: string;
+  productName: string;
   tenure: number;
   currentAmount: number;
   target: number;

@@ -1,23 +1,13 @@
 import React from "react";
 import Image from "next/image";
 import { InvestmentType } from "@/types/shared";
+import { categoriesLogo } from "@/constants";
 
 type Props = {
   investments: InvestmentType[];
 };
 
 export const InvestmentAccounts: React.FC<Props> = ({ investments }) => {
-  const categoriesLogo: Record<string, { iconSrc: string }> = {
-    "target saving": { iconSrc: "/assets/images/target-icon.svg" },
-    "project saving": {
-      iconSrc: "/assets/images/project-icon.svg",
-    },
-    "entrepreneurial saving": {
-      iconSrc: "/assets/images/work-icon.svg",
-    },
-    kolo: { iconSrc: "/assets/images/kolo-icon.svg" },
-    "thrift esusu": { iconSrc: "/assets/images/thrift-icon.svg" },
-  };
   return (
     <div>
       <div className="overflow-auto">
@@ -39,7 +29,9 @@ export const InvestmentAccounts: React.FC<Props> = ({ investments }) => {
                 <td className="flex gap-1 items-start">
                   <div className="h-6 w-6 lg:h-12 lg:w-12 flex items-center justify-center bg-accent-blue rounded-full">
                     <Image
-                      src={categoriesLogo[investment.category]?.iconSrc ?? ""}
+                      src={
+                        categoriesLogo[investment.productName]?.iconSrc ?? ""
+                      }
                       alt="Think Save"
                       height={10}
                       width={10}
@@ -51,7 +43,7 @@ export const InvestmentAccounts: React.FC<Props> = ({ investments }) => {
                       {investment.description}
                     </h3>
                     <p className="text-xs text-fade font-semibold mt-1 capitalize">
-                      {investment.category}
+                      {investment.productName}
                     </p>
                   </div>
                 </td>

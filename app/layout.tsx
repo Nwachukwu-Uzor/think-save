@@ -1,16 +1,22 @@
+"use client";
 import type { Metadata } from "next";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Inter } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import { SidebarContextProvider } from "@/context/admin/sidebar";
 
-const inter = Inter({ subsets: ["latin"] });
+const outfit = Outfit({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Think Save",
-  description: "Reshape your financial future",
-};
+// export const metadata: Metadata = {
+//   title: "Think Save",
+//   description: "Reshape your financial future",
+//   icons: "/assets/images/logo-favicon.svg",
+// };
+
+const queryClient = new QueryClient();
 
 export default function RootLayout({
   children,
@@ -19,9 +25,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <SidebarContextProvider>{children}</SidebarContextProvider>
-        <ToastContainer />
+      <body className={outfit.className}>
+        <QueryClientProvider client={queryClient}>
+          <SidebarContextProvider>{children}</SidebarContextProvider>
+          <ToastContainer />
+          <ReactQueryDevtools
+            initialIsOpen={false}
+            buttonPosition="bottom-left"
+          />
+        </QueryClientProvider>
       </body>
     </html>
   );
