@@ -116,7 +116,9 @@ const Dashboard = () => {
                   View All
                 </button>
               </div>
-              <Products />
+              <article className="grid grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-3">
+                <Products />
+              </article>
             </Card>
           </article>
         </section>

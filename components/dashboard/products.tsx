@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { HiOutlineChip } from "react-icons/hi";
 import { FaPlus } from "react-icons/fa6";
@@ -17,7 +18,7 @@ export const Products: React.FC = () => {
   });
 
   return (
-    <article className="grid grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-3">
+    <>
       {isLoading ? (
         <>
           {placeholders.map((placeholder) => (
@@ -44,6 +45,6 @@ export const Products: React.FC = () => {
           </div>
         </>
       )}
-    </article>
+    </>
   );
 };

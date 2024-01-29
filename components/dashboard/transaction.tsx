@@ -24,10 +24,10 @@ export const Transaction: React.FC<Props> = ({
           <IoReceiptOutline />
         </span>
         <div>
-          <h3 className="text-sm lg:text-base font-bold text-black">
+          <h3 className="text-sm lg:text-base font-medium text-black">
             {description}
           </h3>
-          <p className="text-xs lg:text-sm text-fade font-semibold mt-1">
+          <p className="text-xs lg:text-sm text-fade font-medium mt-1">
             {date}
           </p>
         </div>
