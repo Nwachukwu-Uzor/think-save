@@ -7,7 +7,7 @@ import { UserType } from "@/types/shared";
 import { TextAreaInput, TextInput, Button } from "../shared";
 
 type Props = {
-  userDetails: UserType;
+  userDetails: Partial<UserType>;
   handleClose: () => void;
 };
 export const EditProfileModalContent: React.FC<Props> = ({
@@ -45,7 +45,7 @@ export const EditProfileModalContent: React.FC<Props> = ({
         <div>
           <div className="flex items-center gap-2">
             <Image
-              src={avatarUrl}
+              src={avatarUrl ?? ""}
               alt="Think Save"
               height={20}
               width={20}

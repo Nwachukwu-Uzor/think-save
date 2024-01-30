@@ -5,7 +5,7 @@ import { UserType } from "@/types/shared";
 import { Button } from "../shared";
 import { Detail } from ".";
 
-type Props = { user: UserType; handleEditBtnClick: () => void };
+type Props = { user: Partial<UserType>; handleEditBtnClick: () => void };
 
 export const UserDetails: React.FC<Props> = ({ user, handleEditBtnClick }) => {
   const {
@@ -27,7 +27,7 @@ export const UserDetails: React.FC<Props> = ({ user, handleEditBtnClick }) => {
     <>
       <div className="w-full flex flex-col items-center justify-center gap-0.5">
         <Image
-          src={avatarUrl}
+          src={avatarUrl ?? ""}
           alt="Think Save"
           height={20}
           width={20}
@@ -44,16 +44,16 @@ export const UserDetails: React.FC<Props> = ({ user, handleEditBtnClick }) => {
         </div>
       </div>
       <div className="grid lg:grid-cols-2 gap-1 lg:gap-2 mt-8">
-        <Detail title="BVN" value={bvn} />
-        <Detail title="Phone" value={phone} />
-        <Detail title="Gender" value={gender} />
-        <Detail title="Date of Birth" value={dob} />
-        <Detail title="Nationality" value={nationality} />
-        <Detail title="State" value={state} />
-        <Detail title="City" value={city} />
-        <Detail title="Mother's Maiden Name" value={user.mothersMaidenName} />
+        <Detail title="BVN" value={bvn ?? ""} />
+        <Detail title="Phone" value={phone ?? ""} />
+        <Detail title="Gender" value={gender ?? ""} />
+        <Detail title="Date of Birth" value={dob ?? ""} />
+        <Detail title="Nationality" value={nationality ?? ""} />
+        <Detail title="State" value={state ?? ""} />
+        <Detail title="City" value={city ?? ""} />
+        <Detail title="Mother's Maiden Name" value={user.mothersMaidenName ?? ""} />
         <div className="lg:col-span-2">
-          <Detail title="Address" value={address} />
+          <Detail title="Address" value={address ?? ""} />
         </div>
       </div>
     </>
