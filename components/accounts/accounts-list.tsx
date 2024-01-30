@@ -4,7 +4,7 @@ import { Account } from ".";
 import { AccountType } from "@/types/shared";
 
 type Props = {
-  accounts: AccountType[];
+  accounts: Partial<AccountType>[];
 };
 export const AccountsList: React.FC<Props> = ({ accounts }) => {
   return (
