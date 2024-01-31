@@ -13,14 +13,19 @@ import Link from "next/link";
 import { Button } from "../shared/";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { authService } from "@/services";
+import { formatValidationErrors } from "@/utils/shared";
+import { toast } from "react-toastify";
+import { SESSION_STORAGE_KEY } from "@/config";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
-  firstName: z
+  firstname: z
     .string({
       required_error: "First Name is required",
     })
     .min(2, { message: "First Name should be at least 2 characters" }),
-  lastName: z
+  lastname: z
     .string({
       required_error: "Last Name is required",
     })
@@ -39,11 +44,14 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 export const RegisterForm = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    setError,
+    formState: { errors, isSubmitting },
+    watch,
   } = useForm<FormFields>({
     resolver: zodResolver(schema),
   });
@@ -51,8 +59,33 @@ export const RegisterForm = () => {
   const handleToggleShowPassword = () => {
     setShowPassword((shown) => !shown);
   };
-  const onSubmit: SubmitHandler<FormFields> = (data) => {
-    console.log(data);
+
+  const  agreeToTaC  = watch("agreeToTaC");
+
+  const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    try {
+      const response = await authService.register(data);
+      if (!response?.status) {
+        setError("root", { type: "deps", message: response?.message });
+        toast.error("Registration Failed", { theme: "colored" });
+        return;
+      }
+      sessionStorage.setItem(
+        SESSION_STORAGE_KEY,
+        JSON.stringify(response?.data)
+      );
+      toast.success("Register Success", { theme: "colored" });
+      router.push("/dashboard");
+    } catch (error: any) {
+      console.log(error);
+      const errorData = error?.response?.data?.errors;
+      if (errorData) {
+        const formattedValidationErrors = formatValidationErrors(
+          errorData as Record<string, string[]>
+        );
+        setError("root", { type: "deps", message: formattedValidationErrors });
+      }
+    }
   };
 
   return (
@@ -67,8 +100,9 @@ export const RegisterForm = () => {
             placeholder="First Name"
             leftIcon={<FaRegUser />}
             id="firstName"
-            {...register("firstName")}
-            error={errors.firstName?.message}
+            {...register("firstname")}
+            error={errors.firstname?.message}
+            disabled={isSubmitting}
           />
 
           <TextInput
@@ -76,8 +110,9 @@ export const RegisterForm = () => {
             placeholder="Last Name"
             leftIcon={<FaRegUser />}
             id="lastName"
-            {...register("lastName")}
-            error={errors.lastName?.message}
+            {...register("lastname")}
+            error={errors.lastname?.message}
+            disabled={isSubmitting}
           />
           <TextInput
             label="Email"
@@ -86,6 +121,7 @@ export const RegisterForm = () => {
             id="email"
             {...register("email")}
             error={errors.email?.message}
+            disabled={isSubmitting}
           />
           <TextInput
             label="Password"
@@ -99,21 +135,34 @@ export const RegisterForm = () => {
             }
             id="password"
             {...register("password")}
+            disabled={isSubmitting}
           />
-          <div className="relative z-20">
-            <Button color="red" type="submit">
-              Register
-            </Button>
-          </div>
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
               className="rounded text-main-blue bg-accent-blue border-0 outline-none cursor-pointer"
               {...register("agreeToTaC")}
+              disabled={isSubmitting}
             />
             <h2 className="text-xs font-semibold text-black">
               I agree to the Terms of Service and Privacy Policy.
             </h2>
+          </div>
+          <div className="flex flex-col gap-0.5">
+            {errors?.root?.message?.split(",").map((error) => (
+              <p key={error} className="text-sm text-main-red">
+                {error}
+              </p>
+            ))}
+          </div>
+          <div className="relative z-20">
+            <Button
+              color="red"
+              type="submit"
+              disabled={isSubmitting || !agreeToTaC}
+            >
+              Register
+            </Button>
           </div>
         </div>
       </form>

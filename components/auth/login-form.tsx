@@ -14,11 +14,10 @@ import { Button } from "../shared/";
 import { IoEyeOffOutline } from "react-icons/io5";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { ApiResponseType, UserType } from "@/types/shared";
-import { baseUrl, SESSION_STORAGE_KEY } from "@/config";
-import { formatValidationErrors, getLocalOS } from "@/utils/shared";
+import {  SESSION_STORAGE_KEY } from "@/config";
+import { formatValidationErrors } from "@/utils/shared";
 import { toast } from "react-toastify";
+import { authService } from "@/services";
 
 const schema = z.object({
   email: z
@@ -48,30 +47,18 @@ export const LoginForm = () => {
   const handleToggleShowPassword = () => {
     setShowPassword((shown) => !shown);
   };
+  
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      const payload = {
-        username: data.email,
-        password: data.password,
-        OS: getLocalOS(),
-        Channel: "Web",
-        DeviceId: "192.168.1.1",
-        IpAddress: Date.now().toString(),
-      };
-      console.log({ payload });
-
-      const response = await axios.post<ApiResponseType<UserType>>(
-        `${baseUrl}/Auth/UserLogin`,
-        payload
-      );
-      if (!response.data?.status) {
-        setError("root", { type: "deps", message: response?.data?.message });
+      const response = await authService.login(data);
+      if (!response?.status) {
+        setError("root", { type: "deps", message: response?.message });
         toast.error("Login Failed", { theme: "colored" });
         return;
       }
       sessionStorage.setItem(
         SESSION_STORAGE_KEY,
-        JSON.stringify(response.data?.data)
+        JSON.stringify(response?.data)
       );
       toast.success("Login Success", { theme: "colored" });
       router.push("/dashboard");
