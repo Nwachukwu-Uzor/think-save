@@ -6,6 +6,7 @@ import { FETCH_TRANSACTION_BY_CUSTOMER_ID } from "@/constants";
 import { transactionService } from "@/services";
 import { FaMoneyCheck } from "react-icons/fa6";
 import { TransactionLoader } from "../shared/skeleton-loaders";
+import { EmptyPage } from "../shared";
 
 type Props = {
   customerId: string;
@@ -41,11 +42,17 @@ export const RecentTransactions: React.FC<Props> = ({ customerId }) => {
       ))}
     </ul>
   ) : (
-    <div>
-      <div className="h-16 w-16 lg:h-20 lg:w-20 mx-auto flex items-center justify-center text-white bg-main-blue rounded-full mt-3">
-        <FaMoneyCheck className="text-2xl lg:text-4xl xl:text-5xl" />
-      </div>
-      <h3 className="lg:text-lg mt-2 text-center">No Transactions Found</h3>
+    // <div>
+    //   <div className="h-16 w-16 lg:h-20 lg:w-20 mx-auto flex items-center justify-center text-white bg-main-blue rounded-full mt-3">
+    //     <FaMoneyCheck className="text-2xl lg:text-4xl xl:text-5xl" />
+    //   </div>
+    //   <h3 className="lg:text-lg mt-2 text-center">No Transactions Found</h3>
+    // </div>
+    <div className="mt-2 lg:mt-3">
+      <EmptyPage
+        title="No Transactions Found"
+        subtitle="You have not performed any transactions yet"
+      />
     </div>
   );
 };

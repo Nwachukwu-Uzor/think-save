@@ -8,3 +8,4 @@ export { Table } from "./table";
 export { DebouncedInput } from "./debounced-input";
 export { Pagination } from "./pagination";
 export { TextAvatar } from "./text-avatar";
+export { EmptyPage } from "./empty-page";
