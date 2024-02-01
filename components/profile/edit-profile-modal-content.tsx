@@ -65,7 +65,8 @@ export const EditProfileModalContent: React.FC<Props> = ({
     customerId,
     userId,
     email,
-    gender
+    gender,
+    dateOfBirth,
   } = userDetails;
 
   const {
@@ -89,6 +90,7 @@ export const EditProfileModalContent: React.FC<Props> = ({
       bvn: bvn ?? "",
       mothersMaidenName: mothersMaidenName ?? "",
       gender: gender ?? "",
+      dateOfBirth: dateOfBirth ?? "",
     },
   });
 
@@ -248,7 +250,14 @@ export const EditProfileModalContent: React.FC<Props> = ({
         <div>
           <div className="flex flex-col gap-2 justify-start">
             <TextInput label="Other Name" {...register("middleName")} />
-            <TextInput label="Phone" {...register("phoneNumber")} />
+            <TextInput
+              label="Phone"
+              {...register("phoneNumber")}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, "");
+                setValue("phoneNumber", value);
+              }}
+            />
             <div className="flex flex-col gap-2 lg:-mt-3">
               <label htmlFor="country" className="font-semibold text-sm">
                 Nationality
@@ -256,6 +265,7 @@ export const EditProfileModalContent: React.FC<Props> = ({
 
               <Select
                 options={countries}
+                defaultInputValue={country}
                 isDisabled={isFetchingCountries}
                 maxMenuHeight={150}
                 placeholder={isFetchingCountries ? "Loading..." : "Select..."}
@@ -297,16 +307,11 @@ export const EditProfileModalContent: React.FC<Props> = ({
                   ))}
                 </select>
               </div>
-              <div className="flex flex-col gap-1.5">
-                <label htmlFor="gender" className="font-semibold text-sm">
-                  Date of Birth
-                </label>
-                <input
-                  type="date"
-                  {...register("dateOfBirth")}
-                  className="relative w-full bg-accent-blue py-1.5 px-2 focus:border-none focus:outline-none focus:ring-[0.5px] focus:ring-main-blue rounded-md duration-50"
-                />
-              </div>
+              <TextInput
+                label="Date of Birth"
+                {...register("dateOfBirth")}
+                type="date"
+              />
             </div>
             <TextInput label="State" {...register("state")} />
             <TextInput

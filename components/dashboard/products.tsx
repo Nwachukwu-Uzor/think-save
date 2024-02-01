@@ -6,10 +6,11 @@ import { Product } from ".";
 import { useQuery } from "@tanstack/react-query";
 import { FETCH_ALL_PRODUCTS } from "@/constants";
 import { productsService } from "@/services";
+import { ProductLoader } from "../shared/skeleton-loaders";
 
 export const Products: React.FC = () => {
   const placeholders = new Array(6).fill("").map((_val, index) => index);
-  const { isLoading, data: products } = useQuery({
+  const { data: products, isLoading } = useQuery({
     queryKey: [FETCH_ALL_PRODUCTS],
     queryFn: async () => {
       const products = await productsService.getAllProducts();
@@ -22,10 +23,7 @@ export const Products: React.FC = () => {
       {isLoading ? (
         <>
           {placeholders.map((placeholder) => (
-            <div
-              key={placeholder}
-              className="h-[100px] bg-slate-100 animate-pulse rounded-sm"
-            ></div>
+            <ProductLoader key={placeholder} />
           ))}
         </>
       ) : (

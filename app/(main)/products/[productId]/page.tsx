@@ -5,10 +5,11 @@ import { Container } from "@/components/shared";
 import { useQuery } from "@tanstack/react-query";
 import { FETCH_PRODUCT_BY_PRODUCT_ID } from "@/constants";
 import { productsService } from "@/services";
+import { ProductDetailsLoader } from "@/components/shared/skeleton-loaders";
 
 const ProductDetail = () => {
   const { productId } = useParams<{ productId: string }>();
-  const { isLoading, data: product } = useQuery({
+  const { data: product, isLoading } = useQuery({
     queryKey: [FETCH_PRODUCT_BY_PRODUCT_ID, productId],
     queryFn: async ({ queryKey }) => {
       const product = await productsService.getProductByProductId(queryKey[1]);
@@ -19,9 +20,9 @@ const ProductDetail = () => {
   return (
     <>
       <Container>
-        <section className="px-2 lg:px-3 py-3 lg:py-4 bg-white">
+        <section className="px-2 lg:px-3 py-3 lg:py-4 bg-white min-h-[50vh]">
           {isLoading ? (
-            <p>Loading...</p>
+            <ProductDetailsLoader />
           ) : product ? (
             <article>
               <h2 className="lg:text-lg font-semibold mb-2">
@@ -41,7 +42,10 @@ const ProductDetail = () => {
               </h2>
               <ul className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-2 gap-y-4">
                 {product.tenures.map((tenure) => (
-                  <li key={tenure.tenureId} className="flex flex-col gap-2 bg-accent-blue px-2 py-3 lg:py-4 rounded-md">
+                  <li
+                    key={tenure.tenureId}
+                    className="flex flex-col gap-2 bg-accent-blue px-2 py-3 lg:py-4 rounded-md"
+                  >
                     <h3 className="font-light">
                       <span className="font-medium">Duration:</span>{" "}
                       {tenure.tenure}

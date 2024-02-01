@@ -20,46 +20,6 @@ const Dashboard = () => {
     setUser(userFromSessionStorage);
   }, []);
 
-  const transactions = [
-    {
-      id: 1,
-      amount: 5000,
-      description: "Groceries",
-      date: "25 Jun, 4:45pm",
-      transactionType: "debit",
-    },
-    {
-      id: 2,
-      amount: 12000,
-      description: "Salary",
-      date: "26 Jun, 10:30am",
-      transactionType: "credit",
-    },
-    {
-      id: 3,
-      amount: 800,
-      description: "Dinner out",
-      date: "27 Jun, 8:15pm",
-      transactionType: "debit",
-    },
-  ];
-
-  const plans = [
-    { id: 1, name: "Target Saving", iconSrc: "/assets/images/target-icon.svg" },
-    {
-      id: 2,
-      name: "Project Saving",
-      iconSrc: "/assets/images/project-icon.svg",
-    },
-    {
-      id: 3,
-      name: "Entrepreneurial Saving",
-      iconSrc: "/assets/images/work-icon.svg",
-    },
-    { id: 4, name: "Kolo", iconSrc: "/assets/images/kolo-icon.svg" },
-    { id: 5, name: "Thrift Esusu", iconSrc: "/assets/images/thrift-icon.svg" },
-  ];
-
   return (
     <>
       <Container>
@@ -70,7 +30,7 @@ const Dashboard = () => {
           Hi {user?.firstName} {user?.lastName}, Welcome Back.
         </p>
         <section className="my-3 lg:my-8 grid lg:grid-cols-5 gap-2 lg:gap-4 overflow-hidden">
-          <article className=" lg:col-span-3 overflow-hidden">
+          <article className="lg:col-span-3 overflow-hidden">
             <Card>
               <div className="flex justify-between items-center">
                 <h2 className="text-black font-bold mb-2">Accounts</h2>
@@ -92,23 +52,22 @@ const Dashboard = () => {
           </article>
         </section>
         <section className="my-3 lg:my-8 grid lg:grid-cols-5 gap-2 lg:gap-4 overflow-hidden items-start">
-          <article className="lg:col-span-2">
+          <article className="order-2 lg:col-span-2">
             <Card>
-              <div className="flex justify-between items-center mb-3 lg:mb-4">
-                <h2 className="text-black font-bold">Recent Transaction</h2>
-                <button className="text-main-blue text-sm lg:text-base font-bold hover:opacity-80 active:scale-75 duration-100">
-                  View All
-                </button>
+              <div className="min-h-[250px]">
+                <div className="flex justify-between items-center mb-3 lg:mb-4">
+                  <h2 className="text-black font-bold">Recent Transaction</h2>
+                  <button className="text-main-blue text-sm lg:text-base font-bold hover:opacity-80 active:scale-75 duration-100">
+                    View All
+                  </button>
+                </div>
+                {user ? (
+                  <RecentTransactions customerId={user.customerId} />
+                ) : null}
               </div>
-              {user ? (
-                <RecentTransactions
-                  transactions={transactions}
-                  customerId={user.customerId}
-                />
-              ) : null}
             </Card>
           </article>
-          <article className=" lg:col-span-3 overflow-hidden">
+          <article className=" lg:col-span-3 order-1 lg:order-3 overflow-hidden">
             <Card>
               <div className="flex justify-between items-center mb-3 lg:mb-4">
                 <h2 className="text-black font-bold">Products</h2>

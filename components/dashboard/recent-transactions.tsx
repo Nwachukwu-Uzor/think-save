@@ -5,13 +5,13 @@ import { TransactionType } from "@/types/dashboard";
 import { FETCH_TRANSACTION_BY_CUSTOMER_ID } from "@/constants";
 import { transactionService } from "@/services";
 import { FaMoneyCheck } from "react-icons/fa6";
+import { TransactionLoader } from "../shared/skeleton-loaders";
 
 type Props = {
-  transactions: TransactionType[];
   customerId: string;
 };
 export const RecentTransactions: React.FC<Props> = ({ customerId }) => {
-  const { isLoading, data: transactions } = useQuery({
+  const { data: transactions, isLoading } = useQuery({
     queryKey: [FETCH_TRANSACTION_BY_CUSTOMER_ID, customerId],
     queryFn: async ({ queryKey }) => {
       const transactions = await transactionService.getTransactionByCustomerId(
@@ -21,8 +21,14 @@ export const RecentTransactions: React.FC<Props> = ({ customerId }) => {
     },
   });
 
+  const placeholders = new Array(3).fill("").map((_val, index) => index);
+
   return isLoading ? (
-    <div className="w-full min-h-[200px] animate-pulse bg-slate-200"></div>
+    <div className="flex flex-col gap-2">
+      {placeholders.map((placeholder) => (
+        <TransactionLoader key={placeholder} />
+      ))}
+    </div>
   ) : transactions && transactions.length > 0 ? (
     <ul className="flex flex-col gap-2">
       {transactions.map((transaction) => (

@@ -134,7 +134,9 @@ const Profile = () => {
                   user={user}
                   handleEditBtnClick={handleEditBtnClick}
                 />
-              ) : null}
+              ) : (
+                <div className="bg-slate-100 animate-pulse w-full min-h-[250px]"></div>
+              )}
             </Card>
           </div>
           <div className="col-span-1 lg:col-span-4 xl:col-span-5">

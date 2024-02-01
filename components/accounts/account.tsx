@@ -10,7 +10,8 @@ type Props = {
 };
 
 export const Account: React.FC<Props> = ({ account }) => {
-  const { accountName } = account;
+  const { accountName, balance } = account;
+
   return (
     <Card>
       <div className="my-2 flex justify-end text-xl text-main-blue">
@@ -24,7 +25,9 @@ export const Account: React.FC<Props> = ({ account }) => {
       </p>
       <div className="p-2 lg:p-4 rounded-md bg-accent-blue mt-2 lg:mt-3 relative">
         <h2 className="text-sm lg:text-lg text-main-blue font-bold my-1">
-          {account?.balance ? formatNumberWithCommas(account.balance.toString()) : null}
+          {balance !== null && balance !== undefined
+            ? formatNumberWithCommas(balance.toString())
+            : null}
         </h2>
         <p className="text-xs lg:text-sm text-fade font-semibold">
           Current Balance

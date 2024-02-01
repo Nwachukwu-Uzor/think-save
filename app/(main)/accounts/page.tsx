@@ -1,8 +1,19 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { Container } from "@/components/shared";
 import { AccountsList } from "@/components/accounts";
+import { UserType } from "@/types/shared";
+import { SESSION_STORAGE_KEY } from "@/config";
 
 const Accounts = () => {
+  const [user, setUser] = useState<UserType | null>(null);
+  useEffect(() => {
+    const userFromSessionStorage = JSON.parse(
+      sessionStorage.getItem(SESSION_STORAGE_KEY) as string
+    ) as unknown as UserType;
+    setUser(userFromSessionStorage);
+  }, []);
+
   const accounts = [
     {
       id: "1",
@@ -53,11 +64,12 @@ const Accounts = () => {
       balance: 4890023,
     },
   ];
+
   return (
     <>
       <Container>
         <section>
-          <AccountsList accounts={accounts} />
+          <AccountsList customerId={user?.customerId ?? ""} />
         </section>
       </Container>
     </>
