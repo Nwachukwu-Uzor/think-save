@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { MdOutlineEdit } from "react-icons/md";
 import { UserType } from "@/types/shared";
-import { Button } from "../shared";
+import { Button, TextAvatar } from "../shared";
 import { Detail } from ".";
 
 type Props = { user: Partial<UserType>; handleEditBtnClick: () => void };
@@ -15,24 +15,30 @@ export const UserDetails: React.FC<Props> = ({ user, handleEditBtnClick }) => {
     lastName,
     email,
     bvn,
-    phone,
+    phoneNumber,
     gender,
     dob,
-    nationality,
+    country,
     state,
     city,
+    imagePath,
     address,
+    dateOfBirth,
   } = user;
   return (
     <>
       <div className="w-full flex flex-col items-center justify-center gap-0.5">
-        <Image
-          src={avatarUrl ?? ""}
-          alt="Think Save"
-          height={20}
-          width={20}
-          className="h-8 w-8 lg:h-12 lg:w-12"
-        />
+        {imagePath ? (
+          <Image
+            src={imagePath}
+            alt="Think Save"
+            height={20}
+            width={20}
+            className="h-8 w-8 lg:h-12 lg:w-12 rounded-full object-cover"
+          />
+        ) : (
+          <TextAvatar text={firstName?.charAt(0) ?? "T"} size="sm" />
+        )}
         <h3 className="text-sm lg:text-base font-semibold text-black">{`${firstName}${
           middleName ? " " + middleName : ""
         } ${lastName}`}</h3>
@@ -45,13 +51,16 @@ export const UserDetails: React.FC<Props> = ({ user, handleEditBtnClick }) => {
       </div>
       <div className="grid lg:grid-cols-2 gap-1 lg:gap-2 mt-8">
         <Detail title="BVN" value={bvn ?? ""} />
-        <Detail title="Phone" value={phone ?? ""} />
+        <Detail title="Phone" value={phoneNumber ?? ""} />
         <Detail title="Gender" value={gender ?? ""} />
-        <Detail title="Date of Birth" value={dob ?? ""} />
-        <Detail title="Nationality" value={nationality ?? ""} />
+        <Detail title="Date of Birth" value={dateOfBirth ?? ""} />
+        <Detail title="Nationality" value={country ?? ""} />
         <Detail title="State" value={state ?? ""} />
         <Detail title="City" value={city ?? ""} />
-        <Detail title="Mother's Maiden Name" value={user.mothersMaidenName ?? ""} />
+        <Detail
+          title="Mother's Maiden Name"
+          value={user.mothersMaidenName ?? ""}
+        />
         <div className="lg:col-span-2">
           <Detail title="Address" value={address ?? ""} />
         </div>

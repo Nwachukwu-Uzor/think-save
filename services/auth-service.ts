@@ -4,7 +4,7 @@ import { getLocalOS } from "@/utils/shared";
 import axios from "axios";
 
 class AuthService {
-  async login(data: { email: string; password: string }) {
+  async login(data: { username: string; password: string }) {
     const payload = {
       ...data,
       OS: getLocalOS(),
@@ -35,11 +35,28 @@ class AuthService {
       IpAddress: Date.now().toString(),
       OSVersion: "10.0",
       DeviceName: "Web",
-      DeviceToken: "12345678s"
+      DeviceToken: "12345678s",
     };
 
-    const response = await axios.post<ApiResponseType<UserType>>(`${baseUrl}/User/UserSignUp`, payload);
+    const response = await axios.post<ApiResponseType<UserType>>(
+      `${baseUrl}/User/UserSignUp`,
+      payload
+    );
     console.log(response);
+    return response.data;
+  }
+
+  async updateProfile(formData: FormData) {
+    const response = await axios.post<ApiResponseType<UserType>>(
+      `${baseUrl}/Customer/AddOrEditCustomer`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data", // Important for sending form data
+        },
+      }
+    );
+
     return response.data;
   }
 }

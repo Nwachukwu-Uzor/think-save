@@ -7,7 +7,7 @@ export type UserType = {
   middleName: string;
   lastName: string;
   bvn: string;
-  phone: string;
+  phoneNumber: string;
   gender: string;
   dob: string;
   city: string;

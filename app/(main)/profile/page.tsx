@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import {
   EditProfileModalContent,
@@ -7,8 +7,18 @@ import {
   UserDetails,
 } from "@/components/profile";
 import { Button, Card, Container } from "@/components/shared";
+import { UserType } from "@/types/shared";
+import { SESSION_STORAGE_KEY } from "@/config";
 
 const Profile = () => {
+  const [user, setUser] = useState<UserType | null>(null);
+  useEffect(() => {
+    const userFromSessionStorage = JSON.parse(
+      sessionStorage.getItem(SESSION_STORAGE_KEY) as string
+    ) as unknown as UserType;
+    setUser(userFromSessionStorage);
+  }, []);
+
   const dummyUser = {
     id: 1,
     dateCreated: "6/29/2023",
@@ -17,14 +27,14 @@ const Profile = () => {
     middleName: "Doe",
     lastName: "Smith",
     bvn: "123456789",
-    phone: "555-1234",
+    phoneNumber: "555-1234",
     gender: "Male",
     dob: "Jun., 03, 2023",
     city: "New York",
     mothersMaidenName: "Johnson",
     address: "123 Main Street",
     avatarUrl: "/assets/images/dummy-avatar.png",
-    nationality: "Nigerian",
+    country: "Nigerian",
     state: "Lagos",
   };
 
@@ -119,10 +129,12 @@ const Profile = () => {
         <section className="grid grid-cols-1 lg:grid-cols-7 xl:grid-cols-8 gap-2 lg:gap-3 items-start justify-between ">
           <div className="col-span-1 lg:col-span-3">
             <Card>
-              <UserDetails
-                user={dummyUser}
-                handleEditBtnClick={handleEditBtnClick}
-              />
+              {user ? (
+                <UserDetails
+                  user={user}
+                  handleEditBtnClick={handleEditBtnClick}
+                />
+              ) : null}
             </Card>
           </div>
           <div className="col-span-1 lg:col-span-4 xl:col-span-5">
@@ -149,10 +161,12 @@ const Profile = () => {
       </Container>
       <dialog id="my_modal_1" className="modal">
         <div className="modal-box w-[90%] max-w-[800px] overflow-y-scroll no-scrollbar bg-white">
-          <EditProfileModalContent
-            userDetails={dummyUser}
-            handleClose={handleCloseModal}
-          />
+          {user ? (
+            <EditProfileModalContent
+              userDetails={user}
+              handleClose={handleCloseModal}
+            />
+          ) : null}
           <div className="modal-action">
             <form method="dialog" className="hidden">
               <button ref={buttonRef}>close</button>

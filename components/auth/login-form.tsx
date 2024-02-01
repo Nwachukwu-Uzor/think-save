@@ -14,17 +14,17 @@ import { Button } from "../shared/";
 import { IoEyeOffOutline } from "react-icons/io5";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {  SESSION_STORAGE_KEY } from "@/config";
+import { SESSION_STORAGE_KEY } from "@/config";
 import { formatValidationErrors } from "@/utils/shared";
 import { toast } from "react-toastify";
 import { authService } from "@/services";
 
 const schema = z.object({
-  email: z
+  username: z
     .string({
-      required_error: "Email is required",
+      required_error: "Username is required",
     })
-    .email({ message: "Please provide a valid email address" }),
+    .email({ message: "Please provide a valid username address" }),
   password: z
     .string()
     .min(8, { message: "Password should be at least 8 characters" }),
@@ -47,7 +47,7 @@ export const LoginForm = () => {
   const handleToggleShowPassword = () => {
     setShowPassword((shown) => !shown);
   };
-  
+
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       const response = await authService.login(data);
@@ -82,12 +82,12 @@ export const LoginForm = () => {
         </h2>
         <div className="flex flex-col gap-3 lg:gap-4">
           <TextInput
-            label="Email"
-            placeholder="Email"
+            label="Username"
+            placeholder="Username"
             leftIcon={<MdOutlineEmail />}
-            id="email"
-            {...register("email")}
-            error={errors.email?.message}
+            id="username"
+            {...register("username")}
+            error={errors.username?.message}
             disabled={isSubmitting}
           />
           <TextInput
