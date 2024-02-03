@@ -42,12 +42,6 @@ export const RecentTransactions: React.FC<Props> = ({ customerId }) => {
       ))}
     </ul>
   ) : (
-    // <div>
-    //   <div className="h-16 w-16 lg:h-20 lg:w-20 mx-auto flex items-center justify-center text-white bg-main-blue rounded-full mt-3">
-    //     <FaMoneyCheck className="text-2xl lg:text-4xl xl:text-5xl" />
-    //   </div>
-    //   <h3 className="lg:text-lg mt-2 text-center">No Transactions Found</h3>
-    // </div>
     <div className="mt-2 lg:mt-3">
       <EmptyPage
         title="No Transactions Found"
