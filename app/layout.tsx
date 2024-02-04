@@ -1,6 +1,6 @@
 "use client";
 import type { Metadata } from "next";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastContainer, toast } from "react-toastify";
@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import { SidebarContextProvider } from "@/context/admin/sidebar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SESSION_STORAGE_KEY } from "@/config";
 
 const outfit = Outfit({ subsets: ["latin"] });
@@ -27,14 +27,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const currentRoute = usePathname();
 
   useEffect(() => {
     const user = sessionStorage.getItem(SESSION_STORAGE_KEY);
     if (!user) {
-      toast.error("Please login", { theme: "colored" });
+      if (currentRoute !== "/login" && currentRoute !== "/register") {
+        toast.error("Please login", { theme: "colored" });
+      }
       router.push("/login");
     }
-  }, [router]);
+  }, [router, currentRoute]);
 
   return (
     <html lang="en">

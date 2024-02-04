@@ -33,14 +33,6 @@ export const Products: React.FC = () => {
           ) : (
             <div className="col-span-2 lg:col-span-3">No Product Found</div>
           )}
-          <div className="bg-main-blue px-3 lg:px-4 py-4  text-white rounded-md flex flex-col items-center gap-4 lg:gap-8">
-            <button className="w-10 h-8 lg:w-16 lg:h-14 flex items-center justify-center bg-accent-blue rounded-md text-main-blue active:scale-90 duration-150 active:opacity-55">
-              <FaPlus />
-            </button>
-            <h3 className="text-sm lg:text-base font-semibold">
-              Create Custom Plan
-            </h3>
-          </div>
         </>
       )}
     </>

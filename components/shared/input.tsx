@@ -1,11 +1,10 @@
 import React, {
   forwardRef,
-  ForwardRefRenderFunction,
   ComponentProps,
 } from "react";
 
 type Props = {
-  label?: string;
+  label?: string | React.ReactNode;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   error?: string;
@@ -14,7 +13,7 @@ type Props = {
 export const TextInput = forwardRef<HTMLInputElement, Props>(
   ({ label, id, rightIcon, leftIcon, error, ...props }, ref) => {
     return (
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-1.5 w-full">
         {label ? (
           <label htmlFor={id} className="font-semibold text-sm">
             {label}

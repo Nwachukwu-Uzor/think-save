@@ -47,7 +47,7 @@ const Dashboard = () => {
           </article>
           <article className="lg:col-span-2">
             <Card>
-              <Wallet balance={830520} />
+              <Wallet />
             </Card>
           </article>
         </section>

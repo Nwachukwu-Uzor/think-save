@@ -52,7 +52,7 @@ export const MainHeader = () => {
             <li
               key={id}
               className={`w-full py-2 lg:py-0 lg:w-auto pl-6 lg:pl-0 ${
-                href === currentRoute
+                href === currentRoute || currentRoute.includes(href)
                   ? "bg-white text-main-blue"
                   : "text-white lg:text-black"
               }`}
