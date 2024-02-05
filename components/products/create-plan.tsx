@@ -1,12 +1,17 @@
-import { ProductType } from "@/types/shared";
 import React, { useState } from "react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ProductType, TenureType } from "@/types/shared";
 import { IoChevronBackOutline } from "react-icons/io5";
-import Select from "react-select";
-import { Button, TextInput } from "../shared";
+import Select, { SingleValue } from "react-select";
+import { Button, TextInput, Toggle } from "../shared";
+import { useForm } from "react-hook-form";
+import { addMonthsToDate, computePayout } from "@/utils/shared";
 
 type Props = {
   product: ProductType;
   handleClose: () => void;
+  customerId: string;
 };
 
 const saveFrequencyOptions = [
@@ -30,19 +35,72 @@ const sourceOfFundsOptions = [
   { label: "Card", value: "Card", id: 2 },
 ];
 
-export const CreatePlan: React.FC<Props> = ({ product, handleClose }) => {
+const schema = z.object({
+  Name: z.string().min(2, { message: "Name should be at least 2 characters" }),
+  Amount: z.string().refine((amount) => Number(amount) > 0, {
+    message: "Amount must be greater than zero",
+    path: ["Amount"],
+  }),
+  Tenure: z.string().refine((amount) => Number(amount) > 0, {
+    message: "Tenure must be greater than zero",
+    path: ["Tenure"],
+  }),
+  Interest: z.string().refine((amount) => Number(amount) > 0, {
+    message: "Interest must be greater than zero",
+    path: ["Interest"],
+  }),
+  Description: z.optional(z.string()),
+  Frequency: z.string({ required_error: "Frequency is required" }),
+  DayOfTheWeek: z.optional(z.string()),
+  DayOfTheMonth: z.optional(z.string()),
+  FundingSource: z.string({ required_error: "Funding Source is required" }),
+  PreferredTime: z.string(),
+  StartDate: z.string(),
+});
+
+type FormFields = z.infer<typeof schema>;
+const now = new Date();
+const defaultDate = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+
+export const CreatePlan: React.FC<Props> = ({
+  product,
+  handleClose,
+  customerId,
+}) => {
   const [isContinued, setIsContinued] = useState(false);
   const { productName, productId, tenures } = product;
+
+  const {
+    register,
+    handleSubmit,
+    setError,
+    setValue,
+    formState: { errors, isSubmitting },
+    watch,
+  } = useForm<FormFields>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      StartDate: defaultDate,
+    },
+  });
 
   const formattedTenure = tenures.map((tenure) => ({
     value: tenure,
     label: tenure.interest,
   }));
 
+  const [Interest, Tenure, Amount, StartDate] = watch([
+    "Interest",
+    "Tenure",
+    "Amount",
+    "StartDate",
+  ]);
   const handleContinue = () => {
     setIsContinued(true);
   };
 
+  const payout = computePayout(Interest, Amount, Tenure);
+  const maturityDate = addMonthsToDate(StartDate, Number(Tenure));
   return (
     <div>
       <h2 className="font-medium mb-2 flex items-center justify-start gap-2">
@@ -61,28 +119,67 @@ export const CreatePlan: React.FC<Props> = ({ product, handleClose }) => {
           Fill out the form to create a plan
         </p>
         <div className="mt-3 flex flex-col gap-2 lg:gap-3">
-          <TextInput label={`Title`} />
+          <TextInput
+            label={`Title`}
+            {...register("Name")}
+            error={errors?.Name?.message}
+          />
           <TextInput
             label={
               <span>
                 Reason <i className="font-normal">(Description)</i>
               </span>
             }
+            {...register("Description")}
+            error={errors?.Description?.message}
           />
-          <TextInput label={`Overall Target Amount`} />
-          <div className="flex items-center justify-between gap-3">
+          <TextInput
+            label={`Overall Target Amount`}
+            {...register("Amount")}
+            onChange={(e) => {
+              const value = e.target.value.replace(/\D/g, "");
+              setValue("Amount", value);
+            }}
+          />
+          <div className="flex items-start justify-between gap-3">
             <h4 className="text-sm font-medium">Total Payout: </h4>
             <div className="flex-1">
-              <TextInput />
+              <TextInput disabled value={payout} />
             </div>
           </div>
           <div>
             <h4 className="text-sm font-medium mb-1">Tenure: </h4>
-            <Select options={formattedTenure} maxMenuHeight={100} />
+            <Select
+              options={formattedTenure}
+              maxMenuHeight={100}
+              onChange={(
+                val: SingleValue<{ label: string; value: TenureType }>
+              ) => {
+                const tenure = val?.value;
+                if (!tenure) {
+                  return;
+                }
+                const { interestRate, tenureRate } = tenure;
+                setValue("Tenure", tenureRate);
+                setValue("Interest", interestRate);
+              }}
+            />
+            <p className="h-1 mt-0.5 text-red-500 text-xs">
+              {errors?.Tenure?.message}{" "}
+            </p>
           </div>
           <div className="flex flex-col lg:flex-row items-center justify-between gap-2">
-            <TextInput type="date" label="Start Date" />
-            <TextInput type="date" label="End Date" />
+            <TextInput
+              type="date"
+              label="Start Date"
+              {...register("StartDate")}
+            />
+            <TextInput
+              type="date"
+              label="End Date"
+              disabled
+              value={maturityDate}
+            />
           </div>
           {isContinued ? (
             <>
@@ -102,13 +199,22 @@ export const CreatePlan: React.FC<Props> = ({ product, handleClose }) => {
                 <h4 className="text-sm font-medium mb-1">Source of Fund</h4>
                 <Select options={sourceOfFundsOptions} maxMenuHeight={100} />
               </div>
-              <div className="form-control">
+              <div className="flex items-center gap-2 mt-2">
+                <Toggle />
+                <p className="text-xs">Lock funds until maturity date.</p>
+              </div>
+              <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
-                  className="toggle toggle-success"
-                  // checked
+                  className="rounded text-main-blue bg-accent-blue border-0 outline-none cursor-pointer"
                 />
+                <h2 className="text-xs font-semibold text-black">
+                  I agree to the Terms of Service and Privacy Policy.
+                </h2>
               </div>
+              <Button color="main-blue" type="submit">
+                Invest
+              </Button>
             </>
           ) : (
             <Button color="accent-blue" type="button" onClick={handleContinue}>

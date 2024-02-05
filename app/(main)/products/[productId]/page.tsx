@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Button, Container } from "@/components/shared";
 import { useQuery } from "@tanstack/react-query";
@@ -7,8 +7,12 @@ import { FETCH_PRODUCT_BY_PRODUCT_ID } from "@/constants";
 import { productsService } from "@/services";
 import { ProductDetailsLoader } from "@/components/shared/skeleton-loaders";
 import { CreatePlan } from "@/components/products";
+import { UserType } from "@/types/shared";
+import { SESSION_STORAGE_KEY } from "@/config";
+import { useUser } from "@/hooks";
 
 const ProductDetail = () => {
+  const { user } = useUser();
   const [mode, setMode] = useState<"DETAILS" | "CREATE">("DETAILS");
 
   const { productId } = useParams<{ productId: string }>();
@@ -73,7 +77,11 @@ const ProductDetail = () => {
                 </div>
               </article>
             ) : (
-              <CreatePlan product={product} handleClose={handleToggleMode} />
+              <CreatePlan
+                product={product}
+                handleClose={handleToggleMode}
+                customerId={user?.customerId ?? ""}
+              />
             )
           ) : null}
         </section>

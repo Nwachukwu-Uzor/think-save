@@ -54,3 +54,7 @@ body {
 .indicators > button {
   margin: 5px;
 }
+
+.t-input:checked ~ span:last-child {
+  --tw-translate-x: 1rem; /* translate-x-7 */
+}

@@ -9,34 +9,10 @@ import {
 import { Button, Card, Container } from "@/components/shared";
 import { UserType } from "@/types/shared";
 import { SESSION_STORAGE_KEY } from "@/config";
+import { useUser } from "@/hooks";
 
 const Profile = () => {
-  const [user, setUser] = useState<UserType | null>(null);
-  useEffect(() => {
-    const userFromSessionStorage = JSON.parse(
-      sessionStorage.getItem(SESSION_STORAGE_KEY) as string
-    ) as unknown as UserType;
-    setUser(userFromSessionStorage);
-  }, []);
-
-  const dummyUser = {
-    id: 1,
-    dateCreated: "6/29/2023",
-    firstName: "John",
-    email: "jeffwilson@example.com",
-    middleName: "Doe",
-    lastName: "Smith",
-    bvn: "123456789",
-    phoneNumber: "555-1234",
-    gender: "Male",
-    dob: "Jun., 03, 2023",
-    city: "New York",
-    mothersMaidenName: "Johnson",
-    address: "123 Main Street",
-    avatarUrl: "/assets/images/dummy-avatar.png",
-    country: "Nigerian",
-    state: "Lagos",
-  };
+  const { user } = useUser();
 
   const dummyInvestments = [
     {

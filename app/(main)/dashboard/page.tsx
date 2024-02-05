@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   AccountsSlider,
   Products,
@@ -8,17 +8,10 @@ import {
 } from "@/components/dashboard/";
 import { Card } from "@/components/shared/";
 import { Container } from "@/components/shared/";
-import { UserType } from "@/types/shared";
-import { SESSION_STORAGE_KEY } from "@/config";
+import { useUser } from "@/hooks";
 
 const Dashboard = () => {
-  const [user, setUser] = useState<UserType | null>(null);
-  useEffect(() => {
-    const userFromSessionStorage = JSON.parse(
-      sessionStorage.getItem(SESSION_STORAGE_KEY) as string
-    ) as unknown as UserType;
-    setUser(userFromSessionStorage);
-  }, []);
+  const { user } = useUser();
 
   return (
     <>
