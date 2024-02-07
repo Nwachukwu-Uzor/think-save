@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProductType, TenureType } from "@/types/shared";
@@ -59,8 +59,6 @@ const schema = z.object({
 });
 
 type FormFields = z.infer<typeof schema>;
-const now = new Date();
-const defaultDate = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
 
 export const CreatePlan: React.FC<Props> = ({
   product,
@@ -75,13 +73,11 @@ export const CreatePlan: React.FC<Props> = ({
     handleSubmit,
     setError,
     setValue,
+    trigger,
     formState: { errors, isSubmitting },
     watch,
   } = useForm<FormFields>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      StartDate: defaultDate,
-    },
   });
 
   const formattedTenure = tenures.map((tenure) => ({
@@ -95,8 +91,25 @@ export const CreatePlan: React.FC<Props> = ({
     "Amount",
     "StartDate",
   ]);
-  const handleContinue = () => {
+  const handleContinue = async () => {
+    const result = await trigger([
+      "Name",
+      "Interest",
+      "Tenure",
+      "Amount",
+      "StartDate",
+    ]);
+
+    if (!result) {
+      return;
+    }
     setIsContinued(true);
+  };
+
+  const triggerInitialFieldsValidate = async (
+    _event?: ChangeEvent<HTMLInputElement>
+  ) => {
+    await trigger(["Name", "Interest", "Tenure", "Amount", "StartDate"]);
   };
 
   const payout = computePayout(Interest, Amount, Tenure);
@@ -105,7 +118,7 @@ export const CreatePlan: React.FC<Props> = ({
     <div>
       <h2 className="font-medium mb-2 flex items-center justify-start gap-2">
         <span
-          className="bg-accent-blue rounded-md p-1.5 active:scale-95 active:opacity-80 duration-100 cursor-pointer"
+          className="bg-white rounded-md p-1.5 active:scale-95 active:opacity-80 duration-100 cursor-pointer"
           onClick={handleClose}
         >
           <IoChevronBackOutline className="text-xl text-main-blue" />
@@ -113,7 +126,7 @@ export const CreatePlan: React.FC<Props> = ({
         <span className="text-lg lg:text-xl">Create Plan</span>
       </h2>
 
-      <form className="mt-3  max-w-[500px] mx-auto">
+      <form className="mt-3  max-w-[600px] mx-auto bg-white px-2 py-3 rounded-md">
         <h2 className="font-medium lg:text-lg text-center">{productName}</h2>
         <p className="my-1 text-sm lg:text-base text-center font-light">
           Fill out the form to create a plan
@@ -123,6 +136,9 @@ export const CreatePlan: React.FC<Props> = ({
             label={`Title`}
             {...register("Name")}
             error={errors?.Name?.message}
+            onChange={async (e) => {
+              await triggerInitialFieldsValidate(e);
+            }}
           />
           <TextInput
             label={
@@ -132,14 +148,19 @@ export const CreatePlan: React.FC<Props> = ({
             }
             {...register("Description")}
             error={errors?.Description?.message}
+            onChange={async (e) => {
+              await triggerInitialFieldsValidate(e);
+            }}
           />
           <TextInput
             label={`Overall Target Amount`}
             {...register("Amount")}
-            onChange={(e) => {
+            onChange={async (e) => {
               const value = e.target.value.replace(/\D/g, "");
               setValue("Amount", value);
+              await triggerInitialFieldsValidate(e);
             }}
+            error={errors?.Amount?.message}
           />
           <div className="flex items-start justify-between gap-3">
             <h4 className="text-sm font-medium">Total Payout: </h4>
@@ -152,7 +173,7 @@ export const CreatePlan: React.FC<Props> = ({
             <Select
               options={formattedTenure}
               maxMenuHeight={100}
-              onChange={(
+              onChange={async (
                 val: SingleValue<{ label: string; value: TenureType }>
               ) => {
                 const tenure = val?.value;
@@ -160,12 +181,13 @@ export const CreatePlan: React.FC<Props> = ({
                   return;
                 }
                 const { interestRate, tenureRate } = tenure;
+                await triggerInitialFieldsValidate();
                 setValue("Tenure", tenureRate);
                 setValue("Interest", interestRate);
               }}
             />
             <p className="h-1 mt-0.5 text-red-500 text-xs">
-              {errors?.Tenure?.message}{" "}
+              {errors?.Tenure?.message}
             </p>
           </div>
           <div className="flex flex-col lg:flex-row items-center justify-between gap-2">
@@ -173,6 +195,10 @@ export const CreatePlan: React.FC<Props> = ({
               type="date"
               label="Start Date"
               {...register("StartDate")}
+              error={errors?.StartDate?.message}
+              onChange={async (e) => {
+                await triggerInitialFieldsValidate(e);
+              }}
             />
             <TextInput
               type="date"

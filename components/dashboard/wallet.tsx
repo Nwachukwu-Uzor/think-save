@@ -17,7 +17,6 @@ import { toast } from "react-toastify";
 export const Wallet: React.FC = () => {
   const [walletAccount, setWalletAccount] = useState<AccountType | null>(null);
   const [isCopied, setIsCopied] = useState(false);
-  const [isLoadingWallet, setIsLoadingWallet] = useState(true);
   const [showBalance, setShowBalance] = useState(false);
 
   const handleToggleShowBalance = () => {
@@ -25,13 +24,16 @@ export const Wallet: React.FC = () => {
   };
 
   useEffect(() => {
+    const userString = sessionStorage.getItem(SESSION_STORAGE_KEY) as string;
+    if (!userString) {
+      return;
+    }
     const userFromSessionStorage = JSON.parse(
       sessionStorage.getItem(SESSION_STORAGE_KEY) as string
     ) as unknown as UserType;
 
     const { accounts } = userFromSessionStorage;
     if (!accounts || !accounts.length) {
-      setIsLoadingWallet(false);
       return;
     }
 
@@ -42,12 +44,10 @@ export const Wallet: React.FC = () => {
     );
     const [savingsWallet] = savingsWallets;
     if (!savingsWallet) {
-      setIsLoadingWallet(false);
       return;
     }
 
     setWalletAccount(savingsWallet);
-    setIsLoadingWallet(false);
   }, []);
 
   const handleCopy = async (text: string) => {
@@ -66,9 +66,7 @@ export const Wallet: React.FC = () => {
   };
   return (
     <>
-      {isLoadingWallet ? (
-        <WalletLoader />
-      ) : walletAccount ? (
+      {walletAccount ? (
         <article className="flex flex-col justify-between gap-2 lg:gap-4 xl:gap-6">
           <div className="bg-accent-blue rounded-sm py-4 lg:py-6 flex flex-col items-center justify-center gap-0.5">
             <div className="w-full text-right px-3">
@@ -143,7 +141,7 @@ export const Wallet: React.FC = () => {
           </div>
         </article>
       ) : (
-        <div>You do not have a wallet account yet</div>
+        <WalletLoader />
       )}
     </>
   );

@@ -30,12 +30,12 @@ const ProductDetail = () => {
   return (
     <>
       <Container>
-        <section className="px-2 lg:px-3 py-3 lg:py-4 bg-white min-h-[50vh]">
+        <section className="min-h-[50vh]">
           {isLoading ? (
             <ProductDetailsLoader />
           ) : product ? (
             mode === "DETAILS" ? (
-              <article>
+              <article className="px-2 lg:px-3 py-3 lg:py-4 bg-white">
                 <h2 className="lg:text-lg font-semibold mb-2">
                   {product.productName}
                 </h2>

@@ -8,8 +8,12 @@ import { SESSION_STORAGE_KEY } from "@/config";
 const Accounts = () => {
   const [user, setUser] = useState<UserType | null>(null);
   useEffect(() => {
+    const userString = sessionStorage.getItem(SESSION_STORAGE_KEY) as string;
+    if (!userString) {
+      return;
+    }
     const userFromSessionStorage = JSON.parse(
-      sessionStorage.getItem(SESSION_STORAGE_KEY) as string
+      userString
     ) as unknown as UserType;
     setUser(userFromSessionStorage);
   }, []);
