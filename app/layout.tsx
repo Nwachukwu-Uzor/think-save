@@ -10,6 +10,7 @@ import "./globals.css";
 import { SidebarContextProvider } from "@/context/admin/sidebar";
 import { useEffect, useState } from "react";
 import { SESSION_STORAGE_KEY } from "@/config";
+import { useUser } from "@/hooks";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -29,6 +30,8 @@ export default function RootLayout({
   const router = useRouter();
   const currentRoute = usePathname();
 
+  const { user } = useUser();
+
   useEffect(() => {
     const user = sessionStorage.getItem(SESSION_STORAGE_KEY);
     if (!user) {
@@ -38,6 +41,10 @@ export default function RootLayout({
       router.push("/login");
     }
   }, [router, currentRoute]);
+
+  if (!user && currentRoute !== "/login" && currentRoute !== "/register") {
+    return null;
+  }
 
   return (
     <html lang="en">
