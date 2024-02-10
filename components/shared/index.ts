@@ -9,4 +9,7 @@ export { DebouncedInput } from "./debounced-input";
 export { Pagination } from "./pagination";
 export { TextAvatar } from "./text-avatar";
 export { EmptyPage } from "./empty-page";
-export { Toggle } from "./toggle"
+export { Toggle } from "./toggle";
+export { SessionProvider } from "./session-provider";
+export { Provider } from "./query-client-provider";
+export { Protected } from "./protected-route";

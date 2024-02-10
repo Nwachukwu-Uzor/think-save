@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { z } from "zod";
 import { TextInput } from "../shared/";
 import {
@@ -50,18 +51,22 @@ export const LoginForm = () => {
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      const response = await authService.login(data);
-      if (!response?.status) {
-        setError("root", { type: "deps", message: response?.message });
+      const response = await signIn("login", {
+        ...data,
+        redirect: false,
+      });
+
+      if (response?.error) {
+        if (typeof response?.error !== "string") {
+          throw response.error;
+        }
+        setError("root", { type: "deps", message: response?.error });
         toast.error("Login Failed", { theme: "colored" });
         return;
       }
-      sessionStorage.setItem(
-        SESSION_STORAGE_KEY,
-        JSON.stringify(response?.data)
-      );
       toast.success("Login Success", { theme: "colored" });
       router.push("/dashboard");
+      router.refresh();
     } catch (error: any) {
       console.log(error);
       const errorData = error?.response?.data?.errors;

@@ -9,9 +9,14 @@ import {
 import { Card } from "@/components/shared/";
 import { Container } from "@/components/shared/";
 import { useUser } from "@/hooks";
+import { useSession } from "next-auth/react";
 
 const Dashboard = () => {
   const { user } = useUser();
+  const session = useSession();
+  console.log({ session: session });
+  // const { info } = session;
+  // console.log({info})
 
   return (
     <>

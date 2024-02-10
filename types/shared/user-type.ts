@@ -24,6 +24,6 @@ export type UserType = {
   dateOfBirth?: string;
   dateCreated?: string;
   customerId: string;
-  accountId?: string;
+  accountId: string;
   accounts?: AccountType[];
 };

@@ -5,9 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaRegBell, FaBars, FaRegUser } from "react-icons/fa6";
 import { IoLogOutOutline } from "react-icons/io5";
-import { SESSION_STORAGE_KEY } from "@/config";
-import { UserType } from "@/types/shared";
 import { TextAvatar } from "../shared";
+import { useSession } from "next-auth/react";
 
 export const MainHeader = () => {
   const currentRoute = usePathname();
@@ -19,14 +18,9 @@ export const MainHeader = () => {
     { id: 5, content: <>Products</>, href: "/products" },
   ];
 
+  const { data } = useSession();
+
   const [navOpen, setNavOpen] = useState(false);
-  const [user, setUser] = useState<UserType | null>(null);
-  useEffect(() => {
-    const userFromSessionStorage = JSON.parse(
-      sessionStorage.getItem(SESSION_STORAGE_KEY) as string
-    ) as unknown as UserType;
-    setUser(userFromSessionStorage);
-  }, []);
 
   const handleToggleNav = () => {
     setNavOpen((opened) => !opened);
@@ -91,9 +85,9 @@ export const MainHeader = () => {
           </li>
           <li className="dropdown dropdown-end hidden lg:list-item">
             <div tabIndex={0} role="button">
-              {user?.imagePath ? (
+              {data?.user?.image ? (
                 <Image
-                  src={user?.imagePath}
+                  src={data?.user?.image}
                   alt="User"
                   height={20}
                   width={20}
@@ -101,7 +95,7 @@ export const MainHeader = () => {
                 />
               ) : (
                 <TextAvatar
-                  text={user?.firstName?.charAt(0) ?? "T"}
+                  text={data?.user?.name?.charAt(0) ?? "T"}
                   size="sm"
                 />
               )}
@@ -112,9 +106,9 @@ export const MainHeader = () => {
             >
               <li className=" px-2 py-1.5 border-b border-b-gray-300 rounded-0">
                 <div className="flex items-center gap-2 w-full p-0">
-                  {user?.imagePath ? (
+                  {data?.user?.image ? (
                     <Image
-                      src={user?.imagePath}
+                      src={data?.user?.image}
                       alt="User"
                       height={20}
                       width={20}
@@ -122,15 +116,13 @@ export const MainHeader = () => {
                     />
                   ) : (
                     <TextAvatar
-                      text={user?.firstName?.charAt(0) ?? "T"}
+                      text={data?.user?.name?.charAt(0) ?? "T"}
                       size="sm"
                     />
                   )}
                   <div className="flex flex-col gap-1">
-                    <h4 className="font-semibold">
-                      {user?.firstName} {user?.lastName}
-                    </h4>
-                    <p>{user?.email}</p>
+                    <h4 className="font-semibold">{data?.user?.name}</h4>
+                    <p>{data?.user?.email}</p>
                   </div>
                 </div>
               </li>

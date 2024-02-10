@@ -1,7 +1,11 @@
 import { MainHeader } from "@/components/main/";
 import { Container } from "@/components/shared/";
+import { getServerSession } from "next-auth";
 
-const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
+  const session = await getServerSession();
+  console.log({ session });
+
   return (
     <main className="flex flex-col min-h-[100vh]">
       <header className="bg-white">
