@@ -154,7 +154,10 @@ export const Wallet: React.FC = () => {
           </div>
         </article>
       ) : (
-        <div>You have no wallet account</div>
+        <div>
+          You have no wallet account {session.data?.user.customerId}{" "}
+          {session.data?.user.email}
+        </div>
       )}
     </>
   );
