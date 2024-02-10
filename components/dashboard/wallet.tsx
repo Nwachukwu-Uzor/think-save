@@ -75,7 +75,7 @@ export const Wallet: React.FC = () => {
     return <WalletLoader />;
   }
 
-  console.log({ walletAccount });
+  console.log({ session });
 
   return (
     <>
