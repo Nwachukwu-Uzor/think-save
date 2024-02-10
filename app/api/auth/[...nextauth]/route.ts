@@ -52,27 +52,27 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user, trigger }) {
+    async jwt({ token, user }) {
       /* Step 1: update the token based on the user object */
-      if (trigger === "update") {
-        console.log("triggered");
-      }
+      // if (trigger === "update") {
+      //   console.log("triggered");
+      // }
       if (user) {
         token.customerId = user.customerId;
       }
-      return { ...token, ...user };
+      return token;
     },
-    async session({ session, token, trigger, newSession }) {
+    async session({ session, token }) {
       session.user.id = token.id;
       session.user.customerId = token.customerId;
-      if (trigger === "update") {
-        console.log({ newSession });
+      // if (trigger === "update") {
+      //   console.log({ newSession });
 
-        return {
-          ...session,
-          ...newSession,
-        };
-      }
+      //   return {
+      //     ...session,
+      //     ...newSession,
+      //   };
+      // }
       return session;
     },
   },
