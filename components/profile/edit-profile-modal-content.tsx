@@ -16,10 +16,12 @@ import { formatValidationErrors } from "@/utils/shared";
 import { toast } from "react-toastify";
 import { SESSION_STORAGE_KEY } from "@/config";
 import { PulseLoader } from "react-spinners";
+import { useSession } from "next-auth/react";
 
 type Props = {
   userDetails: Partial<UserType>;
   handleClose: () => void;
+  onSuccess: () => Promise<void>;
 };
 
 const schema = z.object({
@@ -31,11 +33,7 @@ const schema = z.object({
     .min(2, { message: "Last name should be at least 2 characters" }),
   middleName: z.optional(z.string()),
   phoneNumber: z.optional(z.string()),
-  bvn: z
-    .optional(z.string())
-    .refine((value) => !value || /^\d{10}$/.test(value), {
-      message: "BVN must be a 10-digit string",
-    }),
+  bvn: z.optional(z.string()),
   city: z.optional(z.string()),
   mothersMaidenName: z.optional(z.string()),
   dateOfBirth: z.optional(z.string()),
@@ -49,7 +47,9 @@ type FormFields = z.infer<typeof schema> & {};
 export const EditProfileModalContent: React.FC<Props> = ({
   userDetails,
   handleClose,
+  onSuccess,
 }) => {
+  const { update, data: sessionData } = useSession();
   const {
     lastName,
     firstName,
@@ -72,7 +72,6 @@ export const EditProfileModalContent: React.FC<Props> = ({
   const {
     register,
     setError,
-    control,
     handleSubmit,
     setValue,
     formState: { errors, isSubmitting },
@@ -121,7 +120,6 @@ export const EditProfileModalContent: React.FC<Props> = ({
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    console.log(data);
     try {
       const formData = new FormData();
       for (const key in data) {
@@ -148,7 +146,19 @@ export const EditProfileModalContent: React.FC<Props> = ({
         JSON.stringify(response?.data)
       );
       toast.success("Profile update success", { theme: "colored" });
+      if (sessionData) {
+        console.log("Update done");
+        await update({
+          ...sessionData,
+          user: {
+            ...sessionData.user,
+            name: `${response?.data?.firstName} ${response?.data?.lastName}`,
+            image: response?.data?.imagePath,
+          },
+        });
+      }
       handleClose();
+      await onSuccess();
     } catch (error: any) {
       console.log(error);
       const errorData = error?.response?.data?.errors;
@@ -290,6 +300,7 @@ export const EditProfileModalContent: React.FC<Props> = ({
                 const value = e.target.value.replace(/\D/g, "");
                 setValue("bvn", value);
               }}
+              error={errors?.bvn?.message}
             />
             <div className="grid lg:grid-cols-2 gap-2 lg:gap-4">
               <div className="flex flex-col gap-1.5">

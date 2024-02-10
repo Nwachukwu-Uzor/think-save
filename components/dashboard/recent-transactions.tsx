@@ -7,14 +7,20 @@ import { transactionService } from "@/services";
 import { FaMoneyCheck } from "react-icons/fa6";
 import { TransactionLoader } from "../shared/skeleton-loaders";
 import { EmptyPage } from "../shared";
+import { useSession } from "next-auth/react";
 
-type Props = {
-  customerId: string;
-};
-export const RecentTransactions: React.FC<Props> = ({ customerId }) => {
+export const RecentTransactions: React.FC = () => {
+  const session = useSession();
+
   const { data: transactions, isLoading } = useQuery({
-    queryKey: [FETCH_TRANSACTION_BY_CUSTOMER_ID, customerId],
+    queryKey: [
+      FETCH_TRANSACTION_BY_CUSTOMER_ID,
+      session.data?.user?.customerId,
+    ],
     queryFn: async ({ queryKey }) => {
+      if (!queryKey[1]) {
+        return null;
+      }
       const transactions = await transactionService.getTransactionByCustomerId(
         queryKey[1]
       );
@@ -24,13 +30,17 @@ export const RecentTransactions: React.FC<Props> = ({ customerId }) => {
 
   const placeholders = new Array(3).fill("").map((_val, index) => index);
 
-  return isLoading ? (
-    <div className="flex flex-col gap-2">
-      {placeholders.map((placeholder) => (
-        <TransactionLoader key={placeholder} />
-      ))}
-    </div>
-  ) : transactions && transactions.length > 0 ? (
+  if (isLoading || session.status === "loading") {
+    return (
+      <div className="flex flex-col gap-2">
+        {placeholders.map((placeholder) => (
+          <TransactionLoader key={placeholder} />
+        ))}
+      </div>
+    );
+  }
+
+  return transactions && transactions.length > 0 ? (
     <ul className="flex flex-col gap-2">
       {transactions.map((transaction) => (
         <li

@@ -13,10 +13,7 @@ import { useSession } from "next-auth/react";
 
 const Dashboard = () => {
   const { user } = useUser();
-  const session = useSession();
-  console.log({ session: session });
-  // const { info } = session;
-  // console.log({info})
+  const { data } = useSession();
 
   return (
     <>
@@ -25,7 +22,7 @@ const Dashboard = () => {
           Welcome to ThinkSave
         </h2>
         <p className="text-[#B7B7B7] my-1 font-medium">
-          Hi {user?.firstName} {user?.lastName}, Welcome Back.
+          Hi {data?.user.name}, Welcome Back.
         </p>
         <section className="my-3 lg:my-8 grid lg:grid-cols-5 gap-2 lg:gap-4 overflow-hidden">
           <article className="lg:col-span-3 overflow-hidden">
@@ -37,9 +34,7 @@ const Dashboard = () => {
                 </button>
               </div>
               <div className="mt-2 lg:mt-3 w-full overflow-hidden rounded-md">
-                {user?.accounts ? (
-                  <AccountsSlider accounts={user?.accounts} />
-                ) : null}
+                <AccountsSlider />
               </div>
             </Card>
           </article>
@@ -59,9 +54,7 @@ const Dashboard = () => {
                     View All
                   </button>
                 </div>
-                {user ? (
-                  <RecentTransactions customerId={user.customerId} />
-                ) : null}
+                <RecentTransactions />
               </div>
             </Card>
           </article>

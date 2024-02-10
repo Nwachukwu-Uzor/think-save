@@ -1,7 +1,7 @@
 import { SESSION_STORAGE_KEY, baseUrl } from "@/config";
 import { authService } from "@/services";
 import { UserType } from "@/types/shared";
-import NextAuth, { User } from "next-auth";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const handler = NextAuth({
@@ -37,10 +37,12 @@ const handler = NextAuth({
             return null;
           }
           const user = {
+            ...data,
             email: data.email,
             image: data?.imagePath,
             id: data.customerId,
             name: `${data.firstName} ${data.lastName}`,
+            customerId: data.customerId,
           };
           return user;
         } catch (err: unknown) {
@@ -50,11 +52,27 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async session({ token, session }) {
-      console.log({ token, session });
-      // if (session.user) {
-      //   session.user.id = token?.sub;
-      // }
+    async jwt({ token, user, trigger }) {
+      /* Step 1: update the token based on the user object */
+      if (trigger === "update") {
+        console.log("triggered");
+      }
+      if (user) {
+        token.customerId = user.customerId;
+      }
+      return { ...token, ...user };
+    },
+    async session({ session, token, trigger, newSession }) {
+      session.user.id = token.id;
+      session.user.customerId = token.customerId;
+      if (trigger === "update") {
+        console.log({ newSession });
+
+        return {
+          ...session,
+          ...newSession,
+        };
+      }
       return session;
     },
   },

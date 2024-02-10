@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import {
@@ -13,26 +13,25 @@ import { AccountType, UserType } from "@/types/shared";
 import { SESSION_STORAGE_KEY } from "@/config";
 import { WalletLoader } from "../shared/skeleton-loaders";
 import { toast } from "react-toastify";
+import { useSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
+import { FETCH_ACCOUNTS_BY_CUSTOMER_ID } from "@/constants";
+import { accountService } from "@/services";
 
 export const Wallet: React.FC = () => {
-  const [walletAccount, setWalletAccount] = useState<AccountType | null>(null);
-  const [isCopied, setIsCopied] = useState(false);
-  const [showBalance, setShowBalance] = useState(false);
+  const session = useSession();
+  const { data: accounts, isLoading } = useQuery({
+    queryKey: [FETCH_ACCOUNTS_BY_CUSTOMER_ID, session.data?.user?.customerId],
+    queryFn: async ({ queryKey }) => {
+      if (!queryKey[1]) {
+        return null;
+      }
 
-  const handleToggleShowBalance = () => {
-    setShowBalance((shown) => !shown);
-  };
+      return await accountService.getAccountsByCustomerId(queryKey[1]);
+    },
+  });
 
-  useEffect(() => {
-    const userString = sessionStorage.getItem(SESSION_STORAGE_KEY) as string;
-    if (!userString) {
-      return;
-    }
-    const userFromSessionStorage = JSON.parse(
-      sessionStorage.getItem(SESSION_STORAGE_KEY) as string
-    ) as unknown as UserType;
-
-    const { accounts } = userFromSessionStorage;
+  const walletAccount = useMemo(() => {
     if (!accounts || !accounts.length) {
       return;
     }
@@ -47,8 +46,15 @@ export const Wallet: React.FC = () => {
       return;
     }
 
-    setWalletAccount(savingsWallet);
-  }, []);
+    return savingsWallet;
+  }, [accounts]);
+
+  const [isCopied, setIsCopied] = useState(false);
+  const [showBalance, setShowBalance] = useState(false);
+
+  const handleToggleShowBalance = () => {
+    setShowBalance((shown) => !shown);
+  };
 
   const handleCopy = async (text: string) => {
     try {
@@ -64,6 +70,13 @@ export const Wallet: React.FC = () => {
       console.log(error);
     }
   };
+
+  if (isLoading || session.status === "loading") {
+    return <WalletLoader />;
+  }
+
+  console.log({ walletAccount });
+
   return (
     <>
       {walletAccount ? (
@@ -141,7 +154,7 @@ export const Wallet: React.FC = () => {
           </div>
         </article>
       ) : (
-        <WalletLoader />
+        <div>You have no wallet account</div>
       )}
     </>
   );

@@ -4,15 +4,32 @@ import { AccountSlider } from "./";
 import { Button, Carousel, CarouselItem } from "../shared";
 import { AccountType } from "@/types/shared";
 import { FaPlus } from "react-icons/fa6";
+import { useSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
+import { FETCH_ACCOUNTS_BY_CUSTOMER_ID } from "@/constants";
+import { accountService } from "@/services";
+import { AccountLoader } from "../shared/skeleton-loaders";
 
-type Props = {
-  accounts: AccountType[];
-};
+export const AccountsSlider: React.FC = () => {
+  const session = useSession();
+  const { data: accounts, isLoading } = useQuery({
+    queryKey: [FETCH_ACCOUNTS_BY_CUSTOMER_ID, session?.data?.user?.customerId],
+    queryFn: async ({ queryKey }) => {
+      if (!queryKey[1]) {
+        return null;
+      }
 
-export const AccountsSlider: React.FC<Props> = ({ accounts }) => {
+      return await accountService.getAccountsByCustomerId(queryKey[1]);
+    },
+  });
+
+  if (isLoading || session.status === "loading") {
+    return <AccountLoader />;
+  }
+
   return (
     <div className="relative">
-      {accounts.length > 0 ? (
+      {accounts && accounts.length > 0 ? (
         <Carousel speed={5000}>
           {accounts.map((item) => (
             <CarouselItem key={item.id}>

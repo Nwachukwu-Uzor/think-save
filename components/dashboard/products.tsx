@@ -1,7 +1,5 @@
 "use client";
 import React from "react";
-import { HiOutlineChip } from "react-icons/hi";
-import { FaPlus } from "react-icons/fa6";
 import { Product } from ".";
 import { useQuery } from "@tanstack/react-query";
 import { FETCH_ALL_PRODUCTS } from "@/constants";
@@ -18,15 +16,15 @@ export const Products: React.FC = () => {
     },
   });
 
+  if (isLoading) {
+    return placeholders.map((placeholder) => (
+      <ProductLoader key={placeholder} />
+    ));
+  }
+
   return (
     <>
-      {isLoading ? (
-        <>
-          {placeholders.map((placeholder) => (
-            <ProductLoader key={placeholder} />
-          ))}
-        </>
-      ) : (
+      {
         <>
           {products && products.length > 0 ? (
             products.map((plan) => <Product {...plan} key={plan.productId} />)
@@ -34,7 +32,7 @@ export const Products: React.FC = () => {
             <div className="col-span-2 lg:col-span-3">No Product Found</div>
           )}
         </>
-      )}
+      }
     </>
   );
 };

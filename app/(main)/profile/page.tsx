@@ -7,12 +7,26 @@ import {
   UserDetails,
 } from "@/components/profile";
 import { Button, Card, Container } from "@/components/shared";
-import { UserType } from "@/types/shared";
-import { SESSION_STORAGE_KEY } from "@/config";
 import { useUser } from "@/hooks";
+import { useQuery } from "@tanstack/react-query";
+import { FETCH_USER_BY_CUSTOMER_ID } from "@/constants";
+import { useSession } from "next-auth/react";
+import { userService } from "@/services";
 
 const Profile = () => {
-  const { user } = useUser();
+  const session = useSession();
+
+  const { data: user, refetch } = useQuery({
+    queryKey: [FETCH_USER_BY_CUSTOMER_ID, session?.data?.user?.customerId],
+    queryFn: async ({ queryKey }) => {
+      const [_first, second] = queryKey;
+      if (!second) {
+        return null;
+      }
+
+      return await userService.getUserByCustomerId(second);
+    },
+  });
 
   const dummyInvestments = [
     {
@@ -99,6 +113,10 @@ const Profile = () => {
     }
   };
 
+  const handleRefetch = async () => {
+    await refetch();
+  };
+
   return (
     <>
       <Container>
@@ -143,6 +161,7 @@ const Profile = () => {
             <EditProfileModalContent
               userDetails={user}
               handleClose={handleCloseModal}
+              onSuccess={handleRefetch}
             />
           ) : null}
           <div className="modal-action">
