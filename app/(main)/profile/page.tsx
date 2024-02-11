@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { FETCH_USER_BY_CUSTOMER_ID } from "@/constants";
 import { useSession } from "next-auth/react";
 import { userService } from "@/services";
+import Link from "next/link";
 
 const Profile = () => {
   const session = useSession();
@@ -27,73 +28,6 @@ const Profile = () => {
       return await userService.getUserByCustomerId(second);
     },
   });
-
-  const dummyInvestments = [
-    {
-      id: 1,
-      description: "Emergency Fund",
-      productName: "target saving",
-      tenure: 12,
-      currentAmount: 5000,
-      target: 10000,
-    },
-    {
-      id: 2,
-      description: "Monthly Thrift",
-      productName: "thrift esusu",
-      tenure: 6,
-      currentAmount: 2000,
-      target: 12000,
-    },
-    {
-      id: 3,
-      description: "Vacation Fund",
-      productName: "kolo",
-      tenure: 24,
-      currentAmount: 3000,
-      target: 8000,
-    },
-    {
-      id: 4,
-      description: "Business Startup",
-      productName: "entrepreneurial saving",
-      tenure: 18,
-      currentAmount: 10000,
-      target: 50000,
-    },
-    {
-      id: 5,
-      description: "Home Renovation",
-      productName: "project saving",
-      tenure: 36,
-      currentAmount: 15000,
-      target: 60000,
-    },
-    {
-      id: 6,
-      description: "Education Fund",
-      productName: "target saving",
-      tenure: 24,
-      currentAmount: 8000,
-      target: 20000,
-    },
-    {
-      id: 7,
-      description: "Car Purchase",
-      productName: "kolo",
-      tenure: 30,
-      currentAmount: 12000,
-      target: 30000,
-    },
-    {
-      id: 8,
-      description: "Retirement Plan",
-      productName: "thrift esusu",
-      tenure: 48,
-      currentAmount: 25000,
-      target: 100000,
-    },
-  ];
 
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -140,11 +74,13 @@ const Profile = () => {
                   Invesments Accounts
                 </h2>
                 <button className="text-main-blue text-base font-bold hover:opacity-80 active:scale-75 duration-100">
-                  View All
+                  <Link href="/investments">View All</Link>
                 </button>
               </div>
               <div className="mt-3">
-                <InvestmentAccounts investments={dummyInvestments} />
+                <InvestmentAccounts
+                  customerId={session.data?.user.customerId}
+                />
               </div>
               <div className="flex justify-end mt-3 w-full max-w-[150px] ml-auto">
                 <Button color="main-blue">
