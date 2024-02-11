@@ -15,6 +15,7 @@
     "@tanstack/react-query-devtools": "^5.17.21",
     "@tanstack/react-table": "^8.11.6",
     "axios": "^1.6.5",
+    "dayjs": "^1.11.10",
     "next": "14.0.4",
     "next-auth": "^4.24.5",
     "react": "^18",

@@ -9,6 +9,7 @@ import {
 import { Card } from "@/components/shared/";
 import { Container } from "@/components/shared/";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 const Dashboard = () => {
   const { data } = useSession();
@@ -49,7 +50,7 @@ const Dashboard = () => {
                 <div className="flex justify-between items-center mb-3 lg:mb-4">
                   <h2 className="text-black font-bold">Recent Transaction</h2>
                   <button className="text-main-blue text-sm lg:text-base font-bold hover:opacity-80 active:scale-75 duration-100">
-                    View All
+                    <Link href="/transactions">View All</Link>
                   </button>
                 </div>
                 <RecentTransactions />
@@ -61,7 +62,7 @@ const Dashboard = () => {
               <div className="flex justify-between items-center mb-3 lg:mb-4">
                 <h2 className="text-black font-bold">Products</h2>
                 <button className="text-main-blue text-sm lg:text-base font-bold hover:opacity-80 active:scale-75 duration-100">
-                  View All
+                  <Link href="/products">View All</Link>
                 </button>
               </div>
               <article className="grid grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-3">
