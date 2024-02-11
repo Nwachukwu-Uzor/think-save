@@ -8,11 +8,9 @@ import {
 } from "@/components/dashboard/";
 import { Card } from "@/components/shared/";
 import { Container } from "@/components/shared/";
-import { useUser } from "@/hooks";
 import { useSession } from "next-auth/react";
 
 const Dashboard = () => {
-  const { user } = useUser();
   const { data } = useSession();
 
   return (

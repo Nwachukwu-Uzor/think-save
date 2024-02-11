@@ -1,5 +1,5 @@
 "use client";
-import React, {useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -13,7 +13,7 @@ export const MainHeader = () => {
   const navLinks = [
     { id: 1, content: <>Dashboard</>, href: "/dashboard" },
     { id: 2, content: <>Accounts</>, href: "/accounts" },
-    { id: 3, content: <>Plans</>, href: "/plans" },
+    { id: 3, content: <>Investments</>, href: "/investments" },
     { id: 4, content: <>Transactions</>, href: "/transactions" },
     { id: 5, content: <>Products</>, href: "/products" },
   ];
@@ -27,7 +27,7 @@ export const MainHeader = () => {
   };
 
   const handleLogout = () => {
-    signOut()
+    signOut();
   };
   return (
     <nav className="h-16 lg:h-20 flex items-center justify-center relative">

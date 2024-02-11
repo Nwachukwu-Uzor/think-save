@@ -7,5 +7,6 @@ export {
   FETCH_ACCOUNTS_BY_CUSTOMER_ID,
   FETCH_USER_BY_CUSTOMER_ID,
   FETCH_ACCOUNT_BY_ACCOUNT_ID,
+  FETCH_INVESTMENTS_BY_CUSTOMER_ID
 } from "./query-keys";
 export { categoriesLogo } from "./categories-logo";

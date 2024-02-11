@@ -3,6 +3,7 @@ import {
   AccountType,
   ApiResponseType,
   InvestmentCreateType,
+  InvestmentType,
 } from "@/types/shared";
 import axios from "axios";
 
@@ -14,6 +15,18 @@ class InvestmentService {
     );
 
     return response?.data;
+  }
+
+  async getInvestmentByCustomerId(customerId: string) {
+    const response = await axios.get<ApiResponseType<InvestmentType[]>>(
+      `${baseUrl}/Investment/GetInvestmentByCustomerId?CustomerId=${customerId}`
+    );
+
+    if (!response?.data?.status) {
+      throw new Error(response?.data?.message);
+    }
+
+    return response?.data?.data;
   }
 }
 

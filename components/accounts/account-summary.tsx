@@ -39,6 +39,14 @@ export const AccountSummary: React.FC<Props> = ({ account }) => {
         <h1 className="font-semibold">Date Created:</h1>
         <p className="font-bold text-fade">{account.dateCreated}</p>
       </div>
+      <div className="flex items-center justify-between text-xs lg:text-sm mt-2 lg:mt-3">
+        <h1 className="font-semibold">Interest Rate:</h1>
+        <p className="font-bold text-fade">{account.interestRate}</p>
+      </div>
+      <div className="flex items-center justify-between text-xs lg:text-sm mt-2 lg:mt-3">
+        <h1 className="font-semibold">Virtual Account Number:</h1>
+        <p className="font-bold text-fade">{account.virtualAcountNumber}</p>
+      </div>
     </Card>
   );
 };

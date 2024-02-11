@@ -84,6 +84,7 @@ export const CreatePlan: React.FC<Props> = ({
     setError,
     setValue,
     trigger,
+    reset,
     formState: { errors, isSubmitting },
     watch,
   } = useForm<FormFields>({
@@ -91,7 +92,6 @@ export const CreatePlan: React.FC<Props> = ({
   });
 
   const agreeToTAC = watch("agreeToTAC");
-  console.log({ agreeToTAC });
 
   const formattedTenure = tenures.map((tenure) => ({
     value: tenure,
@@ -148,6 +148,8 @@ export const CreatePlan: React.FC<Props> = ({
       }
 
       toast.success(response?.message);
+      reset()
+      handleClose()
     } catch (error: any) {
       console.log(error);
       const errorData = error?.response?.data?.errors;
