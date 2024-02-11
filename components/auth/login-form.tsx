@@ -15,10 +15,8 @@ import { Button } from "../shared/";
 import { IoEyeOffOutline } from "react-icons/io5";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SESSION_STORAGE_KEY } from "@/config";
 import { formatValidationErrors } from "@/utils/shared";
 import { toast } from "react-toastify";
-import { authService } from "@/services";
 
 const schema = z.object({
   username: z

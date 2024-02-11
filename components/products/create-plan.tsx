@@ -5,8 +5,15 @@ import { ProductType, TenureType } from "@/types/shared";
 import { IoChevronBackOutline } from "react-icons/io5";
 import Select, { SingleValue } from "react-select";
 import { Button, TextInput, Toggle } from "../shared";
-import { useForm } from "react-hook-form";
-import { addMonthsToDate, computePayout } from "@/utils/shared";
+import { useForm, SubmitHandler } from "react-hook-form";
+import {
+  addMonthsToDate,
+  computePayout,
+  formatValidationErrors,
+} from "@/utils/shared";
+import { PulseLoader } from "react-spinners";
+import { investmentService } from "@/services";
+import { toast } from "react-toastify";
 
 type Props = {
   product: ProductType;
@@ -56,6 +63,9 @@ const schema = z.object({
   FundingSource: z.string({ required_error: "Funding Source is required" }),
   PreferredTime: z.string(),
   StartDate: z.string(),
+  LockStatus: z.boolean(),
+  agreeToTAC: z.boolean(),
+  ReoccuringAmount: z.string(),
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -79,6 +89,9 @@ export const CreatePlan: React.FC<Props> = ({
   } = useForm<FormFields>({
     resolver: zodResolver(schema),
   });
+
+  const agreeToTAC = watch("agreeToTAC");
+  console.log({ agreeToTAC });
 
   const formattedTenure = tenures.map((tenure) => ({
     value: tenure,
@@ -114,19 +127,56 @@ export const CreatePlan: React.FC<Props> = ({
 
   const payout = computePayout(Interest, Amount, Tenure);
   const maturityDate = addMonthsToDate(StartDate, Number(Tenure));
+
+  const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    try {
+      const payload = {
+        ...data,
+        LockStatus: data.LockStatus ? "on" : "off",
+        MaturityDate: maturityDate,
+        TotalPayout: payout.toString(),
+        productId,
+        customerId,
+      };
+
+      const response = await investmentService.addInvestment(payload);
+
+      if (!response?.status) {
+        setError("root", { type: "deps", message: response?.message });
+        toast.error(response?.message);
+        return;
+      }
+
+      toast.success(response?.message);
+    } catch (error: any) {
+      console.log(error);
+      const errorData = error?.response?.data?.errors;
+      if (errorData) {
+        const formattedValidationErrors = formatValidationErrors(
+          errorData as Record<string, string[]>
+        );
+        setError("root", { type: "deps", message: formattedValidationErrors });
+      }
+    }
+  };
+
   return (
     <div>
       <h2 className="font-medium mb-2 flex items-center justify-start gap-2">
-        <span
+        <button
           className="bg-white rounded-md p-1.5 active:scale-95 active:opacity-80 duration-100 cursor-pointer"
           onClick={handleClose}
+          disabled={isSubmitting}
         >
           <IoChevronBackOutline className="text-xl text-main-blue" />
-        </span>
+        </button>
         <span className="text-lg lg:text-xl">Create Plan</span>
       </h2>
 
-      <form className="mt-3  max-w-[600px] mx-auto bg-white px-2 py-3 rounded-md">
+      <form
+        className="mt-3  max-w-[600px] mx-auto bg-white px-2 py-3 rounded-md border-t-4 lg:border-t-8 border-t-main-blue"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <h2 className="font-medium lg:text-lg text-center">{productName}</h2>
         <p className="my-1 text-sm lg:text-base text-center font-light">
           Fill out the form to create a plan
@@ -213,33 +263,88 @@ export const CreatePlan: React.FC<Props> = ({
                 <h4 className="text-sm font-medium mb-1">
                   How will you prefer to save:{" "}
                 </h4>
-                <Select options={saveFrequencyOptions} maxMenuHeight={100} />
+                <Select
+                  options={saveFrequencyOptions}
+                  maxMenuHeight={100}
+                  onChange={(
+                    val: SingleValue<{ label: string; value: string }>
+                  ) => {
+                    setValue("Frequency", val?.value ?? "");
+                  }}
+                />
+                <p className="h-1 mt-0.5 text-red-500 text-xs">
+                  {errors?.Frequency?.message}
+                </p>
               </div>
-              <TextInput label="Preferred Amount to Save Frequently" />
+              <TextInput
+                label="Preferred Amount to Save Frequently"
+                {...register("ReoccuringAmount")}
+                onChange={async (e) => {
+                  const value = e.target.value.replace(/\D/g, "");
+                  setValue("ReoccuringAmount", value);
+                }}
+                error={errors?.ReoccuringAmount?.message}
+              />
               <div>
                 <h4 className="text-sm font-medium mb-1">Day of the week</h4>
-                <Select options={dayOptions} maxMenuHeight={200} />
+                <Select
+                  options={dayOptions}
+                  maxMenuHeight={200}
+                  onChange={(
+                    val: SingleValue<{ label: string; value: string }>
+                  ) => {
+                    setValue("DayOfTheWeek", val?.value);
+                  }}
+                />
               </div>
-              <TextInput label="Time" type="time" />
+              <TextInput
+                label="Time"
+                type="time"
+                {...register("PreferredTime")}
+                error={errors.PreferredTime?.message}
+              />
               <div>
                 <h4 className="text-sm font-medium mb-1">Source of Fund</h4>
-                <Select options={sourceOfFundsOptions} maxMenuHeight={100} />
+                <Select
+                  options={sourceOfFundsOptions}
+                  maxMenuHeight={100}
+                  onChange={(
+                    val: SingleValue<{ label: string; value: string }>
+                  ) => {
+                    setValue("FundingSource", val?.value ?? "");
+                  }}
+                />
+                <p className="h-1 mt-0.5 text-red-500 text-xs">
+                  {errors?.FundingSource?.message}
+                </p>
               </div>
               <div className="flex items-center gap-2 mt-2">
-                <Toggle />
+                <Toggle {...register("LockStatus")} />
                 <p className="text-xs">Lock funds until maturity date.</p>
               </div>
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
                   className="rounded text-main-blue bg-accent-blue border-0 outline-none cursor-pointer"
+                  {...register("agreeToTAC")}
                 />
                 <h2 className="text-xs font-semibold text-black">
                   I agree to the Terms of Service and Privacy Policy.
                 </h2>
               </div>
-              <Button color="main-blue" type="submit">
-                Invest
+              <div className="flex flex-col gap-0.5">
+                {errors?.root?.message?.split(",").map((error) => (
+                  <p key={error} className="text-sm text-main-red">
+                    {error}
+                  </p>
+                ))}
+              </div>
+              <Button
+                color="main-blue"
+                type="submit"
+                disabled={isSubmitting || !agreeToTAC}
+              >
+                {isSubmitting ? <PulseLoader /> : "Invest"}
               </Button>
             </>
           ) : (

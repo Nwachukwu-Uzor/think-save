@@ -1,12 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaRegBell, FaBars, FaRegUser } from "react-icons/fa6";
 import { IoLogOutOutline } from "react-icons/io5";
 import { TextAvatar } from "../shared";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 export const MainHeader = () => {
   const currentRoute = usePathname();
@@ -26,7 +26,9 @@ export const MainHeader = () => {
     setNavOpen((opened) => !opened);
   };
 
-  const handleLogout = () => {};
+  const handleLogout = () => {
+    signOut()
+  };
   return (
     <nav className="h-16 lg:h-20 flex items-center justify-center relative">
       <div className="w-full flex justify-between items-center">

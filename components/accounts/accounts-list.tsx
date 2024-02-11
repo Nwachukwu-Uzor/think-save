@@ -27,9 +27,13 @@ export const AccountsList: React.FC = () => {
   const placeholders = new Array(6).fill("").map((_val, index) => index);
 
   if (isLoading || session.status === "loading") {
-    return placeholders.map((placeholder) => (
-      <AccountLoader key={placeholder} />
-    ));
+    return (
+      <article className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-5 xl:gap-8">
+        {placeholders.map((placeholder) => (
+          <AccountLoader key={placeholder} />
+        ))}
+      </article>
+    );
   }
 
   return (
