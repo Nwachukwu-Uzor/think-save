@@ -60,7 +60,7 @@ export const RegisterForm = () => {
     setShowPassword((shown) => !shown);
   };
 
-  const  agreeToTaC  = watch("agreeToTaC");
+  const agreeToTaC = watch("agreeToTaC");
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
@@ -184,7 +184,7 @@ export const RegisterForm = () => {
           {errors.agreeToTaC?.message}
         </p>
         <div className="mt-4 hidden lg:block w-full">
-          <Button color="light-red">
+          <Button color="light-red" disabled={isSubmitting}>
             <Link href="/login">Login</Link>
           </Button>
           <h3 className="mt-3 text-black font-medium text-xs">

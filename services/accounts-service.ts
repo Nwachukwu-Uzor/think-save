@@ -14,6 +14,11 @@ class AccountService {
 
     return response.data.data;
   }
+
+  async getAccountByAccountId(accountId: string) {
+
+    // const response = await axios.post<ApiResponseType<>>()
+  }
 }
 
 export const accountService = new AccountService();

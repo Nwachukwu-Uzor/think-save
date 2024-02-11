@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { z } from "zod";
 import { TextInput } from "../shared/";
@@ -33,6 +33,8 @@ type FormFields = z.infer<typeof schema>;
 
 export const LoginForm = () => {
   const router = useRouter();
+  const searchParam = useSearchParams();
+
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
@@ -63,8 +65,12 @@ export const LoginForm = () => {
         return;
       }
       toast.success("Login Success", { theme: "colored" });
+      const callbackUrl = searchParam.get("callbackUrl");
+      if (callbackUrl) {
+        router.push(callbackUrl);
+        return;
+      }
       router.push("/dashboard");
-      router.refresh();
     } catch (error: any) {
       console.log(error);
       const errorData = error?.response?.data?.errors;
@@ -136,7 +142,7 @@ export const LoginForm = () => {
           <span className="flex-1 inline-block border-b-2 h-2 w-full border-black translate-y-[50%]"></span>
         </div>
         <div className="mt-4 hidden lg:block">
-          <Button color="light-red">
+          <Button color="light-red" disabled={isSubmitting}>
             <Link href="/register">Register</Link>
           </Button>
           <h3 className="mt-3 text-black font-medium text-xs">

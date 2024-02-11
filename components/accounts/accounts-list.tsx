@@ -8,6 +8,7 @@ import { FETCH_ACCOUNTS_BY_CUSTOMER_ID } from "@/constants";
 import { accountService } from "@/services";
 import { Button, Card, EmptyPage } from "../shared";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 export const AccountsList: React.FC = () => {
   const session = useSession();
@@ -40,7 +41,9 @@ export const AccountsList: React.FC = () => {
     <article className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-5 xl:gap-8">
       {accounts && accounts.length > 0 ? (
         accounts.map((account) => (
-          <Account account={account} key={account.id} />
+          <Link href={`accounts/${account.accountId}`} key={account.id}>
+            <Account account={account} />
+          </Link>
         ))
       ) : (
         <div className="md:col-span-2 lg:col-span-3 xl:col-span-4">
