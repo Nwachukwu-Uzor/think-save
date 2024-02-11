@@ -10,7 +10,7 @@ interface Props {
 export const EmptyPage: React.FC<Props> = ({ title, subtitle, children }) => {
   return (
     <article className="w-full flex flex-col items-center justify-center">
-      <h2 className="text-sm lg:text-lg font-light mb-3">{title}</h2>
+      <h2 className="text-sm lg:text-lg mb-3">{title}</h2>
       <Image
         src="/assets/images/empty-box.jpg"
         alt="Think Save"

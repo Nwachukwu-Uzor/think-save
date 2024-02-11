@@ -1,5 +1,5 @@
 import { baseUrl } from "@/config";
-import { AccountType, ApiResponseType } from "@/types/shared";
+import { AccountInvestmentType, AccountType, ApiResponseType} from "@/types/shared";
 import axios from "axios";
 
 class AccountService {
@@ -16,8 +16,10 @@ class AccountService {
   }
 
   async getAccountByAccountId(accountId: string) {
-
-    // const response = await axios.post<ApiResponseType<>>()
+    const response = await axios.get<
+      ApiResponseType<AccountType>
+    >(`${baseUrl}/Account/GetAccountByAccountId?AccountId=${accountId}`);
+    return response?.data?.data;
   }
 }
 

@@ -53,10 +53,6 @@ const handler = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user }) {
-      /* Step 1: update the token based on the user object */
-      // if (trigger === "update") {
-      //   console.log("triggered");
-      // }
       if (user) {
         token.customerId = user.customerId;
       }

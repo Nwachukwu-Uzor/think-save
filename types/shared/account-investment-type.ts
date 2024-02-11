@@ -1,4 +1,4 @@
-export type AccountInvestment = {
+export type AccountInvestmentType = {
   transactionId: string;
   accountId: string;
   customerId: string;

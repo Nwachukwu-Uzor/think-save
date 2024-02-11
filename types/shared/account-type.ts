@@ -1,4 +1,4 @@
-import { AccountInvestment } from ".";
+import { AccountInvestmentType } from ".";
 
 export type AccountType = {
   id: string;
@@ -14,6 +14,6 @@ export type AccountType = {
   dateUpdated: null;
   status: string;
   investment: null;
-  accountInvestments: AccountInvestment[] | null;
+  accountInvestments?: AccountInvestmentType[];
   accountPeers: null;
 };
