@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import {
@@ -17,9 +17,13 @@ import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import { FETCH_ACCOUNTS_BY_CUSTOMER_ID } from "@/constants";
 import { accountService } from "@/services";
+import { MdClose } from "react-icons/md";
+import { AddMoneyModalContent } from ".";
 
 export const Wallet: React.FC = () => {
   const session = useSession();
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
   const { data: accounts, isLoading } = useQuery({
     queryKey: [FETCH_ACCOUNTS_BY_CUSTOMER_ID, session.data?.user?.customerId],
     queryFn: async ({ queryKey }) => {
@@ -72,6 +76,22 @@ export const Wallet: React.FC = () => {
   if (isLoading || session.status === "loading") {
     return <WalletLoader />;
   }
+
+  const handleAddMoneyBtnClick = () => {
+    const element = document.getElementById("my_modal_1") as HTMLElement & {
+      showModal: () => void;
+    };
+
+    if (element) {
+      element.showModal();
+    }
+  };
+
+  const handleCloseModal = () => {
+    if (buttonRef.current) {
+      buttonRef.current.click();
+    }
+  };
 
   return (
     <>
@@ -137,7 +157,7 @@ export const Wallet: React.FC = () => {
               />
               Withdraw Funds
             </Button>
-            <Button color="main-blue">
+            <Button color="main-blue" onClick={handleAddMoneyBtnClick}>
               <Image
                 src="/assets/images/fund-wallet.svg"
                 width={4}
@@ -152,6 +172,19 @@ export const Wallet: React.FC = () => {
       ) : (
         <EmptyPage title="No wallet found" />
       )}
+      <dialog id="my_modal_1" className="modal">
+        <div className="modal-box w-[90%] max-w-[400px] overflow-y-scroll no-scrollbar bg-white">
+          <AddMoneyModalContent
+            handleClose={handleCloseModal}
+            accountNumber={walletAccount?.accountId}
+          />
+          <div className="modal-action">
+            <form method="dialog" className="hidden">
+              <button ref={buttonRef}>close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </>
   );
 };

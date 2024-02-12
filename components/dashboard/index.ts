@@ -5,3 +5,4 @@ export { RecentTransactions } from "./recent-transactions";
 export { Transaction } from "./transaction";
 export { Products } from "./products";
 export { Product } from "./product"
+export { AddMoneyModalContent } from "./add-money-modal-content"
