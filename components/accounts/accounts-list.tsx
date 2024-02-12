@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { Account } from ".";
 ("");
@@ -6,12 +6,14 @@ import { AccountLoader } from "../shared/skeleton-loaders";
 import { useQuery } from "@tanstack/react-query";
 import { FETCH_ACCOUNTS_BY_CUSTOMER_ID } from "@/constants";
 import { accountService } from "@/services";
-import { Button, Card, EmptyPage } from "../shared";
+import { Button, Card, EmptyPage, Pagination } from "../shared";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 export const AccountsList: React.FC = () => {
   const session = useSession();
+  const pageSize = 6;
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { data: accounts, isLoading } = useQuery({
     queryKey: [FETCH_ACCOUNTS_BY_CUSTOMER_ID, session?.data?.user?.customerId],
@@ -37,14 +39,33 @@ export const AccountsList: React.FC = () => {
     );
   }
 
+  // Calculate total number of pages
+  const totalPages = accounts ? Math.ceil(accounts.length / pageSize) : 0;
+  const currentPageData = accounts
+    ? accounts.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+    : [];
+
   return (
     <article className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-5 xl:gap-8">
       {accounts && accounts.length > 0 ? (
-        accounts.map((account) => (
-          <Link href={`accounts/${account.accountId}`} key={account.id}>
-            <Account account={account} />
-          </Link>
-        ))
+        <>
+          {currentPageData.map((account) => (
+            <Link
+              href={`accounts/${account.accountId}`}
+              key={account.accountId}
+              className="hover:shadow-md hover:opacity-80 duration-150"
+            >
+              <Account account={account} />
+            </Link>
+          ))}
+          <div className="col-span-1 md:col-span-2 xl:col-span-4 flex items-center justify-center my-3">
+            <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              handlePageClick={setCurrentPage}
+            />
+          </div>
+        </>
       ) : (
         <div className="md:col-span-2 lg:col-span-3 xl:col-span-4">
           <Card>

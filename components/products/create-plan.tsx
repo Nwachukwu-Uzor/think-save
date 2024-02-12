@@ -151,7 +151,6 @@ export const CreatePlan: React.FC<Props> = ({
       reset()
       handleClose()
     } catch (error: any) {
-      console.log(error);
       const errorData = error?.response?.data?.errors;
       if (errorData) {
         const formattedValidationErrors = formatValidationErrors(

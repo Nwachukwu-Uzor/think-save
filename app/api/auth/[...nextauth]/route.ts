@@ -61,14 +61,7 @@ const handler = NextAuth({
     async session({ session, token }) {
       session.user.id = token.id;
       session.user.customerId = token.customerId;
-      // if (trigger === "update") {
-      //   console.log({ newSession });
-
-      //   return {
-      //     ...session,
-      //     ...newSession,
-      //   };
-      // }
+      
       return session;
     },
   },

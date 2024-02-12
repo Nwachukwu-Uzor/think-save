@@ -147,7 +147,6 @@ export const EditProfileModalContent: React.FC<Props> = ({
       );
       toast.success("Profile update success", { theme: "colored" });
       if (sessionData) {
-        console.log("Update done");
         await update({
           ...sessionData,
           user: {
@@ -160,7 +159,6 @@ export const EditProfileModalContent: React.FC<Props> = ({
       handleClose();
       await onSuccess();
     } catch (error: any) {
-      console.log(error);
       const errorData = error?.response?.data?.errors;
       if (errorData) {
         const formattedValidationErrors = formatValidationErrors(

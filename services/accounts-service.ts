@@ -1,5 +1,5 @@
 import { baseUrl } from "@/config";
-import { AccountInvestmentType, AccountType, ApiResponseType} from "@/types/shared";
+import { AccountType, ApiResponseType} from "@/types/shared";
 import axios from "axios";
 
 class AccountService {

@@ -72,7 +72,6 @@ export const LoginForm = () => {
       }
       router.push("/dashboard");
     } catch (error: any) {
-      console.log(error);
       const errorData = error?.response?.data?.errors;
       if (errorData) {
         const formattedValidationErrors = formatValidationErrors(

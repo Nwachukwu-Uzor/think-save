@@ -77,7 +77,6 @@ export const RegisterForm = () => {
       toast.success("Register Success", { theme: "colored" });
       router.push("/dashboard");
     } catch (error: any) {
-      console.log(error);
       const errorData = error?.response?.data?.errors;
       if (errorData) {
         const formattedValidationErrors = formatValidationErrors(

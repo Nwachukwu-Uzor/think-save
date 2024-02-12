@@ -42,7 +42,6 @@ class AuthService {
       `${baseUrl}/User/UserSignUp`,
       payload
     );
-    console.log(response);
     return response.data;
   }
 
