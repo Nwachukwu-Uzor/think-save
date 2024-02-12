@@ -7,14 +7,15 @@ import Link from "next/link";
 
 type Props = ProductType & {};
 export const Product: React.FC<Props> = ({ productName, productId }) => {
+  const category = categoriesLogo[productName.replace(/\s/g, "").toLowerCase()];
   return (
     <Link
       href={`/products/${productId}`}
       className="bg-accent-blue px-3 lg:px-4 py-4 text-black rounded-md flex flex-col gap-4 lg:gap-8 hover:shadow-lg duration-200"
     >
-      {categoriesLogo[productName.toLowerCase()] ? (
+      {category ? (
         <Image
-          src={categoriesLogo[productName.toLowerCase()].iconSrc ?? " "}
+          src={category.iconSrc ?? " "}
           alt="Think Save"
           height={20}
           width={20}

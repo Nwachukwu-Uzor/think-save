@@ -70,7 +70,7 @@ const schema = z.object({
 
 type FormFields = z.infer<typeof schema>;
 
-export const CreatePlan: React.FC<Props> = ({
+export const CreatePlanSingle: React.FC<Props> = ({
   product,
   handleClose,
   customerId,
@@ -91,19 +91,20 @@ export const CreatePlan: React.FC<Props> = ({
     resolver: zodResolver(schema),
   });
 
-  const agreeToTAC = watch("agreeToTAC");
 
   const formattedTenure = tenures.map((tenure) => ({
     value: tenure,
     label: tenure.interest,
   }));
 
-  const [Interest, Tenure, Amount, StartDate] = watch([
+  const [Interest, Tenure, Amount, StartDate, agreeToTAC] = watch([
     "Interest",
     "Tenure",
     "Amount",
     "StartDate",
+    "agreeToTAC"
   ]);
+
   const handleContinue = async () => {
     const result = await trigger([
       "Name",
@@ -148,8 +149,8 @@ export const CreatePlan: React.FC<Props> = ({
       }
 
       toast.success(response?.message);
-      reset()
-      handleClose()
+      reset();
+      handleClose();
     } catch (error: any) {
       const errorData = error?.response?.data?.errors;
       if (errorData) {

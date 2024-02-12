@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { FETCH_ACCOUNTS_BY_CUSTOMER_ID } from "@/constants";
 import { accountService } from "@/services";
 import { AccountLoader } from "../shared/skeleton-loaders";
+import Link from "next/link";
 
 export const AccountsSlider: React.FC = () => {
   const session = useSession();
@@ -49,9 +50,11 @@ export const AccountsSlider: React.FC = () => {
             Want to create your first account?
           </h3>
           <div className="max-w-[150px]">
-            <Button color="fade-red">
-              <FaPlus /> Create Account
-            </Button>
+            <Link href="/products/create-plan">
+              <Button color="fade-red">
+                <FaPlus /> Create Plan
+              </Button>
+            </Link>
           </div>
         </div>
       )}

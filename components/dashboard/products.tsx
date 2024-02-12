@@ -22,12 +22,17 @@ export const Products: React.FC = () => {
     ));
   }
 
+  const filteredProducts =
+    products?.filter((product) => product.productId !== "Savings") ?? [];
+
   return (
     <>
       {
         <>
-          {products && products.length > 0 ? (
-            products.map((plan) => <Product {...plan} key={plan.productId} />)
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((plan) => (
+              <Product {...plan} key={plan.productId} />
+            ))
           ) : (
             <div className="col-span-2 lg:col-span-3">No Product Found</div>
           )}

@@ -17,5 +17,5 @@ export const computePayout = (
     return 0;
   }
 
-  return payout;
+  return payout.toFixed(3);
 };

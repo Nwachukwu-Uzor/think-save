@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { FETCH_PRODUCT_BY_PRODUCT_ID } from "@/constants";
 import { productsService } from "@/services";
 import { ProductDetailsLoader } from "@/components/shared/skeleton-loaders";
-import { CreatePlan } from "@/components/products";
+import { CreatePlanSingle } from "@/components/products";
 import { UserType } from "@/types/shared";
 import { SESSION_STORAGE_KEY } from "@/config";
 import { useUser } from "@/hooks";
@@ -77,7 +77,7 @@ const ProductDetail = () => {
                 </div>
               </article>
             ) : (
-              <CreatePlan
+              <CreatePlanSingle
                 product={product}
                 handleClose={handleToggleMode}
                 customerId={user?.customerId ?? ""}

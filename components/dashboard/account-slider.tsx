@@ -3,6 +3,7 @@ import { FaPlus } from "react-icons/fa6";
 import { Button } from "../shared/";
 import { formatNumberWithCommas } from "@/utils/shared";
 import { AccountType } from "@/types/shared";
+import Link from "next/link";
 
 type Props = AccountType & Omit<ComponentProps<"div">, "id">;
 
@@ -24,9 +25,11 @@ export const AccountSlider: React.FC<Props> = ({
         N {formatNumberWithCommas(balance.toString())}
       </h3>
       <div className="max-w-[150px]">
-        <Button color="fade-red">
-          <FaPlus /> Add Account
-        </Button>
+        <Link href="/products/create-plan">
+          <Button color="fade-red">
+            <FaPlus /> Add Plan
+          </Button>
+        </Link>
       </div>
     </div>
   );
