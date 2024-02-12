@@ -1,13 +1,13 @@
 import { SESSION_STORAGE_KEY, baseUrl } from "@/config";
 import { authService } from "@/services";
-import { UserType } from "@/types/shared";
-import NextAuth from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-const handler = NextAuth({
+export const authOptions: AuthOptions = {
   session: {
     strategy: "jwt",
   },
+  debug: true,
   pages: {
     signIn: "/login",
   },
@@ -77,6 +77,8 @@ const handler = NextAuth({
       };
     },
   },
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

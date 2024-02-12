@@ -8,6 +8,7 @@ import "./globals.css";
 import { SidebarContextProvider } from "@/context/admin/sidebar";
 import { Provider, SessionProvider } from "@/components/shared";
 import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -22,7 +23,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   return (
     <html lang="en">
       <body className={outfit.className}>
