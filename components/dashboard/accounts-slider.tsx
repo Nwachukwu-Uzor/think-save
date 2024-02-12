@@ -32,7 +32,7 @@ export const AccountsSlider: React.FC = () => {
       {accounts && accounts.length > 0 ? (
         <Carousel speed={5000}>
           {accounts.map((item) => (
-            <CarouselItem key={item.id}>
+            <CarouselItem key={item.accountId}>
               <AccountSlider {...item} />
             </CarouselItem>
           ))}

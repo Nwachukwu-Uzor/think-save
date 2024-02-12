@@ -8,15 +8,15 @@ import "./globals.css";
 import { SidebarContextProvider } from "@/context/admin/sidebar";
 import { Provider, SessionProvider } from "@/components/shared";
 import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { authOptions } from "@/utils/auth";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
-// export const metadata: Metadata = {
-//   title: "Think Save",
-//   description: "Reshape your financial future",
-//   icons: "/assets/images/logo-favicon.svg",
-// };
+export const metadata: Metadata = {
+  title: "Think Save",
+  description: "Reshape your financial future",
+  icons: "/assets/images/logo-favicon.svg",
+};
 
 export default async function RootLayout({
   children,

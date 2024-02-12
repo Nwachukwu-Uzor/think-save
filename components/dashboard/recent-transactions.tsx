@@ -44,16 +44,16 @@ export const RecentTransactions: React.FC = () => {
     if (!transactions || !transactions.length || transactions.length < 5) {
       return transactions;
     }
-    return transactions.slice(0, 5)
-  }
+    return transactions.slice(0, 5);
+  };
 
-  const formattedTransactions = formatTransactions()
+  const formattedTransactions = formatTransactions();
 
   return formattedTransactions && formattedTransactions.length > 0 ? (
     <ul className="flex flex-col gap-2">
       {formattedTransactions.map((transaction) => (
         <li
-          key={transaction.id}
+          key={transaction.transactionId}
           className="py-2 border-b-2 border-b-gray-200 last:border-b-0"
         >
           <Transaction {...transaction} />

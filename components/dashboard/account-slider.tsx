@@ -11,13 +11,9 @@ export const AccountSlider: React.FC<Props> = ({
   id,
   accountName,
   balance,
-  ...rest
 }) => {
   return (
-    <div
-      className="text-white bg-main-red rounded-lg overflow-hidden w-full px-2 lg:px-3 py-6"
-      {...rest}
-    >
+    <div className="text-white bg-main-red rounded-lg overflow-hidden w-full px-2 lg:px-3 py-6">
       <p className="text-sm lg:text-base text-[#FFC8C8] font-semibold text-right">
         {productName}
       </p>
