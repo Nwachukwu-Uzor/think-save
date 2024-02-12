@@ -8,7 +8,7 @@ import {
 } from "react-icons/hi2";
 
 import { formatNumberWithCommas } from "@/utils/shared";
-import { Button } from "../shared";
+import { Button, EmptyPage } from "../shared";
 import { AccountType, UserType } from "@/types/shared";
 import { SESSION_STORAGE_KEY } from "@/config";
 import { WalletLoader } from "../shared/skeleton-loaders";
@@ -66,8 +66,7 @@ export const Wallet: React.FC = () => {
       setTimeout(() => {
         setIsCopied(false);
       }, 2000);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   if (isLoading || session.status === "loading") {
@@ -151,10 +150,7 @@ export const Wallet: React.FC = () => {
           </div>
         </article>
       ) : (
-        <div>
-          You have no wallet account {session.data?.user.customerId}{" "}
-          {session.data?.user.email}
-        </div>
+        <EmptyPage title="No wallet found" />
       )}
     </>
   );

@@ -148,12 +148,9 @@ export const EditProfileModalContent: React.FC<Props> = ({
       toast.success("Profile update success", { theme: "colored" });
       if (sessionData) {
         await update({
-          ...sessionData,
-          user: {
-            ...sessionData.user,
-            name: `${response?.data?.firstName} ${response?.data?.lastName}`,
-            image: response?.data?.imagePath,
-          },
+          ...sessionData.user,
+          name: `${response?.data?.firstName} ${response?.data?.lastName}`,
+          image: response?.data?.imagePath,
         });
       }
       handleClose();
