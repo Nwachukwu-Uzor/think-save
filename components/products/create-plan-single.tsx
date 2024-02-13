@@ -75,7 +75,7 @@ export const CreatePlanSingle: React.FC<Props> = ({
   handleClose,
   customerId,
 }) => {
-  const [isContinued, setIsContinued] = useState(false);
+  const [step, setStep] = useState(1);
   const { productName, productId, tenures } = product;
 
   const {
@@ -91,7 +91,6 @@ export const CreatePlanSingle: React.FC<Props> = ({
     resolver: zodResolver(schema),
   });
 
-
   const formattedTenure = tenures.map((tenure) => ({
     value: tenure,
     label: tenure.interest,
@@ -102,7 +101,7 @@ export const CreatePlanSingle: React.FC<Props> = ({
     "Tenure",
     "Amount",
     "StartDate",
-    "agreeToTAC"
+    "agreeToTAC",
   ]);
 
   const handleContinue = async () => {
@@ -117,7 +116,7 @@ export const CreatePlanSingle: React.FC<Props> = ({
     if (!result) {
       return;
     }
-    setIsContinued(true);
+    setStep(2);
   };
 
   const triggerInitialFieldsValidate = async (
@@ -183,83 +182,111 @@ export const CreatePlanSingle: React.FC<Props> = ({
         <p className="my-1 text-sm lg:text-base text-center font-light">
           Fill out the form to create a plan
         </p>
+
+        <div className="flex items-center justify-center gap-0.5 my-2">
+          {[1, 2].map((n) => (
+            <span
+              key={n}
+              className={`inline-block w-[50px] lg:w-[75px] h-1 rounded-lg ${
+                step >= n ? "bg-main-blue" : "bg-accent-blue"
+              } ${step === n ? "opacity-100" : "opacity-75"}`}
+            ></span>
+          ))}
+        </div>
         <div className="mt-3 flex flex-col gap-2 lg:gap-3">
-          <TextInput
-            label={`Title`}
-            {...register("Name")}
-            error={errors?.Name?.message}
-            onChange={async (e) => {
-              await triggerInitialFieldsValidate(e);
-            }}
-          />
-          <TextInput
-            label={
-              <span>
-                Reason <i className="font-normal">(Description)</i>
-              </span>
-            }
-            {...register("Description")}
-            error={errors?.Description?.message}
-            onChange={async (e) => {
-              await triggerInitialFieldsValidate(e);
-            }}
-          />
-          <TextInput
-            label={`Overall Target Amount`}
-            {...register("Amount")}
-            onChange={async (e) => {
-              const value = e.target.value.replace(/\D/g, "");
-              setValue("Amount", value);
-              await triggerInitialFieldsValidate(e);
-            }}
-            error={errors?.Amount?.message}
-          />
-          <div className="flex items-start justify-between gap-3">
-            <h4 className="text-sm font-medium">Total Payout: </h4>
-            <div className="flex-1">
-              <TextInput disabled value={payout} />
-            </div>
-          </div>
-          <div>
-            <h4 className="text-sm font-medium mb-1">Tenure: </h4>
-            <Select
-              options={formattedTenure}
-              maxMenuHeight={100}
-              onChange={async (
-                val: SingleValue<{ label: string; value: TenureType }>
-              ) => {
-                const tenure = val?.value;
-                if (!tenure) {
-                  return;
-                }
-                const { interestRate, tenureRate } = tenure;
-                await triggerInitialFieldsValidate();
-                setValue("Tenure", tenureRate);
-                setValue("Interest", interestRate);
-              }}
-            />
-            <p className="h-1 mt-0.5 text-red-500 text-xs">
-              {errors?.Tenure?.message}
-            </p>
-          </div>
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-2">
-            <TextInput
-              type="date"
-              label="Start Date"
-              {...register("StartDate")}
-              error={errors?.StartDate?.message}
-              onChange={async (e) => {
-                await triggerInitialFieldsValidate(e);
-              }}
-            />
-            <TextInput
-              type="date"
-              label="End Date"
-              disabled
-              value={maturityDate}
-            />
-          </div>
-          {isContinued ? (
+          {step === 1 ? (
+            <>
+              <>
+                <TextInput
+                  label={`Title`}
+                  {...register("Name")}
+                  error={errors?.Name?.message}
+                  onChange={async (e) => {
+                    await triggerInitialFieldsValidate(e);
+                  }}
+                  disabled={isSubmitting}
+                />
+                <TextInput
+                  label={
+                    <span>
+                      Reason <i className="font-normal">(Description)</i>
+                    </span>
+                  }
+                  {...register("Description")}
+                  error={errors?.Description?.message}
+                  onChange={async (e) => {
+                    await triggerInitialFieldsValidate(e);
+                  }}
+                  disabled={isSubmitting}
+                />
+                <TextInput
+                  label={`Overall Target Amount`}
+                  {...register("Amount")}
+                  onChange={async (e) => {
+                    const value = e.target.value.replace(/\D/g, "");
+                    setValue("Amount", value);
+                    await triggerInitialFieldsValidate(e);
+                  }}
+                  error={errors?.Amount?.message}
+                  disabled={isSubmitting}
+                />
+                <div className="flex items-start justify-between gap-3">
+                  <h4 className="text-sm font-medium">Total Payout: </h4>
+                  <div className="flex-1">
+                    <TextInput disabled value={payout} />
+                  </div>
+                </div>
+                <div>
+                  <h4 className="text-sm font-medium mb-1">Tenure: </h4>
+                  <Select
+                    options={formattedTenure}
+                    maxMenuHeight={200}
+                    onChange={async (
+                      val: SingleValue<{ label: string; value: TenureType }>
+                    ) => {
+                      const tenure = val?.value;
+                      if (!tenure) {
+                        return;
+                      }
+                      const { interestRate, tenureRate } = tenure;
+                      await triggerInitialFieldsValidate();
+                      setValue("Tenure", tenureRate);
+                      setValue("Interest", interestRate);
+                    }}
+                    isDisabled={isSubmitting}
+                  />
+                  <p className="h-1 mt-0.5 text-red-500 text-xs">
+                    {errors?.Tenure?.message}
+                  </p>
+                </div>
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-2">
+                  <TextInput
+                    type="date"
+                    label="Start Date"
+                    {...register("StartDate")}
+                    error={errors?.StartDate?.message}
+                    onChange={async (e) => {
+                      await triggerInitialFieldsValidate(e);
+                    }}
+                    disabled={isSubmitting}
+                  />
+                  <TextInput
+                    type="date"
+                    label="End Date"
+                    disabled
+                    value={maturityDate}
+                  />
+                </div>
+                <Button
+                  color="accent-blue"
+                  type="button"
+                  onClick={handleContinue}
+                >
+                  Continue
+                </Button>
+              </>
+            </>
+          ) : (
             <>
               <div>
                 <h4 className="text-sm font-medium mb-1">
@@ -267,12 +294,13 @@ export const CreatePlanSingle: React.FC<Props> = ({
                 </h4>
                 <Select
                   options={saveFrequencyOptions}
-                  maxMenuHeight={100}
+                  maxMenuHeight={200}
                   onChange={(
                     val: SingleValue<{ label: string; value: string }>
                   ) => {
                     setValue("Frequency", val?.value ?? "");
                   }}
+                  isDisabled={isSubmitting}
                 />
                 <p className="h-1 mt-0.5 text-red-500 text-xs">
                   {errors?.Frequency?.message}
@@ -286,6 +314,7 @@ export const CreatePlanSingle: React.FC<Props> = ({
                   setValue("ReoccuringAmount", value);
                 }}
                 error={errors?.ReoccuringAmount?.message}
+                disabled={isSubmitting}
               />
               <div>
                 <h4 className="text-sm font-medium mb-1">Day of the week</h4>
@@ -297,6 +326,7 @@ export const CreatePlanSingle: React.FC<Props> = ({
                   ) => {
                     setValue("DayOfTheWeek", val?.value);
                   }}
+                  isDisabled={isSubmitting}
                 />
               </div>
               <TextInput
@@ -304,6 +334,7 @@ export const CreatePlanSingle: React.FC<Props> = ({
                 type="time"
                 {...register("PreferredTime")}
                 error={errors.PreferredTime?.message}
+                disabled={isSubmitting}
               />
               <div>
                 <h4 className="text-sm font-medium mb-1">Source of Fund</h4>
@@ -315,13 +346,14 @@ export const CreatePlanSingle: React.FC<Props> = ({
                   ) => {
                     setValue("FundingSource", val?.value ?? "");
                   }}
+                  isDisabled={isSubmitting}
                 />
                 <p className="h-1 mt-0.5 text-red-500 text-xs">
                   {errors?.FundingSource?.message}
                 </p>
               </div>
               <div className="flex items-center gap-2 mt-2">
-                <Toggle {...register("LockStatus")} />
+                <Toggle {...register("LockStatus")} disabled={isSubmitting} />
                 <p className="text-xs">Lock funds until maturity date.</p>
               </div>
               <div className="flex items-center gap-2">
@@ -329,6 +361,7 @@ export const CreatePlanSingle: React.FC<Props> = ({
                   type="checkbox"
                   className="rounded text-main-blue bg-accent-blue border-0 outline-none cursor-pointer"
                   {...register("agreeToTAC")}
+                  disabled={isSubmitting}
                 />
                 <h2 className="text-xs font-semibold text-black">
                   I agree to the Terms of Service and Privacy Policy.
@@ -349,10 +382,6 @@ export const CreatePlanSingle: React.FC<Props> = ({
                 {isSubmitting ? <PulseLoader /> : "Invest"}
               </Button>
             </>
-          ) : (
-            <Button color="accent-blue" type="button" onClick={handleContinue}>
-              Continue
-            </Button>
           )}
         </div>
       </form>

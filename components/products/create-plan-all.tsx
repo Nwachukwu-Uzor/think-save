@@ -206,7 +206,7 @@ export const CreatePlanAll: React.FC = () => {
               key={n}
               className={`inline-block w-[50px] lg:w-[75px] h-1 rounded-lg ${
                 step >= n ? "bg-main-blue" : "bg-accent-blue"
-              }`}
+              } ${step === n ? "opacity-100" : "opacity-75"}`}
             ></span>
           ))}
         </div>
