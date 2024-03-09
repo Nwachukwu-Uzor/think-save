@@ -5,9 +5,17 @@ import { UserType } from "@/types/shared";
 import { Button, TextAvatar } from "../shared";
 import { Detail } from ".";
 
-type Props = { user: Partial<UserType>; handleEditBtnClick: () => void };
+type Props = {
+  user: Partial<UserType>;
+  handleEditBtnClick?: () => void;
+  editable?: boolean;
+};
 
-export const UserDetails: React.FC<Props> = ({ user, handleEditBtnClick }) => {
+export const UserDetails: React.FC<Props> = ({
+  user,
+  handleEditBtnClick,
+  editable = true,
+}) => {
   const {
     avatarUrl,
     firstName,
@@ -43,11 +51,13 @@ export const UserDetails: React.FC<Props> = ({ user, handleEditBtnClick }) => {
           middleName ? " " + middleName : ""
         } ${lastName}`}</h3>
         <p className="text-xs lg:text-sm text-fade font-semibold">{email}</p>
-        <div className="w-full max-w-[200px] mt-2">
-          <Button color="main-blue" onClick={handleEditBtnClick}>
-            <MdOutlineEdit /> Edit Profile
-          </Button>
-        </div>
+        {editable && (
+          <div className="w-full max-w-[200px] mt-2">
+            <Button color="main-blue" onClick={handleEditBtnClick}>
+              <MdOutlineEdit /> Edit Profile
+            </Button>
+          </div>
+        )}
       </div>
       <div className="grid lg:grid-cols-2 gap-1 lg:gap-2 mt-8">
         <Detail title="BVN" value={bvn ?? ""} />

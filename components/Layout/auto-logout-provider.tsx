@@ -7,6 +7,7 @@ export interface AutoLogoutProviderProps {
   timeoutCheckMs?: number;
   debug?: boolean;
   requireSession?: boolean;
+  redirectPath?: string;
 }
 
 type WindowActivityEvent = keyof WindowEventMap;
@@ -16,6 +17,7 @@ export function AutoLogoutProvider({
   timeoutCheckMs = +(process.env.NEXT_PUBLIC_TIME_OUT_CHECK_MS || 10000), // Time out to check
   debug = false,
   requireSession = false,
+  redirectPath = "/login",
   children,
 }: PropsWithChildren<AutoLogoutProviderProps>) {
   const [lastActivity, setLastActivity] = useState(new Date().getTime());
@@ -24,7 +26,7 @@ export function AutoLogoutProvider({
   const _storageKey = "_lastActivity";
 
   function storage() {
-    return global.window !== undefined ? window.localStorage : null;
+    return global.window !== undefined ? window.sessionStorage : null;
   }
 
   const parseLastActivityString = useCallback((activityStr?: string | null) => {
@@ -106,19 +108,29 @@ export function AutoLogoutProvider({
           console.error("User has expired======", expiry, now);
         }
 
-        signOut().then();
+        signOut({
+          redirect: true,
+          callbackUrl: redirectPath,
+        }).then();
         return true;
       }
     }
 
     if (lastActivity + timeoutMs < now) {
       if (debug) console.log("User inactive======", lastActivity, now);
-      signOut().then();
+      signOut({ redirect: true, callbackUrl: redirectPath }).then();
       return true;
     }
 
     return false;
-  }, [debug, lastActivity, session?.expires, status, timeoutMs]);
+  }, [
+    debug,
+    lastActivity,
+    session?.expires,
+    status,
+    timeoutMs,
+    redirectPath,
+  ]);
 
   const onTimerElapsed = useCallback(() => {
     // just fire the isUserInactive check
@@ -159,7 +171,7 @@ export function AutoLogoutProvider({
       window.addEventListener(eventName, onUserActivity, false);
     });
 
-    // we will use localStorage to determine activity
+    // we will use sessionStorage to determine activity
     window.addEventListener("storage", onStorage, false);
 
     // initialize an interval to check activity

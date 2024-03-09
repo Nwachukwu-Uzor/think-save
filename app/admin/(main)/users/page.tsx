@@ -1,6 +1,6 @@
 "use client"
 import React, { useMemo } from "react";
-import { PageHeader } from "@/components/admin/shared/page-header";
+import { PageHeader } from "@/components/admin/shared/";
 import { Card, Container } from "@/components/shared";
 import { dummyUsers } from "@/data/";
 import { UserType } from "@/types/shared";

@@ -64,7 +64,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     },
   ];
   return (
-    <AutoLogoutProvider>
+    <AutoLogoutProvider requireSession={true} redirectPath="/admin/login">
       <main className="relative bg-accent-blue min-h-screen lg:grid lg:grid-cols-10">
         <nav
           className={`fixed z-40 lg:col-span-2 lg:static top-0 left-0 h-screen ${

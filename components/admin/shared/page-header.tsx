@@ -4,8 +4,8 @@ import Image from "next/image";
 import { Container, TextAvatar } from "@/components/shared";
 import { IoLogOutOutline, IoMenu } from "react-icons/io5";
 import { useSidebarContext } from "@/context/admin/sidebar";
-import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type Props = {
   title: string;
@@ -13,11 +13,15 @@ type Props = {
 };
 
 export const PageHeader: React.FC<Props> = ({ title, subTitle }) => {
+  const router = useRouter();
   const { handleToggleOpen } = useSidebarContext();
   const { data } = useSession();
 
   const handleLogout = () => {
-    signOut();
+    signOut({
+      redirect: true,
+      callbackUrl: "/admin/login",
+    });
   };
 
   return (

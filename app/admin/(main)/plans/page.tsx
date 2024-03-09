@@ -2,7 +2,7 @@
 import React, { useMemo, useRef } from "react";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { FaPlus } from "react-icons/fa";
-import { PageHeader } from "@/components/admin/shared/page-header";
+import { PageHeader } from "@/components/admin/shared/";
 import { Button, Card, Container } from "@/components/shared";
 import { dummyPlans } from "@/data/";
 import { PlanType } from "@/types/dashboard";
