@@ -99,6 +99,7 @@ export const MainHeader = () => {
                 <TextAvatar
                   text={data?.user?.name?.charAt(0) ?? "T"}
                   size="sm"
+                  variant="white"
                 />
               )}
             </div>

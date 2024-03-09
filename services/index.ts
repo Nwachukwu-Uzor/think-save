@@ -5,3 +5,4 @@ export { locationService } from "./location-service";
 export { accountService } from "./accounts-service";
 export { userService } from "./user-service"
 export { investmentService } from "./investment-service"
+export { dashboardService } from "./dashboard-service"

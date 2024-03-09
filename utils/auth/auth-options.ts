@@ -50,6 +50,45 @@ export const authOptions: AuthOptions = {
         }
       },
     }),
+    CredentialsProvider({
+      name: "Custom Provider",
+      id: "admin-login",
+      credentials: {
+        username: {},
+        password: {},
+      },
+      async authorize(credentials, req) {
+        if (!credentials) {
+          return null;
+        }
+
+        try {
+          const { username, password } = credentials;
+          const response = await authService.adminLogin({ username, password });
+
+          if (!response?.status) {
+            throw new Error(response.message);
+          }
+
+          const { data } = response;
+
+          if (!data) {
+            return null;
+          }
+          const user = {
+            ...data,
+            email: data.email,
+            //image: data?.imagePath,
+            id: data.id,
+            name: `${data.firstName} ${data.lastName}`,
+            customerId: "",
+          };
+          return user;
+        } catch (err: unknown) {
+          throw new Error(err as string);
+        }
+      },
+    }),
   ],
   callbacks: {
     async jwt({ token, user, trigger, session }) {

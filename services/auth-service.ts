@@ -1,4 +1,5 @@
 import { baseUrl } from "@/config";
+import { AdminInfoType } from "@/types/admin";
 import { ApiResponseType, UserType } from "@/types/shared";
 import { getLocalOS } from "@/utils/shared";
 import axios from "axios";
@@ -15,6 +16,22 @@ class AuthService {
 
     const response = await axios.post<ApiResponseType<UserType>>(
       `${baseUrl}/Auth/UserLogin`,
+      payload
+    );
+
+    return response.data;
+  }
+  async adminLogin(data: { username: string; password: string }) {
+    const payload = {
+      ...data,
+      OS: getLocalOS(),
+      Channel: "Web",
+      DeviceId: "192.168.1.1",
+      IpAddress: Date.now().toString(),
+    };
+
+    const response = await axios.post<ApiResponseType<AdminInfoType>>(
+      `${baseUrl}/Auth/AdminLogin`,
       payload
     );
 

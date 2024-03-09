@@ -18,7 +18,8 @@ import { useQuery } from "@tanstack/react-query";
 import { FETCH_ACCOUNTS_BY_CUSTOMER_ID } from "@/constants";
 import { accountService } from "@/services";
 import { MdClose } from "react-icons/md";
-import { AddMoneyModalContent } from ".";
+import { AddMoneyModalContent, WithdrawModalContent } from ".";
+import { TypeOf } from "zod";
 
 export const Wallet: React.FC = () => {
   const session = useSession();
@@ -55,6 +56,7 @@ export const Wallet: React.FC = () => {
 
   const [isCopied, setIsCopied] = useState(false);
   const [showBalance, setShowBalance] = useState(false);
+  const [modalType, setModalType] = useState<"WITHDRAW" | "ADD" | "">("");
 
   const handleToggleShowBalance = () => {
     setShowBalance((shown) => !shown);
@@ -77,7 +79,7 @@ export const Wallet: React.FC = () => {
     return <WalletLoader />;
   }
 
-  const handleAddMoneyBtnClick = () => {
+  const handleShowModal = () => {
     const element = document.getElementById("my_modal_1") as HTMLElement & {
       showModal: () => void;
     };
@@ -87,10 +89,20 @@ export const Wallet: React.FC = () => {
     }
   };
 
+  const handleAddMoneyBtnClick = () => {
+    handleShowModal();
+    setModalType("ADD");
+  };
+
   const handleCloseModal = () => {
     if (buttonRef.current) {
       buttonRef.current.click();
     }
+  };
+
+  const handleWithdrawBtnClick = () => {
+    handleShowModal();
+    setModalType("WITHDRAW");
   };
 
   return (
@@ -147,7 +159,7 @@ export const Wallet: React.FC = () => {
             </p>
           </div>
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-4  items-center justify-between">
-            <Button color="accent-blue">
+            <Button color="accent-blue" onClick={handleWithdrawBtnClick}>
               <Image
                 src="/assets/images/withdraw-funds.svg"
                 width={4}
@@ -174,10 +186,18 @@ export const Wallet: React.FC = () => {
       )}
       <dialog id="my_modal_1" className="modal">
         <div className="modal-box w-[90%] max-w-[400px] overflow-y-scroll no-scrollbar bg-white">
-          <AddMoneyModalContent
-            handleClose={handleCloseModal}
-            accountNumber={walletAccount?.accountId}
-          />
+          {modalType === "ADD" && (
+            <AddMoneyModalContent
+              handleClose={handleCloseModal}
+              accountNumber={walletAccount?.accountId}
+            />
+          )}
+          {modalType === "WITHDRAW" && (
+            <WithdrawModalContent
+              handleClose={handleCloseModal}
+              maxAmount={walletAccount?.balance ?? 0}
+            />
+          )}
           <div className="modal-action">
             <form method="dialog" className="hidden">
               <button ref={buttonRef}>close</button>

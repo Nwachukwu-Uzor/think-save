@@ -1,6 +1,7 @@
 import React from "react";
 import { AuthSidebar } from "@/components/auth/";
 import Image from "next/image";
+import { AutoLogoutProvider } from "@/components/Layout/auto-logout-provider";
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (

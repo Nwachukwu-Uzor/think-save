@@ -8,3 +8,4 @@ export type { ProductType } from "./product-type";
 export type { TenureType } from "./tenure-type";
 export type { CountryType } from "./country-type";
 export type { InvestmentCreateType } from "./investment-create-type"
+export type { BankType } from "./bank-type"

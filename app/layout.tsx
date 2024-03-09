@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Outfit } from "next/font/google";
 import "./globals.css";
+import "./index.css"
 import { SidebarContextProvider } from "@/context/admin/sidebar";
 import { Provider, SessionProvider } from "@/components/shared";
 import { getServerSession } from "next-auth";

@@ -1,5 +1,6 @@
 import { baseUrl } from "@/config";
-import { AccountType, ApiResponseType} from "@/types/shared";
+import { AccountValidationResultType } from "@/types/dashboard";
+import { AccountType, ApiResponseType, BankType } from "@/types/shared";
 import axios from "axios";
 
 class AccountService {
@@ -16,10 +17,29 @@ class AccountService {
   }
 
   async getAccountByAccountId(accountId: string) {
-    const response = await axios.get<
-      ApiResponseType<AccountType>
-    >(`${baseUrl}/Account/GetAccountByAccountId?AccountId=${accountId}`);
+    const response = await axios.get<ApiResponseType<AccountType>>(
+      `${baseUrl}/Account/GetAccountByAccountId?AccountId=${accountId}`
+    );
     return response?.data?.data;
+  }
+
+  async getBanks() {
+    const response = await axios.get<ApiResponseType<BankType[]>>(
+      `${baseUrl}/Transfer/Banks`
+    );
+    console.log(response?.data?.data);
+    return response?.data?.data;
+  }
+
+  async validateAccountNumber(beneficiaryBank: string, accountNumber: string) {
+    const payload = {
+      beneficiaryBank,
+      accountNumber,
+    };
+    const response = await axios.post<
+      ApiResponseType<AccountValidationResultType>
+    >(`${baseUrl}/Transfer/AccountEnquiry`, payload);
+    return response?.data;
   }
 }
 
