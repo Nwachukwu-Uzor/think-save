@@ -12,7 +12,7 @@ export interface AutoLogoutProviderProps {
 type WindowActivityEvent = keyof WindowEventMap;
 
 export function AutoLogoutProvider({
-  timeoutMs = +(process.env.NEXT_PUBLIC_TIME_OUT_MS || 30), // Inactivity time
+  timeoutMs = +(process.env.NEXT_PUBLIC_TIME_OUT_MS || 600000), // Inactivity time
   timeoutCheckMs = +(process.env.NEXT_PUBLIC_TIME_OUT_CHECK_MS || 10000), // Time out to check
   debug = false,
   requireSession = false,
