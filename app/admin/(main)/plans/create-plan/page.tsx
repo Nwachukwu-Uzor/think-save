@@ -16,6 +16,7 @@ import { formatNumberWithCommas, formatValidationErrors } from "@/utils/shared";
 import { productsService } from "@/services";
 import { STATUS_CODES } from "@/constants";
 import { PulseLoader } from "react-spinners";
+import { useQueryClient } from "@tanstack/react-query";
 
 const INITIAL_TENURE_FIELDS = {
   interestRate: "",
@@ -47,6 +48,7 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 const CreatePlan = () => {
+  const queryClient = useQueryClient()
   const [tenureInput, setTenureInput] = useState(INITIAL_TENURE_FIELDS);
   const [step, setStep] = useState(1);
   const [tenureErrors, setTenureErrors] = useState(INITIAL_TENURE_FIELDS);
@@ -65,9 +67,7 @@ const CreatePlan = () => {
     setError,
     handleSubmit,
     trigger,
-    clearErrors,
     setValue,
-    reset,
     formState: { errors, isSubmitting },
   } = useForm<FormFields>({
     resolver: zodResolver(schema),
@@ -220,7 +220,7 @@ const CreatePlan = () => {
 
       const payload = {
         ...data,
-        withdrawalLimit: Number(data.withdrawalLimit?.replace(/[,\s]/g, "")),
+        withdrawalLimit: data.withdrawalLimit?.replace(/[,\s]/g, ""),
         minimumAmount: Number(data.minimumAmount?.replace(/[,\s]/g, "")),
         maximumAmount: Number(data.maximumAmount?.replace(/[,\s]/g, "")),
         tenures: formattedTenures,
@@ -239,6 +239,8 @@ const CreatePlan = () => {
         productDescriptionItems: formattedProductDescriptionItems,
       };
       const response = await productsService.addOrEditProduct(payload);
+      console.log(response);
+      
       if (response?.data?.code === STATUS_CODES.SUCCESS) {
         clearInputs();
         toast.success(response?.data?.message);

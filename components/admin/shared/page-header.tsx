@@ -6,6 +6,12 @@ import { IoLogOutOutline, IoMenu } from "react-icons/io5";
 import { useSidebarContext } from "@/context/admin/sidebar";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { ADMIN_ROLES, FETCH_ADMIN_USER_BY_USERNAME } from "@/constants";
+import { useQuery } from "@tanstack/react-query";
+import { userService } from "@/services";
+import { MoonLoader } from "react-spinners";
+import Link from "next/link";
+import { FaPlus } from "react-icons/fa";
 
 type Props = {
   title: string;
@@ -16,6 +22,16 @@ export const PageHeader: React.FC<Props> = ({ title, subTitle }) => {
   const router = useRouter();
   const { handleToggleOpen } = useSidebarContext();
   const { data } = useSession();
+
+  const { data: adminUser, isLoading } = useQuery({
+    queryKey: [FETCH_ADMIN_USER_BY_USERNAME, data?.user?.email],
+    queryFn: async ({ queryKey }) => {
+      if (!queryKey[1]) {
+        return null;
+      }
+      return await userService.getAdminUserByUsername(queryKey[1]);
+    },
+  });
 
   const handleLogout = () => {
     signOut({
@@ -66,6 +82,15 @@ export const PageHeader: React.FC<Props> = ({ title, subTitle }) => {
                     </div>
                   </div>
                 </li>
+                {isLoading ? (
+                  <MoonLoader size={14} />
+                ) : adminUser?.adminRoles.some(
+                    (role) => role?.role === ADMIN_ROLES.INPUTER
+                  ) ? (
+                  <li className="py-1 font-semibold">
+                    <Link href="/add-admin-user"><FaPlus className="text-main-blue" /> Add Admin User</Link>
+                  </li>
+                ) : null}
 
                 <li className="font-semibold py-1">
                   <button onClick={handleLogout}>

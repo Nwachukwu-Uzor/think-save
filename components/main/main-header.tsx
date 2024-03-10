@@ -27,7 +27,10 @@ export const MainHeader = () => {
   };
 
   const handleLogout = () => {
-    signOut();
+    signOut({
+      redirect: true,
+      callbackUrl: "/login",
+    });
   };
   return (
     <nav className="h-16 lg:h-20 flex items-center justify-center relative">

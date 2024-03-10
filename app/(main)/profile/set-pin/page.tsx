@@ -49,7 +49,7 @@ const SetPin = () => {
         return;
       }
       const response = await userService.createTransactionPin(
-        data.pin,
+        btoa(data.pin),
         sessionData?.user.customerId
       );
 

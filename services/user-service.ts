@@ -1,5 +1,6 @@
 import { baseUrl } from "@/config";
 import { STATUS_CODES } from "@/constants";
+import { AdminInfoType } from "@/types/admin";
 import { ApiResponseType, UserType } from "@/types/shared";
 import axios from "axios";
 
@@ -20,6 +21,13 @@ class UserService {
     );
 
     return response;
+  }
+
+  async getAdminUserByUsername(username: string) {
+    const response = await axios.post<ApiResponseType<AdminInfoType>>(
+      `${baseUrl}/Admin/GetAdmin?username=${username}`
+    );
+    return response?.data?.data
   }
 }
 

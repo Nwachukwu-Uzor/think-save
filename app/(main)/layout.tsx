@@ -4,7 +4,7 @@ import { Container } from "@/components/shared/";
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
-    <AutoLogoutProvider>
+    <AutoLogoutProvider requireSession={true} redirectPath="/login">
       <main className="flex flex-col min-h-[100vh]">
         <header className="bg-white">
           <Container>

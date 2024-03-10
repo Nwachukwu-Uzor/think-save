@@ -25,7 +25,7 @@ export type CreateProductType = {
   tenure: string;
   interestRate: string;
   minimumAmount?: number;
-  withdrawalLimit?: number;
+  withdrawalLimit?: string;
   maximumAmount?: number;
   preLiquidationPenality?: string;
   penalty?: string;
