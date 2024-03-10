@@ -1,4 +1,5 @@
 import { baseUrl } from "@/config";
+import { STATUS_CODES } from "@/constants";
 import { ApiResponseType, ProductType } from "@/types/shared";
 import axios from "axios";
 class ProductsService {
@@ -19,7 +20,10 @@ class ProductsService {
       `${baseUrl}/Product/GetProductById?ProductId=${productId}`
     );
 
-    if (!response?.data?.status) {
+    if (
+      !response?.data?.status ||
+      response?.data?.code === STATUS_CODES.FAILED
+    ) {
       throw new Error(response?.data?.message ?? "Unable to get product");
     }
 

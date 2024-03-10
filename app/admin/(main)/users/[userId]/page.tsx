@@ -1,17 +1,23 @@
 "use client";
 import { PageHeader } from "@/components/admin/shared/";
 import { UserDetails } from "@/components/profile";
-import { Card, Container } from "@/components/shared";
+import { Button, Card, Container, ErrorPage } from "@/components/shared";
 import { FETCH_USER_BY_CUSTOMER_ID } from "@/constants";
 import { userService } from "@/services";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
 
 const UserDetailsPage = () => {
+  const router = useRouter();
   const { userId } = useParams<{ userId: string }>();
 
-  const { data: user, refetch } = useQuery({
+  const {
+    data: user,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: [FETCH_USER_BY_CUSTOMER_ID, userId],
     queryFn: async ({ queryKey }) => {
       const [_first, second] = queryKey;
@@ -22,15 +28,29 @@ const UserDetailsPage = () => {
       return await userService.getUserByCustomerId(second);
     },
   });
+
+  const handleBackClick = () => {
+    router.back();
+  };
+
   return (
     <>
       <PageHeader title="User Detail" />
       <Container>
+        <div className="mt-3" />
         <Card>
-          {user ? (
-            <UserDetails user={user} />
-          ) : (
+          {user && <UserDetails user={user} editable={false} />}
+          {isLoading && (
             <div className="bg-slate-100 animate-pulse w-full min-h-[250px]"></div>
+          )}
+          {isError && (
+            <ErrorPage message={error?.message}>
+              <div>
+                <Button color="black" onClick={handleBackClick}>
+                  Go Back
+                </Button>
+              </div>
+            </ErrorPage>
           )}
         </Card>
       </Container>

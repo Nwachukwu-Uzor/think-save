@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { Button, Container } from "@/components/shared";
+import { useParams, useRouter } from "next/navigation";
+import { Button, Card, Container, ErrorPage } from "@/components/shared";
 import { useQuery } from "@tanstack/react-query";
 import { FETCH_PRODUCT_BY_PRODUCT_ID } from "@/constants";
 import { productsService } from "@/services";
@@ -13,10 +13,16 @@ import { useUser } from "@/hooks";
 
 const ProductDetail = () => {
   const { user } = useUser();
+  const router = useRouter();
   const [mode, setMode] = useState<"DETAILS" | "CREATE">("DETAILS");
 
   const { productId } = useParams<{ productId: string }>();
-  const { data: product, isLoading } = useQuery({
+  const {
+    data: product,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: [FETCH_PRODUCT_BY_PRODUCT_ID, productId],
     queryFn: async ({ queryKey }) => {
       const product = await productsService.getProductByProductId(queryKey[1]);
@@ -27,6 +33,11 @@ const ProductDetail = () => {
   const handleToggleMode = () => {
     setMode((mode) => (mode === "CREATE" ? "DETAILS" : "CREATE"));
   };
+
+  const handleBackClick = () => {
+    router.back();
+  };
+
   return (
     <>
       <Container>
@@ -84,6 +95,17 @@ const ProductDetail = () => {
               />
             )
           ) : null}
+          {isError && (
+            <Card>
+              <ErrorPage message={error?.message}>
+                <div>
+                  <Button color="black" onClick={handleBackClick}>
+                    Go Back
+                  </Button>
+                </div>
+              </ErrorPage>
+            </Card>
+          )}
         </section>
       </Container>
     </>

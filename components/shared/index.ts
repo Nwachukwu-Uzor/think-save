@@ -13,3 +13,4 @@ export { Toggle } from "./toggle";
 export { SessionProvider } from "./session-provider";
 export { Provider } from "./query-client-provider";
 export { Protected } from "./protected-route";
+export { ErrorPage } from "./error-page";

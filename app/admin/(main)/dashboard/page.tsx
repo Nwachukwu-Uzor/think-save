@@ -27,7 +27,9 @@ const Dashboard = () => {
 
   const placeholders = new Array(12).fill("").map((_val, index) => index);
 
-  const columns = useMemo<ColumnDef<AccountInfoType, any>[]>(
+  const columns = useMemo<
+    ColumnDef<AccountInfoType & { CustomerId: string }, any>[]
+  >(
     () => [
       { header: "Name", accessorKey: "Username" },
       { header: "Email", accessorKey: "Email" },
@@ -36,7 +38,7 @@ const Dashboard = () => {
       { header: "Joined", accessorKey: "DateCreated" },
       {
         header: "",
-        accessorKey: "Id",
+        accessorKey: "CustomerId",
         cell: ({ getValue }) => {
           const id = getValue();
           return (
@@ -89,10 +91,10 @@ const Dashboard = () => {
                   </button>
                 </div>
                 <div className="">
-                  {dashboardData?.report?.newSignUps &&
-                  dashboardData?.report?.newSignUps?.length > 0 ? (
+                  {dashboardData?.report?.users &&
+                  dashboardData?.report?.users?.length > 0 ? (
                     <Table
-                      data={dashboardData?.report?.newSignUps}
+                      data={dashboardData?.report?.users}
                       columns={columns}
                     />
                   ) : (

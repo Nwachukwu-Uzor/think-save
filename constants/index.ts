@@ -11,3 +11,4 @@ export {
   FETCH_BANKS,
 } from "./query-keys";
 export { categoriesLogo } from "./categories-logo";
+export { STATUS_CODES } from "./status-codes";
