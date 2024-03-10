@@ -4,18 +4,14 @@ import { MdOutlineEdit } from "react-icons/md";
 import { UserType } from "@/types/shared";
 import { Button, TextAvatar } from "../shared";
 import { Detail } from ".";
+import Link from "next/link";
 
 type Props = {
   user: Partial<UserType>;
-  handleEditBtnClick?: () => void;
-  editable?: boolean;
+  handleEditBtnClick: () => void;
 };
 
-export const UserDetails: React.FC<Props> = ({
-  user,
-  handleEditBtnClick,
-  editable = true,
-}) => {
+export const UserDetails: React.FC<Props> = ({ user, handleEditBtnClick }) => {
   const {
     avatarUrl,
     firstName,
@@ -32,6 +28,7 @@ export const UserDetails: React.FC<Props> = ({
     imagePath,
     address,
     dateOfBirth,
+    ups,
   } = user;
   return (
     <>
@@ -51,13 +48,12 @@ export const UserDetails: React.FC<Props> = ({
           middleName ? " " + middleName : ""
         } ${lastName}`}</h3>
         <p className="text-xs lg:text-sm text-fade font-semibold">{email}</p>
-        {editable && (
-          <div className="w-full max-w-[200px] mt-2">
-            <Button color="main-blue" onClick={handleEditBtnClick}>
-              <MdOutlineEdit /> Edit Profile
-            </Button>
-          </div>
-        )}
+
+        <div className="w-full max-w-[200px] mt-2">
+          <Button color="main-blue" onClick={handleEditBtnClick}>
+            <MdOutlineEdit /> Edit Profile
+          </Button>
+        </div>
       </div>
       <div className="grid lg:grid-cols-2 gap-1 lg:gap-2 mt-8">
         <Detail title="BVN" value={bvn ?? ""} />
@@ -75,6 +71,22 @@ export const UserDetails: React.FC<Props> = ({
           <Detail title="Address" value={address ?? ""} />
         </div>
       </div>
+      {ups !== "1" && (
+        <>
+          <p className="mt-8 text-sm font-light">
+            You do not have a transaction pin set. Click the link below to set a
+            pin.
+          </p>
+          <div className="flex items-center justify-center mt-2">
+            <Link
+              href="/profile/set-pin"
+              className="text-main-blue text-center font-semibold hover:opacity-75 underline py-0.5"
+            >
+              Set Pin now
+            </Link>
+          </div>
+        </>
+      )}
     </>
   );
 };

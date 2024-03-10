@@ -81,7 +81,7 @@ export const authOptions: AuthOptions = {
             //image: data?.imagePath,
             id: data.id,
             name: `${data.firstName} ${data.lastName}`,
-            customerId: "",
+            customerId: data?.staffId,
           };
           return user;
         } catch (err: unknown) {

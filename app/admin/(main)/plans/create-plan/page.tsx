@@ -155,7 +155,6 @@ const CreatePlan = () => {
   };
 
   const handleAddProductDescriptionItem = () => {
-    console.log("here");
     if (
       productDescriptionItem.value.length < 3 ||
       productDescriptionItem.error.length > 0

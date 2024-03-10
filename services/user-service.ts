@@ -9,9 +9,17 @@ class UserService {
       `${baseUrl}/Customer/GetCustomerByCustomerId?customerId=${customerId}`
     );
     if (response?.data?.code === STATUS_CODES.FAILED) {
-      throw new Error(response?.data?.message)
+      throw new Error(response?.data?.message);
     }
     return response?.data?.data;
+  }
+
+  async createTransactionPin(pin: string, userId?: string) {
+    const response = await axios.post<ApiResponseType<null>>(
+      `${baseUrl}/Transfer/CreateTransactionPin?userId=${userId}&transactionPin=${pin}`
+    );
+
+    return response;
   }
 }
 

@@ -2,7 +2,14 @@
 import React, { useMemo, useState } from "react";
 import Select, { SingleValue } from "react-select";
 import { PageHeader } from "@/components/admin/shared";
-import { Card, Container, Table, TextInput } from "@/components/shared";
+import {
+  Card,
+  Container,
+  EmptyPage,
+  ErrorPage,
+  Table,
+  TextInput,
+} from "@/components/shared";
 import { FETCH_ACCOUNTS_WITH_FILTER, FETCH_ALL_PRODUCTS } from "@/constants";
 import { accountService, productsService } from "@/services";
 import { useQuery } from "@tanstack/react-query";
@@ -40,6 +47,22 @@ const Accounts = () => {
   );
   const [customerId, setCustomerId] = useState("");
 
+  const handleCustomerIdChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setCustomerId(event.target.value);
+  };
+
+  const placeholders = new Array(6).fill("").map((_val, index) => index);
+
+  const ShowLoader = () => (
+    <article className="grid grid-cols-1 gap-2">
+      {placeholders.map((placeholder) => (
+        <TransactionLoader key={placeholder} />
+      ))}
+    </article>
+  );
+
   const columns = useMemo<ColumnDef<AdminAccountType, any>[]>(
     () => [
       {
@@ -60,10 +83,24 @@ const Accounts = () => {
       },
       {
         accessorKey: "Amount",
-        header: "Amount",
+        header: () => (
+          <span className="text-center w-full inline-block">Amount</span>
+        ),
         cell: ({ getValue }) => {
           const value = getValue() as string;
-          return value ? formatNumberWithCommas(value) : "";
+          return (
+            <span className="text-right w-full inline-block">
+              {value ? formatNumberWithCommas(value) : ""}
+            </span>
+          );
+        },
+      },
+      {
+        accessorKey: "DateCreated",
+        header: "Date Created",
+        cell: ({ getValue }) => {
+          const value = getValue();
+          return formatDate(value, "yyyy-MM-dd");
         },
       },
     ],
@@ -107,7 +144,6 @@ const Accounts = () => {
         searchTerm = INITIAL_FILTER;
       }
       const data = await accountService.spoolAccounts(searchTerm);
-      console.log(data);
       return data;
     },
   });
@@ -201,10 +237,12 @@ const Accounts = () => {
                   noError={true}
                   label="Customer Number"
                   placeholder="Enter customer number..."
+                  value={customerId}
+                  onChange={handleCustomerIdChange}
                 />
               </div>
             </header>
-            <div className="my-2 max-w-[200px]">
+            <div className="mt-2 max-w-[200px]">
               <Button
                 className="text-white bg-black active:ring-black w-full hover:bg-black"
                 onClick={handleFilter}
@@ -212,14 +250,20 @@ const Accounts = () => {
                 Search
               </Button>
             </div>
+            <div className="mt-4" />
+            {isLoadingAccounts ? (
+              <ShowLoader />
+            ) : accounts && accounts?.length > 0 ? (
+              <Table data={accounts} columns={columns} />
+            ) : (
+              <EmptyPage title="No Transaction" />
+            )}
+            {isError && (
+              <ErrorPage
+                message={error?.message ?? "Unable to get transaction"}
+              />
+            )}
           </article>
-          <div className="mt-2" />
-          {isLoadingAccounts && <TransactionLoader />}
-          {accounts && accounts?.length > 0 ? (
-            <Table data={accounts} columns={columns} />
-          ) : (
-            <p></p>
-          )}
         </Card>
       </Container>
     </>

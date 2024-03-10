@@ -15,11 +15,16 @@ import { WalletLoader } from "../shared/skeleton-loaders";
 import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
-import { FETCH_ACCOUNTS_BY_CUSTOMER_ID } from "@/constants";
-import { accountService } from "@/services";
+import {
+  FETCH_ACCOUNTS_BY_CUSTOMER_ID,
+  FETCH_USER_BY_CUSTOMER_ID,
+} from "@/constants";
+import { accountService, userService } from "@/services";
 import { MdClose } from "react-icons/md";
 import { AddMoneyModalContent, WithdrawModalContent } from ".";
 import { TypeOf } from "zod";
+import { MoonLoader } from "react-spinners";
+import Link from "next/link";
 
 export const Wallet: React.FC = () => {
   const session = useSession();
@@ -33,6 +38,18 @@ export const Wallet: React.FC = () => {
       }
 
       return await accountService.getAccountsByCustomerId(queryKey[1]);
+    },
+  });
+
+  const { data: user, isLoading: isLoadingProfile } = useQuery({
+    queryKey: [FETCH_USER_BY_CUSTOMER_ID, session?.data?.user?.customerId],
+    queryFn: async ({ queryKey }) => {
+      const [_first, second] = queryKey;
+      if (!second) {
+        return null;
+      }
+
+      return await userService.getUserByCustomerId(second);
     },
   });
 
@@ -104,7 +121,7 @@ export const Wallet: React.FC = () => {
     handleShowModal();
     setModalType("WITHDRAW");
   };
-
+  console.log(user?.ups);
   return (
     <>
       {walletAccount ? (
@@ -193,10 +210,36 @@ export const Wallet: React.FC = () => {
             />
           )}
           {modalType === "WITHDRAW" && (
-            <WithdrawModalContent
-              handleClose={handleCloseModal}
-              maxAmount={walletAccount?.balance ?? 0}
-            />
+            <>
+              {isLoading ? (
+                <MoonLoader color="#0E12A2" size={30} />
+              ) : user && user.ups ? (
+                <WithdrawModalContent
+                  handleClose={handleCloseModal}
+                  maxAmount={walletAccount?.balance ?? 0}
+                />
+              ) : (
+                <>
+                  <h2 className="font-semibold mb-2 text-center">
+                    No Transation Pin
+                  </h2>
+                  <p className="text-center">
+                    You cannot complete this withdrawal as you have not set a
+                    transaction pin yet. Click the link below to proceed to set
+                    a pin now
+                  </p>
+                  <div className="flex items-center justify-center mt-2">
+                    <Link
+                      href="/profile/set-pin"
+                      className="text-main-blue text-center font-semibold hover:opacity-75 underline py-0.5"
+                    >
+                      Set Pin now
+                    </Link>
+                  </div>
+                </>
+              )}
+              {user?.ups}
+            </>
           )}
           <div className="modal-action">
             <form method="dialog" className="hidden">

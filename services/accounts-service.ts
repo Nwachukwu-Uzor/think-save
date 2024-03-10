@@ -1,6 +1,12 @@
 import { baseUrl } from "@/config";
 import { AccountValidationResultType } from "@/types/dashboard";
-import { AccountType, AdminAccountType, ApiResponseType, BankType } from "@/types/shared";
+import {
+  AccountType,
+  AdminAccountType,
+  ApiResponseType,
+  BankType,
+  UserType,
+} from "@/types/shared";
 import axios from "axios";
 
 class AccountService {
@@ -46,6 +52,24 @@ class AccountService {
     const response = await axios.post<ApiResponseType<AdminAccountType[]>>(
       `${baseUrl}/Admin/AccountsSpool`,
       filter
+    );
+
+    return response?.data?.data;
+  }
+
+  async adminUpdateUserAccount(data: {
+    actionType?: string;
+    userEmail?: string;
+    adminEmail?: string;
+  }) {
+    const url = `${baseUrl}/Admin/${data.actionType}User?username=${data.userEmail}&appUser=${data.adminEmail}`;
+    const response = await axios.post<ApiResponseType<null>>(url);
+    return response
+  }
+
+  async getAllUser() {
+    const response = await axios.get<ApiResponseType<AdminAccountType[]>>(
+      `${baseUrl}/Admin/GetAllUser`
     );
 
     return response?.data?.data;

@@ -1,44 +1,60 @@
-"use client"
+"use client";
 import React, { useMemo } from "react";
 import { PageHeader } from "@/components/admin/shared/";
-import { Card, Container } from "@/components/shared";
+import { Card, Container, EmptyPage, ErrorPage } from "@/components/shared";
 import { dummyUsers } from "@/data/";
 import { UserType } from "@/types/shared";
 import { ColumnDef } from "@tanstack/react-table";
 import { Table } from "@/components/shared/";
 import { SlOptionsVertical } from "react-icons/sl";
+import { FETCH_ALL_USERS } from "@/constants";
+import { useQuery } from "@tanstack/react-query";
+import { accountService } from "@/services";
+import { AdminAccountInfoType } from "@/types/admin";
+import Link from "next/link";
+import { TransactionLoader } from "@/components/shared/skeleton-loaders";
 
 const Users = () => {
-  const columns = useMemo<ColumnDef<UserType, any>[]>(
+  const placeholders = new Array(12).fill("").map((_val, index) => index);
+  const {
+    isLoading,
+    data: users,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: [FETCH_ALL_USERS],
+    queryFn: async () => {
+      const response = await accountService.getAllUser();
+      return response;
+    },
+  });
+
+  console.log(users);
+
+  const columns = useMemo<ColumnDef<AdminAccountInfoType, any>[]>(
     () => [
-      { header: "Name", accessorKey: "firstName" },
+      { header: "Name", accessorKey: "username" },
       { header: "Email", accessorKey: "email" },
-      { header: "Phone", accessorKey: "phoneNumber" },
-      { header: "Gender", accessorKey: "gender" },
+      {
+        header: "Gender",
+        accessorKey: "role",
+        cell: ({ row }) => row.original?.customer?.gender ?? "",
+      },
+      { header: "Status", accessorKey: "status" },
       { header: "Joined", accessorKey: "dateCreated" },
       {
         header: "",
-        accessorKey: "id",
-        cell: ({row}) => {
-          const values = row.original;
-          
+        accessorKey: "customer",
+        cell: ({ getValue }) => {
+          const customer = getValue();
+
           return (
-            <div className="dropdown dropdown-end">
-              <div tabIndex={0} role="button" className="">
-               <SlOptionsVertical />
-              </div>
-              <ul
-                tabIndex={0}
-                className="dropdown-content z-[1] menu p-2 rounded-sm shadow-md bg-base-100  w-fit text-sm"
-              >
-                <li>
-                  <a className="whitespace-nowrap">View Profile</a>
-                </li>
-                <li className="whitespace-nowrap">
-                  <a>Block</a>
-                </li>
-              </ul>
-            </div>
+            <Link
+              href={`/admin/users/${customer?.customerId}`}
+              className="text-xs text-main-blue"
+            >
+              View Profile
+            </Link>
           );
         },
       },
@@ -52,9 +68,24 @@ const Users = () => {
       <Container>
         <div className="relative -translate-y-[40px]">
           <Card>
-            <div className="">
-              <Table data={dummyUsers} columns={columns} />
-            </div>
+            {isLoading ? (
+              <div className="flex flex-col gap-2 my-4">
+                {placeholders.map((placeholder) => (
+                  <TransactionLoader key={placeholder} />
+                ))}
+              </div>
+            ) : users && users?.length > 0 ? (
+              <div className="">
+                <Table data={users} columns={columns} />
+              </div>
+            ) : (
+              <EmptyPage />
+            )}
+            {isError && (
+              <ErrorPage
+                message={error?.message ?? "Unable to retrieve usersss"}
+              />
+            )}
           </Card>
         </div>
         <div className="-mt-[20px] lg:-mt-[10px]"></div>

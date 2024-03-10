@@ -1,6 +1,6 @@
 "use client";
 import { PageHeader } from "@/components/admin/shared/";
-import { UserDetails } from "@/components/profile";
+import { UserDetails } from "@/components/admin/user";
 import { Button, Card, Container, ErrorPage } from "@/components/shared";
 import { FETCH_USER_BY_CUSTOMER_ID } from "@/constants";
 import { userService } from "@/services";
@@ -39,7 +39,7 @@ const UserDetailsPage = () => {
       <Container>
         <div className="mt-3" />
         <Card>
-          {user && <UserDetails user={user} editable={false} />}
+          {user && <UserDetails user={user} />}
           {isLoading && (
             <div className="bg-slate-100 animate-pulse w-full min-h-[250px]"></div>
           )}

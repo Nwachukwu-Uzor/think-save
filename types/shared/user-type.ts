@@ -26,4 +26,5 @@ export type UserType = {
   customerId: string;
   accountId: string;
   accounts?: AccountType[];
+  ups: string | null;
 };
