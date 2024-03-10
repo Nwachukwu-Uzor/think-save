@@ -16,7 +16,7 @@ export const TextInput = forwardRef<HTMLInputElement, Props>(
     return (
       <div className="flex flex-col gap-1.5 w-full">
         {label ? (
-          <label htmlFor={id} className="font-semibold text-sm">
+          <label htmlFor={id} className="font-medium text-sm">
             {label}
           </label>
         ) : null}

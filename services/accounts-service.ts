@@ -1,6 +1,6 @@
 import { baseUrl } from "@/config";
 import { AccountValidationResultType } from "@/types/dashboard";
-import { AccountType, ApiResponseType, BankType } from "@/types/shared";
+import { AccountType, AdminAccountType, ApiResponseType, BankType } from "@/types/shared";
 import axios from "axios";
 
 class AccountService {
@@ -40,6 +40,15 @@ class AccountService {
       ApiResponseType<AccountValidationResultType>
     >(`${baseUrl}/Transfer/AccountEnquiry`, payload);
     return response?.data;
+  }
+
+  async spoolAccounts<T extends unknown>(filter: T) {
+    const response = await axios.post<ApiResponseType<AdminAccountType[]>>(
+      `${baseUrl}/Admin/AccountsSpool`,
+      filter
+    );
+
+    return response?.data?.data;
   }
 }
 
