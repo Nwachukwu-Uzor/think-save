@@ -29,6 +29,16 @@ class ProductsService {
 
     return response?.data?.data;
   }
+
+  async addOrEditProduct(
+    data: Omit<ProductType, "productId"> & { productId?: string }
+  ) {
+    const response = await axios.post<ApiResponseType<ProductType[]>>(
+      `${baseUrl}/Product/AddOrEditProduct`,
+      data
+    );
+    return response;
+  }
 }
 
 export const productsService = new ProductsService();

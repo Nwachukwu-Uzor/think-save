@@ -85,10 +85,10 @@ const Dashboard = () => {
             <div className="-mt-[20px] lg:-mt-[10px]">
               <Card>
                 <div className="flex justify-between items-center">
-                  <h2 className="text-black font-bold mb-2">New Sign ups</h2>
-                  <button className="text-main-blue text-base font-bold hover:opacity-80 active:scale-75 duration-100">
+                  <h2 className="text-black font-bold mb-2">Users</h2>
+                  {/* <button className="text-main-blue text-base font-bold hover:opacity-80 active:scale-75 duration-100">
                     View All
-                  </button>
+                  </button> */}
                 </div>
                 <div className="">
                   {dashboardData?.report?.users &&
@@ -98,7 +98,7 @@ const Dashboard = () => {
                       columns={columns}
                     />
                   ) : (
-                    <p>No new sign ups</p>
+                    <p>No users found</p>
                   )}
                 </div>
               </Card>

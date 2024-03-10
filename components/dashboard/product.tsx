@@ -5,12 +5,18 @@ import { categoriesLogo } from "@/constants";
 import { ProductType } from "@/types/shared";
 import Link from "next/link";
 
-type Props = ProductType & {};
-export const Product: React.FC<Props> = ({ productName, productId }) => {
+type Props = ProductType & {
+  isAdmin?: boolean;
+};
+export const Product: React.FC<Props> = ({
+  productName,
+  productId,
+  isAdmin = false,
+}) => {
   const category = categoriesLogo[productName.replace(/\s/g, "").toLowerCase()];
   return (
     <Link
-      href={`/products/${productId}`}
+      href={isAdmin ? `/admin/plans/${productId}` : `/products/${productId}`}
       className="bg-accent-blue px-3 lg:px-4 py-4 text-black rounded-md flex flex-col gap-4 lg:gap-8 hover:shadow-lg duration-200"
     >
       {category ? (

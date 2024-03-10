@@ -9,7 +9,8 @@ const buttonColors = {
     "bg-accent-blue text-main-blue active:ring active:ring-accent-blue",
   "main-blue": "bg-main-blue text-white active:ring active:ring-main-blue",
   "fade-red": "bg-[#FFD0D1] text-main-red active:ring-[#FFD0D1] active:ring",
-  black: "bg-black text-white active:ring-black active:ring"
+  black: "bg-black text-white active:ring-black active:ring",
+  success: "bg-green-700 text-white active:ring-green-700 active:ring"
 };
 
 type Props = {

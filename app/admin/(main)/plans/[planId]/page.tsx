@@ -8,20 +8,22 @@ import { productsService } from "@/services";
 import { ProductDetailsLoader } from "@/components/shared/skeleton-loaders";
 import { CreatePlanSingle } from "@/components/products";
 import { useUser } from "@/hooks";
+import { PageHeader } from "@/components/admin/shared";
+import { EditPlan } from "@/components/admin/plans/edit-plan";
 
 const ProductDetail = () => {
   const { user } = useUser();
   const router = useRouter();
   const [mode, setMode] = useState<"DETAILS" | "CREATE">("DETAILS");
 
-  const { productId } = useParams<{ productId: string }>();
+  const { planId } = useParams<{ planId: string }>();
   const {
     data: product,
     isLoading,
     isError,
     error,
   } = useQuery({
-    queryKey: [FETCH_PRODUCT_BY_PRODUCT_ID, productId],
+    queryKey: [FETCH_PRODUCT_BY_PRODUCT_ID, planId],
     queryFn: async ({ queryKey }) => {
       const product = await productsService.getProductByProductId(queryKey[1]);
       return product;
@@ -38,6 +40,7 @@ const ProductDetail = () => {
 
   return (
     <>
+      <PageHeader title="Plans Details" />
       <Container>
         <section className="min-h-[50vh]">
           {isLoading ? (
@@ -80,17 +83,13 @@ const ProductDetail = () => {
                 <div className="mt-4">
                   <div className="w-3/4 max-w-[200px]">
                     <Button color="main-blue" onClick={handleToggleMode}>
-                      Start Plan
+                      Edit Plan
                     </Button>
                   </div>
                 </div>
               </article>
             ) : (
-              <CreatePlanSingle
-                product={product}
-                handleClose={handleToggleMode}
-                customerId={user?.customerId ?? ""}
-              />
+              <EditPlan plan={product} handleClose={handleToggleMode} />
             )
           ) : null}
           {isError && (

@@ -6,10 +6,20 @@ import Image from "next/image";
 import { RxDashboard } from "react-icons/rx";
 import { useSidebarContext } from "@/context/admin/sidebar";
 import { AutoLogoutProvider } from "@/components/Layout/auto-logout-provider";
+import { Button } from "@/components/shared";
+import { signOut } from "next-auth/react";
+import { MdLogout } from "react-icons/md";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const { open } = useSidebarContext();
   const currentRoute = usePathname();
+
+  const handleLogout = () => {
+    signOut({
+      redirect: true,
+      callbackUrl: "/admin/login",
+    });
+  };
 
   const navItems = [
     {
@@ -96,6 +106,11 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                 </Link>
               </li>
             ))}
+            <li className="mt-auto py-4 px-2">
+              <Button onClick={handleLogout}>
+                <MdLogout className="text-xl"/> Logout
+              </Button>
+            </li>
           </ul>
         </nav>
 

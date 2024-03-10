@@ -46,15 +46,12 @@ const schema = z.object({
   Name: z.string().min(2, { message: "Name should be at least 2 characters" }),
   Amount: z.string().refine((amount) => Number(amount) > 0, {
     message: "Amount must be greater than zero",
-    path: ["Amount"],
   }),
   Tenure: z.string().refine((amount) => Number(amount) > 0, {
     message: "Tenure must be greater than zero",
-    path: ["Tenure"],
   }),
   Interest: z.string().refine((amount) => Number(amount) > 0, {
     message: "Interest must be greater than zero",
-    path: ["Interest"],
   }),
   Description: z.optional(z.string()),
   Frequency: z.string({ required_error: "Frequency is required" }),

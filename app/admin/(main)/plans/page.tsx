@@ -4,11 +4,13 @@ import { HiOutlineDotsVertical } from "react-icons/hi";
 import { FaPlus } from "react-icons/fa";
 import { PageHeader } from "@/components/admin/shared/";
 import { Button, Card, Container } from "@/components/shared";
+import { Products as ProductsComponent } from "@/components/dashboard";
 import { dummyPlans } from "@/data/";
 import { PlanType } from "@/types/dashboard";
 import { ColumnDef } from "@tanstack/react-table";
 import { Table } from "@/components/shared/";
 import { CreatePlanForm } from "@/components/admin/plans";
+import Link from "next/link";
 
 const Plans = () => {
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -58,15 +60,22 @@ const Plans = () => {
       <Container>
         <div className="relative -translate-y-[40px]">
           <Card>
+            <article className="min-h-[40vh]">
+              <div className="my-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-3 xl:gap-6">
+                <ProductsComponent isAdmin={true} />
+              </div>
+            </article>
             <div className="max-w-[200px] my-3 ml-auto">
-              <Button color="main-blue" onClick={handleCreatePlanBtnClick}>
-                <FaPlus />
-                Create New Plan
-              </Button>
+              <Link href="/admin/plans/create-plan">
+                <Button color="main-blue">
+                  <FaPlus />
+                  Create New Plan
+                </Button>
+              </Link>
             </div>
-            <div className="">
+            {/* <div className="">
               <Table data={dummyPlans} columns={columns} />
-            </div>
+            </div> */}
           </Card>
         </div>
         <div className="-mt-[20px] lg:-mt-[10px]"></div>

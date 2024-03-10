@@ -6,12 +6,12 @@ export type ProductType = {
   productDescription: string;
   tenure: string;
   interestRate: string;
-  minimumAmount: number;
-  withdrawalLimit: number | null;
-  maximumAmount: number | null;
-  preLiquidationPenality: number | null;
-  penalty: string;
-  maximumNoWithdrawal: number | null;
+  minimumAmount?: string;
+  withdrawalLimit?: string;
+  maximumAmount?: string;
+  preLiquidationPenality?: string;
+  penalty?: string;
+  maximumNoWithdrawal?: string;
   productDescriptionItems: string[];
   tenures: TenureType[];
   interestRates: null;

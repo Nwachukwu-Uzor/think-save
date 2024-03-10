@@ -6,7 +6,11 @@ import { FETCH_ALL_PRODUCTS } from "@/constants";
 import { productsService } from "@/services";
 import { ProductLoader } from "../shared/skeleton-loaders";
 
-export const Products: React.FC = () => {
+type Props = {
+  isAdmin?: boolean;
+}
+
+export const Products: React.FC<Props> = ({isAdmin=false}) => {
   const placeholders = new Array(6).fill("").map((_val, index) => index);
   const { data: products, isLoading } = useQuery({
     queryKey: [FETCH_ALL_PRODUCTS],
@@ -31,7 +35,7 @@ export const Products: React.FC = () => {
         <>
           {filteredProducts.length > 0 ? (
             filteredProducts.map((plan) => (
-              <Product {...plan} key={plan.productId} />
+              <Product {...plan} key={plan.productId} isAdmin={isAdmin} />
             ))
           ) : (
             <div className="col-span-2 lg:col-span-3">No Product Found</div>
