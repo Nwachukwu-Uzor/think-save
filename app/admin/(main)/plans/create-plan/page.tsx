@@ -12,8 +12,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { formatNumberWithCommas } from "@/utils/shared";
+import { formatNumberWithCommas, formatValidationErrors } from "@/utils/shared";
 import { productsService } from "@/services";
+import { STATUS_CODES } from "@/constants";
+import { PulseLoader } from "react-spinners";
 
 const INITIAL_TENURE_FIELDS = {
   interestRate: "",
@@ -65,6 +67,7 @@ const CreatePlan = () => {
     trigger,
     clearErrors,
     setValue,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<FormFields>({
     resolver: zodResolver(schema),
@@ -152,6 +155,7 @@ const CreatePlan = () => {
   };
 
   const handleAddProductDescriptionItem = () => {
+    console.log("here");
     if (
       productDescriptionItem.value.length < 3 ||
       productDescriptionItem.error.length > 0
@@ -194,6 +198,14 @@ const CreatePlan = () => {
     setStep(2);
   };
 
+  const clearInputs = () => {
+    setStep(1);
+    setTenures([]);
+    setTenureErrors(INITIAL_TENURE_FIELDS);
+    setProductDescriptionItems([]);
+    setProductDescriptionItem(INITIAL_PRODUCT_DESCRIPTION_ITEM);
+  };
+
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       const formattedTenures = tenures.map((tenure) => ({
@@ -227,8 +239,22 @@ const CreatePlan = () => {
         }, ""),
         productDescriptionItems: formattedProductDescriptionItems,
       };
-     const response = await productsService.addOrEditProduct(payload)
-    } catch (error) {}
+      const response = await productsService.addOrEditProduct(payload);
+      if (response?.data?.code === STATUS_CODES.SUCCESS) {
+        clearInputs();
+        toast.success(response?.data?.message);
+        return;
+      }
+      setError("root", { message: response?.data?.message });
+    } catch (error: any) {
+      const errorData = error?.response?.data?.errors;
+      if (errorData) {
+        const formattedValidationErrors = formatValidationErrors(
+          errorData as Record<string, string[]>
+        );
+        setError("root", { type: "deps", message: formattedValidationErrors });
+      }
+    }
   };
 
   return (
@@ -250,11 +276,13 @@ const CreatePlan = () => {
                   label="Product Name"
                   {...register("productName")}
                   error={errors?.productName?.message}
+                  disabled={isSubmitting}
                 />
                 <TextAreaInput
                   label="Product Description"
                   {...register("productDescription")}
                   error={errors?.productDescription?.message}
+                  disabled={isSubmitting}
                 />
                 <>
                   <label
@@ -272,6 +300,7 @@ const CreatePlan = () => {
                         onChange={handleProductDescriptionItemChange}
                         name="productDescriptionItem"
                         id="productDescriptionItem"
+                        disabled={isSubmitting}
                       />
                     </div>
                     <div className="max-w-[150px]">
@@ -279,6 +308,7 @@ const CreatePlan = () => {
                         color="success"
                         type="button"
                         onClick={handleAddProductDescriptionItem}
+                        disabled={isSubmitting}
                       >
                         Add
                       </Button>
@@ -311,6 +341,7 @@ const CreatePlan = () => {
                       value={tenureInput.tenureRate}
                       onChange={handleTenureInputChange}
                       error={tenureErrors?.tenureRate}
+                      disabled={isSubmitting}
                     />
                     <TextInput
                       label="Interest Rate (%)"
@@ -319,6 +350,7 @@ const CreatePlan = () => {
                       value={tenureInput.interestRate}
                       onChange={handleTenureInputChange}
                       error={tenureErrors?.interestRate}
+                      disabled={isSubmitting}
                     />
                   </div>
                   <p className="h-1 text-xs text-red-500 mt-1">
@@ -329,6 +361,7 @@ const CreatePlan = () => {
                       color="success"
                       type="button"
                       onClick={handleAddTenure}
+                      disabled={isSubmitting}
                     >
                       Add
                     </Button>
@@ -356,7 +389,11 @@ const CreatePlan = () => {
                   </div>
                 </>
                 <div className="max-w-[250px] mt-2">
-                  <Button onClick={handleNextClick} type="button">
+                  <Button
+                    onClick={handleNextClick}
+                    disabled={isSubmitting}
+                    type="button"
+                  >
                     Next
                   </Button>
                 </div>
@@ -368,22 +405,39 @@ const CreatePlan = () => {
                   label="Minimum Amount"
                   {...register("minimumAmount")}
                   onChange={handleNumericInputChange}
+                  disabled={isSubmitting}
                 />
                 <TextInput
                   label="Maximum Amount"
                   {...register("maximumAmount")}
                   onChange={handleNumericInputChange}
+                  disabled={isSubmitting}
                 />
                 <TextInput
                   label="Withdrawal Limit"
                   {...register("withdrawalLimit")}
                   onChange={handleNumericInputChange}
+                  disabled={isSubmitting}
                 />
+                <div className="flex flex-col gap-0.5">
+                  {errors?.root?.message?.split(",").map((error) => (
+                    <p key={error} className="text-sm text-main-red">
+                      {error}
+                    </p>
+                  ))}
+                </div>
                 <div className="flex items-center gap-2">
-                  <Button color="red" onClick={handleBackClick} type="button">
+                  <Button
+                    color="red"
+                    onClick={handleBackClick}
+                    type="button"
+                    disabled={isSubmitting}
+                  >
                     Back
                   </Button>
-                  <Button>Submit</Button>
+                  <Button disabled={isSubmitting}>
+                    {isSubmitting ? <PulseLoader color="#fff" /> : "Submit"}
+                  </Button>
                 </div>
               </>
             )}

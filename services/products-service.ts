@@ -1,6 +1,6 @@
 import { baseUrl } from "@/config";
 import { STATUS_CODES } from "@/constants";
-import { ApiResponseType, ProductType } from "@/types/shared";
+import { ApiResponseType, CreateProductType, ProductType } from "@/types/shared";
 import axios from "axios";
 class ProductsService {
   async getAllProducts() {
@@ -30,9 +30,7 @@ class ProductsService {
     return response?.data?.data;
   }
 
-  async addOrEditProduct(
-    data: Omit<ProductType, "productId"> & { productId?: string }
-  ) {
+  async addOrEditProduct(data: Partial<CreateProductType>) {
     const response = await axios.post<ApiResponseType<ProductType[]>>(
       `${baseUrl}/Product/AddOrEditProduct`,
       data

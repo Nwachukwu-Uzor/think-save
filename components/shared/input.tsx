@@ -1,17 +1,18 @@
-import React, {
-  forwardRef,
-  ComponentProps,
-} from "react";
+import React, { forwardRef, ComponentProps } from "react";
 
 type Props = {
   label?: string | React.ReactNode;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   error?: string;
+  noError?: boolean;
 } & ComponentProps<"input">;
 
 export const TextInput = forwardRef<HTMLInputElement, Props>(
-  ({ label, id, rightIcon, leftIcon, error, ...props }, ref) => {
+  (
+    { label, id, rightIcon, leftIcon, error, noError = false, ...props },
+    ref
+  ) => {
     return (
       <div className="flex flex-col gap-1.5 w-full">
         {label ? (
@@ -38,7 +39,9 @@ export const TextInput = forwardRef<HTMLInputElement, Props>(
             </span>
           ) : null}
         </div>
-        <p className="h-1 mt-0.5 text-red-500 text-xs">{error}</p>
+        {noError ? null : (
+          <p className="h-1 mt-0.5 text-red-500 text-xs">{error}</p>
+        )}
       </div>
     );
   }
