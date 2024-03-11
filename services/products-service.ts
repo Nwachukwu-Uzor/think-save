@@ -30,7 +30,7 @@ class ProductsService {
     return response?.data?.data;
   }
 
-  async addOrEditProduct(data: Partial<CreateProductType>) {
+  async addOrEditProduct<T extends unknown>(data: T) {
     const response = await axios.post<ApiResponseType<ProductType[]>>(
       `${baseUrl}/Product/AddOrEditProduct`,
       data
