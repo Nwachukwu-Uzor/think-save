@@ -1,6 +1,6 @@
 import { baseUrl } from "@/config";
 import { STATUS_CODES } from "@/constants";
-import { AdminInfoType } from "@/types/admin";
+import { AdminInfoType, AdminUserCreateType } from "@/types/admin";
 import { ApiResponseType, UserType } from "@/types/shared";
 import axios from "axios";
 
@@ -27,7 +27,15 @@ class UserService {
     const response = await axios.post<ApiResponseType<AdminInfoType>>(
       `${baseUrl}/Admin/GetAdmin?username=${username}`
     );
-    return response?.data?.data
+    return response?.data?.data;
+  }
+
+  async addAdminUser(data: AdminUserCreateType) {
+    const response = await axios.post<ApiResponseType<null>>(
+      `${baseUrl}/Admin/AddOrEditAdmin`,
+      data
+    );
+    return response;
   }
 }
 

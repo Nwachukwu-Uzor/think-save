@@ -5,4 +5,6 @@ export type TransactionType = {
   date: string;
   transactionType: string;
   transactionId: string;
+  accountId?: string;
+  customerId?: string;
 };

@@ -88,7 +88,9 @@ export const PageHeader: React.FC<Props> = ({ title, subTitle }) => {
                     (role) => role?.role === ADMIN_ROLES.INPUTER
                   ) ? (
                   <li className="py-1 font-semibold">
-                    <Link href="/add-admin-user"><FaPlus className="text-main-blue" /> Add Admin User</Link>
+                    <Link href="/admin/add-admin-user">
+                      <FaPlus className="text-main-blue" /> Add Admin User
+                    </Link>
                   </li>
                 ) : null}
 
