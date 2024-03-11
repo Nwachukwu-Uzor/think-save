@@ -11,14 +11,12 @@ import { PulseLoader } from "react-spinners";
 import { userService } from "@/services";
 import { STATUS_CODES } from "@/constants";
 import { toast } from "react-toastify";
+import { useSession } from "next-auth/react";
 
 const schema = z.object({
   username: z
     .string({ required_error: "Username is required" })
     .min(3, "Username should be at least 3 characters"),
-  appUser: z
-    .string({ required_error: "AppUser is required" })
-    .min(3, "AppUser should be at least 3 characters"),
   firstName: z
     .string({ required_error: "First Name is required" })
     .min(3, "First Name should be at least 3 characters"),
@@ -33,6 +31,7 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 const AddAdminUser = () => {
+  const { data: sessionData } = useSession();
   const {
     register,
     setError,
@@ -45,7 +44,10 @@ const AddAdminUser = () => {
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      const response = await userService.addAdminUser(data);
+      const response = await userService.addAdminUser({
+        ...data,
+        appUser: sessionData?.user?.email as string,
+      });
 
       if (response?.data?.code === STATUS_CODES.FAILED) {
         setError("root", { message: response?.data?.message });
@@ -99,12 +101,6 @@ const AddAdminUser = () => {
                 label="Email"
                 {...register("email")}
                 error={errors?.email?.message}
-                disabled={isSubmitting}
-              />
-              <TextInput
-                label="AppUser"
-                {...register("appUser")}
-                error={errors?.appUser?.message}
                 disabled={isSubmitting}
               />
               <div className="flex flex-col gap-0.5">
