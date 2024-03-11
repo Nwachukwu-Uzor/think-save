@@ -48,7 +48,7 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 const CreatePlan = () => {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   const [tenureInput, setTenureInput] = useState(INITIAL_TENURE_FIELDS);
   const [step, setStep] = useState(1);
   const [tenureErrors, setTenureErrors] = useState(INITIAL_TENURE_FIELDS);
@@ -224,7 +224,7 @@ const CreatePlan = () => {
         minimumAmount: Number(data.minimumAmount?.replace(/[,\s]/g, "")),
         maximumAmount: Number(data.maximumAmount?.replace(/[,\s]/g, "")),
         tenures: formattedTenures,
-        interestRate: formattedTenures.reduce(
+        interestRates: formattedTenures.reduce(
           (a, b) => `${a} ${b.interest}`,
           ""
         ),
@@ -240,7 +240,7 @@ const CreatePlan = () => {
       };
       const response = await productsService.addOrEditProduct(payload);
       console.log(response);
-      
+
       if (response?.data?.code === STATUS_CODES.SUCCESS) {
         clearInputs();
         toast.success(response?.data?.message);
