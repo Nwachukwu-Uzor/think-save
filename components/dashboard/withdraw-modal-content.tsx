@@ -15,29 +15,33 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Button, TextInput } from "../shared";
 import Select, { SingleValue } from "react-select";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { FETCH_BANKS } from "@/constants";
-import { accountService } from "@/services";
+import { FETCH_BANKS, STATUS_CODES } from "@/constants";
+import { accountService, transactionService } from "@/services";
 import { ApiResponseType, BankType } from "@/types/shared";
 import { MdClose } from "react-icons/md";
 import { AccountValidationResultType } from "@/types/dashboard";
-import { MoonLoader } from "react-spinners";
-import { formatNumberWithCommas } from "@/utils/shared";
+import { MoonLoader, PulseLoader } from "react-spinners";
+import { formatNumberWithCommas, formatValidationErrors } from "@/utils/shared";
+import { toast } from "react-toastify";
 
 type Props = {
   handleClose: () => void;
   maxAmount: number;
+  sourceAccountNumber: string;
+  customerId: string;
 };
 
 const schema = z.object({
-  amount: z
+  transactionAmount: z
     .string({
       required_error: "Amount is required",
     })
     .min(1, { message: "Amount is required" }),
-  accountNumber: z
+  beneficiaryAccountNumber: z
     .string()
     .min(10, { message: "Account Number should be at least 10 characters" }),
   bankCode: z.string({ required_error: "Please select a bank to continue" }),
+  narration: z.optional(z.string()),
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -45,10 +49,12 @@ type FormFields = z.infer<typeof schema>;
 export const WithdrawModalContent: React.FC<Props> = ({
   handleClose,
   maxAmount,
+  sourceAccountNumber,
+  customerId,
 }) => {
   const [validatedAccountDetails, setValidatedAccountDetails] =
     useState<ApiResponseType<AccountValidationResultType> | null>(null);
-  const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
+  const [otp, setOtp] = useState<string[]>(new Array(4).fill(""));
   const [activeOtpBox, setActiveOtpBox] = useState(0);
   const otpInputRef = useRef<HTMLInputElement | null>(null);
   const [step, setStep] = useState(1);
@@ -85,7 +91,6 @@ export const WithdrawModalContent: React.FC<Props> = ({
     setError,
     handleSubmit,
     setValue,
-    getValues,
     watch,
     trigger,
     clearErrors,
@@ -95,7 +100,7 @@ export const WithdrawModalContent: React.FC<Props> = ({
     resolver: zodResolver(schema),
   });
 
-  const [accountNumber] = watch(["accountNumber"]);
+  const [accountNumber] = watch(["beneficiaryAccountNumber"]);
 
   const handleNumericInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -103,7 +108,7 @@ export const WithdrawModalContent: React.FC<Props> = ({
     const value = event.target.value.replace(/\D/g, "");
     const { name } = event.target;
 
-    if (name === "accountNumber") {
+    if (name === "beneficiaryAccountNumber") {
       setValue(name, value);
       setValidatedAccountDetails(null);
       if (selectedBank?.value && value.length === 10) {
@@ -120,11 +125,11 @@ export const WithdrawModalContent: React.FC<Props> = ({
       .replace(/[^0-9.]/g, "")
       .replace(/(\..*)\./g, "$1");
     // Check if the input is a valid decimal or whole number
-    setValue("amount", formatNumberWithCommas(inputValue));
+    setValue("transactionAmount", formatNumberWithCommas(inputValue));
 
     if (Number(inputValue) > maxAmount) {
       setError(
-        "amount",
+        "transactionAmount",
         {
           message: "Amount cannot be greater than wallet balance",
           type: "manual",
@@ -137,7 +142,11 @@ export const WithdrawModalContent: React.FC<Props> = ({
   };
 
   const handleTransactionDetailsValidate = async () => {
-    const result = await trigger(["amount", "bankCode", "accountNumber"]);
+    const result = await trigger([
+      "transactionAmount",
+      "bankCode",
+      "beneficiaryAccountNumber",
+    ]);
 
     if (!result) {
       return;
@@ -223,11 +232,33 @@ export const WithdrawModalContent: React.FC<Props> = ({
     try {
       const payload = {
         ...data,
-        pin: otp.join(""),
+        transactionPin: btoa(otp.join("")),
+        sourceAccountNumber,
+        beneficiaryBank: selectedBank?.value.bankCode,
+        currencyCode: "NGN",
+        beneficiaryName: validatedAccountDetails?.data?.accountName,
+        customerId,
+        sourceAccountName: "",
       };
-      console.log(payload);
-    } catch (error) {
-    } finally {
+      const response = await transactionService.makeTransfer(payload);
+      console.log(response);
+
+      if (response?.data?.code === STATUS_CODES.SUCCESS) {
+        resetData();
+        toast.success(response?.data?.message);
+        return;
+      }
+      setError("root", { message: response?.data?.message });
+    } catch (error: any) {
+      const errorData = error?.response?.data?.errors;
+      if (errorData) {
+        const formattedValidationErrors = formatValidationErrors(
+          errorData as Record<string, string[]>
+        );
+        setError("root", { type: "deps", message: formattedValidationErrors });
+      } else {
+        setError("root", { message: error?.message ?? "Something went wrong" });
+      }
     }
   };
 
@@ -242,13 +273,13 @@ export const WithdrawModalContent: React.FC<Props> = ({
           className="text-sm cursor-pointer"
         />
       </div>
-      <div className="h-12 lg:h-20 aspect-square flex items-center justify-center bg-gray-100 rounded-full mx-auto">
+      <div className="h-10 lg:h-16 aspect-square flex items-center justify-center bg-gray-100 rounded-full mx-auto">
         <Image
           height={16}
           width={16}
           src="/assets/images/bank-svg.svg"
           alt="Bank"
-          className="w-8 lg:w-16 aspect-square"
+          className="w-8 lg:w-10 aspect-square"
         />
       </div>
       <h2 className="font-semibold text-main-blue mt-2 text-center">
@@ -263,19 +294,24 @@ export const WithdrawModalContent: React.FC<Props> = ({
             {" "}
             <TextInput
               label="Amount"
-              {...register("amount")}
+              {...register("transactionAmount")}
               name="amount"
               onChange={handleAmountChange}
               placeholder="Enter Amount"
-              error={errors?.amount?.message}
+              error={errors?.transactionAmount?.message}
+            />
+            <TextInput
+              label="Narration"
+              {...register("narration")}
+              placeholder="Narration"
             />
             <TextInput
               label="Account Number"
-              {...register("accountNumber")}
-              name="accountNumber"
+              {...register("beneficiaryAccountNumber")}
+              name="beneficiaryAccountNumber"
               placeholder="Enter Account Number"
               onChange={handleNumericInputChange}
-              error={errors?.accountNumber?.message}
+              error={errors?.beneficiaryAccountNumber?.message}
               disabled={isValidatingAccount}
             />
             <div>
@@ -349,14 +385,21 @@ export const WithdrawModalContent: React.FC<Props> = ({
                     ref={index === activeOtpBox ? otpInputRef : null}
                     onKeyDown={(e) => handleKeyDown(e, index)}
                     onFocus={(e) => handleFocus(e, index)}
-                    type="number"
+                    type="password"
                     disabled={isSubmitting}
                   />
                 </div>
               ))}
             </div>
+            <div className="flex flex-col gap-0.5">
+              {errors?.root?.message?.split(",").map((error) => (
+                <p key={error} className="text-sm text-main-red">
+                  {error}
+                </p>
+              ))}
+            </div>
             <Button type="submit" disabled={!isOtpValid}>
-              Withdraw
+              {isSubmitting ? <PulseLoader color="#fff" /> : "Withdraw"}
             </Button>
           </>
         )}

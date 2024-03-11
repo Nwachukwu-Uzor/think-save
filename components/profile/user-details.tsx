@@ -79,8 +79,8 @@ export const UserDetails: React.FC<Props> = ({ user, handleEditBtnClick }) => {
           </p>
           <div className="flex items-center justify-center mt-2">
             <Link
-              href="/profile/set-pin"
-              className="text-main-blue text-center font-semibold hover:opacity-75 underline py-0.5"
+              href={`/profile/${user.userId}/create-pin`}
+              className="text-main-blue text-xs text-center font-semibold hover:opacity-75 underline py-0.5"
             >
               Set Pin now
             </Link>

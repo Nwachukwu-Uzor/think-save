@@ -14,12 +14,23 @@ class TransactionService {
     return response?.data?.data;
   }
 
+  async makeTransfer<T extends unknown>(data: T) {
+    const response = await axios.post<ApiResponseType<null>>(
+      `${baseUrl}/Wallet/FundTransfer`,
+      data
+    );
+
+    return response;
+  }
+
   async adminFetchAllTransaction() {
     const response = await axios.get<ApiResponseType<TransactionType[]>>(
       `${baseUrl}/Transaction/GetAllTransactions?count=10000`
     );
     return response?.data?.data;
   }
+
+  async adminFilterTransaction<T>(filter: T) {}
 }
 
 export const transactionService = new TransactionService();

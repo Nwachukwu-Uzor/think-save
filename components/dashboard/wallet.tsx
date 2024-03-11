@@ -22,7 +22,6 @@ import {
 import { accountService, userService } from "@/services";
 import { MdClose } from "react-icons/md";
 import { AddMoneyModalContent, WithdrawModalContent } from ".";
-import { TypeOf } from "zod";
 import { MoonLoader } from "react-spinners";
 import Link from "next/link";
 
@@ -121,7 +120,7 @@ export const Wallet: React.FC = () => {
     handleShowModal();
     setModalType("WITHDRAW");
   };
-  console.log(user?.ups);
+
   return (
     <>
       {walletAccount ? (
@@ -213,13 +212,21 @@ export const Wallet: React.FC = () => {
             <>
               {isLoading ? (
                 <MoonLoader color="#0E12A2" size={30} />
-              ) : user && user.ups ? (
+              ) : !(user && user.ups === "1") ? (
                 <WithdrawModalContent
                   handleClose={handleCloseModal}
                   maxAmount={walletAccount?.balance ?? 0}
+                  sourceAccountNumber={walletAccount?.virtualAcountNumber ?? ""}
+                  customerId={user?.customerId ?? ""}
                 />
               ) : (
                 <>
+                  <div className="flex justify-end items-center mb-2">
+                    <MdClose
+                      onClick={handleCloseModal}
+                      className="text-sm cursor-pointer"
+                    />
+                  </div>
                   <h2 className="font-semibold mb-2 text-center">
                     No Transation Pin
                   </h2>
@@ -230,8 +237,8 @@ export const Wallet: React.FC = () => {
                   </p>
                   <div className="flex items-center justify-center mt-2">
                     <Link
-                      href="/profile/set-pin"
-                      className="text-main-blue text-center font-semibold hover:opacity-75 underline py-0.5"
+                      href={`/profile/${user?.userId}/create-pin`}
+                      className="text-main-blue text-xs text-center font-semibold hover:opacity-75 underline py-0.5"
                     >
                       Set Pin now
                     </Link>

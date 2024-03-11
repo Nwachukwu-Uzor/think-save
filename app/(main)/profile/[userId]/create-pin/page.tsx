@@ -8,7 +8,7 @@ import { formatValidationErrors } from "@/utils/shared";
 import { userService } from "@/services";
 import { useSession } from "next-auth/react";
 import { FETCH_USER_BY_CUSTOMER_ID, STATUS_CODES } from "@/constants";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { PulseLoader } from "react-spinners";
@@ -25,8 +25,8 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 const SetPin = () => {
-  const { data: sessionData } = useSession();
   const router = useRouter();
+  const { userId } = useParams<{ userId: string }>();
   const queryClient = useQueryClient();
   const {
     register,
@@ -50,7 +50,7 @@ const SetPin = () => {
       }
       const response = await userService.createTransactionPin(
         btoa(data.pin),
-        sessionData?.user.customerId
+        userId
       );
 
       if (response.data.code === STATUS_CODES.FAILED) {
