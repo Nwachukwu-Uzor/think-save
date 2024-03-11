@@ -30,7 +30,13 @@ class TransactionService {
     return response?.data?.data;
   }
 
-  async adminFilterTransaction<T>(filter: T) {}
+  async adminFilterTransaction<T>(filter: T) {
+    const response = await axios.post<ApiResponseType<TransactionType[]>>(
+      `${baseUrl}/Transaction/GetTransactions`,
+      filter
+    );
+    return response?.data?.data;
+  }
 }
 
 export const transactionService = new TransactionService();

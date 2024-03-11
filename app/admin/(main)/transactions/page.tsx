@@ -11,7 +11,11 @@ import {
   TextInput,
 } from "@/components/shared";
 import { FETCH_ACCOUNTS_WITH_FILTER, FETCH_ALL_PRODUCTS } from "@/constants";
-import { accountService, productsService } from "@/services";
+import {
+  accountService,
+  productsService,
+  transactionService,
+} from "@/services";
 import { useQuery } from "@tanstack/react-query";
 import { AccountType, AdminAccountType, ProductType } from "@/types/shared";
 import { format, formatDate } from "date-fns";
@@ -28,6 +32,9 @@ import {
 import { ColumnDef } from "@tanstack/react-table";
 import { TransactionLoader } from "@/components/shared/skeleton-loaders";
 import { formatNumberWithCommas } from "@/utils/shared";
+import { IoReceiptOutline } from "react-icons/io5";
+import { TransactionType } from "@/types/dashboard";
+import dayjs from "dayjs";
 
 const INITIAL_FILTER = {
   customerId: "",
@@ -35,18 +42,20 @@ const INITIAL_FILTER = {
   endDate: "",
   transactionId: "",
   accountNumber: "",
+  transactionType: "",
+  transactionStatus: "",
 };
 
 const TRANSACTION_TYPES_OPTIONS = [
-  { label: "All", value: "" },
-  { label: "Debit", value: "Debit" },
-  { label: "Credit", value: "Credit" },
+  { label: "All", value: "", id: 1 },
+  { label: "Debit", value: "Debit", id: 2 },
+  { label: "Credit", value: "Credit", id: 3 },
 ];
 
 const TRANSACTION_STATUS_OPTIONS = [
-  { label: "All", value: "" },
-  { label: "Success", value: "Success" },
-  { label: "Failed", value: "Failed" },
+  { label: "All", value: "", id: 1 },
+  { label: "Success", value: "Success", id: 2 },
+  { label: "Failed", value: "Failed", id: 3 },
 ];
 const Transactions = () => {
   const [selectedProduct, setSelectedProduct] = useState<{
@@ -57,9 +66,8 @@ const Transactions = () => {
   const [endDate, setEndDate] = React.useState<Date>();
   const [dropDrowValue, setDropDrowValue] = useState<Record<string, string>>({
     transactionStatus: "",
-    transactionType: ""
-
-  })
+    transactionType: "",
+  });
   const [searchQuery, setSearchQuery] = useState(
     JSON.stringify(INITIAL_FILTER)
   );
@@ -89,45 +97,72 @@ const Transactions = () => {
     </article>
   );
 
-  const columns = useMemo<ColumnDef<AdminAccountType, any>[]>(
+  const columns = useMemo<ColumnDef<TransactionType, any>[]>(
     () => [
       {
-        accessorKey: "CustomerId",
-        header: "Customer Id",
-      },
-      {
-        accessorKey: "ProductId",
-        header: "Product Name",
-      },
-      {
-        accessorKey: "ProductId",
-        header: "Product Name",
-      },
-      {
-        accessorKey: "Name",
-        header: "Name",
-      },
-      {
-        accessorKey: "Amount",
-        header: () => (
-          <span className="text-center w-full inline-block">Amount</span>
-        ),
+        header: "Transaction Type",
+        accessorKey: "transactionType",
         cell: ({ getValue }) => {
-          const value = getValue() as string;
+          const type = getValue() as string;
+
           return (
-            <span className="text-right w-full inline-block">
-              {value ? formatNumberWithCommas(value) : ""}
+            <span
+              className={`h-8 w-8 lg:w-11 lg:h-11 font-bold inline-flex items-center justify-center rounded-full lg:text-xl  ${
+                type.toLowerCase() === "credit"
+                  ? "bg-[#D0FFC5] text-[#0FC90C]"
+                  : "bg-[#FFD0D1] text-[#FE3032]"
+              }`}
+            >
+              <IoReceiptOutline />
             </span>
           );
         },
       },
       {
-        accessorKey: "DateCreated",
-        header: "Date Created",
+        accessorKey: "accountId",
+        header: "Account Id",
+      },
+      {
+        accessorKey: "customerId",
+        header: "Customer Id",
+      },
+      { header: "Description", accessorKey: "description" },
+
+      {
+        header: "Amount",
+        accessorKey: "amount",
         cell: ({ getValue }) => {
-          const value = getValue();
-          return formatDate(value, "yyyy-MM-dd");
+          const value = (getValue() as number)?.toString();
+          return <span>{formatNumberWithCommas(value)}</span>;
         },
+      },
+      {
+        header: "Date Created",
+        accessorKey: "date",
+        cell: ({ getValue }) => {
+          const value = (getValue() as number)?.toString();
+          return <span>{value ? dayjs(value).format("DD-MM-YYYY") : ""}</span>;
+        },
+      },
+      {
+        header: "Start Date",
+        accessorKey: "startDate",
+        cell: ({ getValue }) => {
+          const value = (getValue() as number)?.toString();
+          return <span>{value ? dayjs(value).format("DD-MM-YYYY") : ""}</span>;
+        },
+      },
+      {
+        header: "End Date",
+        accessorKey: "endDate",
+        cell: ({ getValue }) => {
+          const value = (getValue() as number)?.toString();
+          return <span>{value ? dayjs(value).format("DD-MM-YYYY") : ""}</span>;
+        },
+      },
+      {
+        header: "Status",
+        accessorKey: "status",
       },
     ],
     []
@@ -140,6 +175,15 @@ const Transactions = () => {
     setAccountNumber(inputValue);
   };
 
+  const handleDropdropChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target;
+    if (name === "transactionStatus" || name === "transactionType") {
+      setDropDrowValue((values) => ({ ...values, [name]: value }));
+    }
+  };
+
   const handleFilter = () => {
     const searchData = {
       customerId,
@@ -147,12 +191,14 @@ const Transactions = () => {
       startDate: startDate ? formatDate(startDate, "yyyy-MM-dd") : "",
       endDate: startDate ? formatDate(startDate, "yyyy-MM-dd") : "",
       accountNumber,
+      ...dropDrowValue,
+      transactionId,
     };
     setSearchQuery(JSON.stringify(searchData));
   };
 
   const {
-    data: accounts,
+    data: transactions,
     isLoading: isLoadingAccounts,
     isError,
     error,
@@ -163,7 +209,7 @@ const Transactions = () => {
       if (!searchTerm) {
         searchTerm = INITIAL_FILTER;
       }
-      const data = await accountService.spoolAccounts(searchTerm);
+      const data = await transactionService.adminFilterTransaction(searchTerm);
       return data;
     },
   });
@@ -250,16 +296,42 @@ const Transactions = () => {
                 />
               </div>
             </header>
-            <header className="flex flex-col lg:flex-row items-stretch justify-between lg:items-end mt-2">
-              <TextInput
-                placeholder="TransactionId"
-                label="Transaction ID"
-                value={transactionId}
-                onChange={handleTransactionIdChange}
-                noError={true}
-              />
+            <header className="flex flex-col lg:flex-row items-stretch justify-between lg:items-end mt-2 gap-2">
+              <div className="w-full max-w-[400px]">
+                <TextInput
+                  placeholder="TransactionId"
+                  label="Transaction ID"
+                  value={transactionId}
+                  onChange={handleTransactionIdChange}
+                  noError={true}
+                />
+              </div>
+              <select
+                value={dropDrowValue.transactionType}
+                name="transactionType"
+                onChange={handleDropdropChange}
+                className="border border-gray-100 px-2 py-1 inline-block w-[150px] rounded-md"
+              >
+                {TRANSACTION_TYPES_OPTIONS.map((option) => (
+                  <option value={option.value} key={option.id}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={dropDrowValue.transactionStatus}
+                name="transactionStatus"
+                onChange={handleDropdropChange}
+                className="border border-gray-100 px-2 py-1 inline-block w-[150px] rounded-md"
+              >
+                {TRANSACTION_STATUS_OPTIONS.map((option) => (
+                  <option value={option.value} key={option.id}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             </header>
-            <div className="mt-2 max-w-[200px]">
+            <div className="mt-4 max-w-[200px]">
               <Button
                 className="text-white bg-black active:ring-black w-full hover:bg-black"
                 onClick={handleFilter}
@@ -268,18 +340,19 @@ const Transactions = () => {
               </Button>
             </div>
             <div className="mt-4" />
-            {isLoadingAccounts ? (
-              <ShowLoader />
-            ) : accounts && accounts?.length > 0 ? (
-              <Table data={accounts} columns={columns} />
-            ) : (
-              <EmptyPage title="No Transaction" />
-            )}
-            {isError && (
-              <ErrorPage
-                message={error?.message ?? "Unable to get transaction"}
-              />
-            )}
+            <Card>
+              {isLoadingAccounts ? (
+                <ShowLoader />
+              ) : transactions && transactions.length > 0 ? (
+                <Table columns={columns} data={transactions} />
+              ) : (
+                <EmptyPage
+                  title="No Transactions"
+                  subtitle="You do not have any transactions."
+                />
+              )}
+              {isError && <ErrorPage message={error?.message} />}
+            </Card>
           </article>
         </Card>
       </Container>
