@@ -29,11 +29,9 @@ const Users = () => {
     },
   });
 
-  console.log(users);
-
   const columns = useMemo<ColumnDef<AdminAccountInfoType, any>[]>(
     () => [
-      { header: "Name", accessorKey: "username" },
+      { header: "User Id", accessorKey: "userId" },
       { header: "Email", accessorKey: "email" },
       {
         header: "Gender",
@@ -51,7 +49,7 @@ const Users = () => {
           return (
             <Link
               href={`/admin/users/${customer?.customerId}`}
-              className="text-xs text-main-blue"
+              className="text-xs font-bold text-main-blue"
             >
               View Profile
             </Link>

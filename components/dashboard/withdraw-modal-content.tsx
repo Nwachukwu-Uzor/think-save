@@ -232,6 +232,7 @@ export const WithdrawModalContent: React.FC<Props> = ({
     try {
       const payload = {
         ...data,
+        transactionAmount: data.transactionAmount?.replace(/[,\s]/g, ""),
         transactionPin: btoa(otp.join("")),
         sourceAccountNumber,
         beneficiaryBank: selectedBank?.value.bankCode,

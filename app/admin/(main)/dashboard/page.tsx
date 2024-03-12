@@ -31,23 +31,31 @@ const Dashboard = () => {
     ColumnDef<AccountInfoType & { CustomerId: string }, any>[]
   >(
     () => [
-      { header: "Name", accessorKey: "Username" },
+      { header: "Customer Id", accessorKey: "CustomerId" },
       { header: "Email", accessorKey: "Email" },
-      { header: "Gender", accessorKey: "gender" },
       { header: "Status", accessorKey: "Status" },
-      { header: "Joined", accessorKey: "DateCreated" },
+      { header: "Date Joined", accessorKey: "DateCreated" },
       {
         header: "",
         accessorKey: "CustomerId",
         cell: ({ getValue }) => {
           const id = getValue();
           return (
-            <Link
-              href={`/admin/users/${id}`}
-              className="text-xs text-main-blue"
-            >
-              View Profile
-            </Link>
+            <div className="flex items-center gap-1">
+              <Link
+                href={`/admin/users/${id}`}
+                className="text-xs font-bold text-main-blue"
+              >
+                View Profile
+              </Link>
+              |
+              <Link
+                href={`/admin/accounts/${id}`}
+                className="text-xs font-bold text-green-900"
+              >
+                View Accounts
+              </Link>
+            </div>
           );
         },
       },

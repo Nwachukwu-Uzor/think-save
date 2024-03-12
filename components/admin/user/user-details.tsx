@@ -6,6 +6,7 @@ import { UserType } from "@/types/shared";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useRef, useState } from "react";
 import { PulseLoader } from "react-spinners";
 import { toast } from "react-toastify";
@@ -145,23 +146,34 @@ export const UserDetails: React.FC<Props> = ({ user }) => {
           <Detail title="Address" value={address ?? ""} />
         </div>
       </div>
-      <div className="mt-6 flex items-center gap-2">
-        <select
-          className="border border-gray-100 px-2 py-1 inline-block w-[150px] rounded-md"
-          value={action}
-          onChange={handleActionChange}
-        >
-          {ADMIN_ACTIONS.map((action) => (
-            <option key={action.id} value={action.value}>
-              {action.label}
-            </option>
-          ))}
-        </select>
-        <div className="mx-w-[150px]">
-          <Button disabled={!action.length} onClick={handleActionBtnClick}>
-            Proceed
-          </Button>
+      <hr className="h-1 w-full my-3 lg:my-4" />
+      <div className="flex items-end flex-col lg:flex-row gap-2 justify-between">
+        <div className="flex items-end gap-2">
+          <div className="flex flex-col">
+            <label className="mb-1 text-sm font-semibold">
+              Select an action to perform:
+            </label>
+            <select
+              className="border-2 border-gray-200 px-2 py-1 inline-block w-full rounded-md"
+              value={action}
+              onChange={handleActionChange}
+            >
+              {ADMIN_ACTIONS.map((action) => (
+                <option key={action.id} value={action.value}>
+                  {action.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mx-w-[150px]">
+            <Button disabled={!action.length} onClick={handleActionBtnClick}>
+              Proceed
+            </Button>
+          </div>
         </div>
+        <Link href={`/admin/accounts/${user.customerId}`}>
+          <Button color="success">View Accounts</Button>
+        </Link>
       </div>
       <dialog id="my_modal_1" className="modal">
         <div className="modal-box w-[90%] max-w-[300px] overflow-y-scroll no-scrollbar bg-white py-2">

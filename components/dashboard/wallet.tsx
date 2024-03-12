@@ -70,6 +70,7 @@ export const Wallet: React.FC = () => {
     return savingsWallet;
   }, [accounts]);
 
+  console.log(walletAccount)
   const [isCopied, setIsCopied] = useState(false);
   const [showBalance, setShowBalance] = useState(false);
   const [modalType, setModalType] = useState<"WITHDRAW" | "ADD" | "">("");

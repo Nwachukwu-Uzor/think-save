@@ -70,17 +70,14 @@ const Accounts = () => {
         header: "Customer Id",
       },
       {
-        accessorKey: "ProductId",
-        header: "Product Name",
+        accessorKey: "AccountId",
+        header: "Account Number",
       },
       {
         accessorKey: "ProductId",
-        header: "Product Name",
+        header: "Product Type",
       },
-      {
-        accessorKey: "Name",
-        header: "Name",
-      },
+
       {
         accessorKey: "Amount",
         header: () => (
@@ -152,12 +149,14 @@ const Accounts = () => {
     <>
       <PageHeader title="Accounts" />
       <Container>
-        <div className="mt-2" />
+        <div className="-mt-3" />
         <Card>
-          <article className="min-h-[40vh]">
+          <article className="min-h-[40vh] lg:py-4">
             <header className="flex flex-col lg:flex-row items-stretch justify-between lg:items-end">
-              <div>
-                <h4 className="text-sm font-medium mb-1">Select a Product:</h4>
+              <div className="lg:w-[250px]">
+                <h4 className="text-sm font-medium mb-1">
+                  Filter by Product Type:
+                </h4>
                 <Select
                   options={formattedProducts}
                   maxMenuHeight={200}
@@ -174,8 +173,18 @@ const Accounts = () => {
                   }`}
                 />
               </div>
+              <div>
+                <TextInput
+                  noError={true}
+                  label="Filter by Customer Id:"
+                  placeholder="Enter customer id..."
+                  value={customerId}
+                  onChange={handleCustomerIdChange}
+                />
+              </div>
               <div className="flex flex-col gap-2 lg:flex-row justify-between my-2 lg:my-0">
                 <div>
+                  <h4 className="text-sm font-medium mb-1">Start Date:</h4>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -189,7 +198,7 @@ const Accounts = () => {
                         {startDate ? (
                           format(startDate, "PPP")
                         ) : (
-                          <span>Pick a date</span>
+                          <span>Start Date</span>
                         )}
                       </Button>
                     </PopoverTrigger>
@@ -204,6 +213,7 @@ const Accounts = () => {
                   </Popover>
                 </div>
                 <div>
+                  <h4 className="text-sm font-medium mb-1">End Date:</h4>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -217,7 +227,7 @@ const Accounts = () => {
                         {endDate ? (
                           format(endDate, "PPP")
                         ) : (
-                          <span>Pick a date</span>
+                          <span>End Date</span>
                         )}
                       </Button>
                     </PopoverTrigger>
@@ -231,15 +241,6 @@ const Accounts = () => {
                     </PopoverContent>
                   </Popover>
                 </div>
-              </div>
-              <div>
-                <TextInput
-                  noError={true}
-                  label="Customer Number"
-                  placeholder="Enter customer number..."
-                  value={customerId}
-                  onChange={handleCustomerIdChange}
-                />
               </div>
             </header>
             <div className="mt-2 max-w-[200px]">

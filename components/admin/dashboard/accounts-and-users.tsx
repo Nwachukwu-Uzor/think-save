@@ -17,19 +17,12 @@ export const AccountsAndUsers: React.FC<Props> = ({ stats }) => {
       <AccountInfo
         iconsUrl="/assets/images/target-icon.svg"
         count={total}
-        description={<>Total</>}
+        description={<>Total Users</>}
       />
       <AccountInfo
         iconsUrl="/assets/images/project-icon.svg"
         count={newAcc}
-        description={
-          <>
-            New Sign Ups{" "}
-            <span className="text-[#9FB4FF] text-xs font-semibold">
-              (Last 1 Month)
-            </span>
-          </>
-        }
+        description={<>New Sign Ups</>}
       />
       <AccountInfo
         iconsUrl="/assets/images/work-icon.svg"

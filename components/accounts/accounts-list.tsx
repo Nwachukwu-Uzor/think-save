@@ -10,13 +10,16 @@ import { Button, Card, EmptyPage, Pagination } from "../shared";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
-export const AccountsList: React.FC = () => {
-  const session = useSession();
+type Props = {
+  userId?: string;
+};
+
+export const AccountsList: React.FC<Props> = ({ userId }) => {
   const pageSize = 6;
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data: accounts, isLoading } = useQuery({
-    queryKey: [FETCH_ACCOUNTS_BY_CUSTOMER_ID, session?.data?.user?.customerId],
+    queryKey: [FETCH_ACCOUNTS_BY_CUSTOMER_ID, userId],
     queryFn: async ({ queryKey }) => {
       const [_first, second] = queryKey;
       if (!second) {
@@ -29,7 +32,7 @@ export const AccountsList: React.FC = () => {
 
   const placeholders = new Array(6).fill("").map((_val, index) => index);
 
-  if (isLoading || session.status === "loading") {
+  if (isLoading) {
     return (
       <article className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-5 xl:gap-8">
         {placeholders.map((placeholder) => (

@@ -37,21 +37,23 @@ const UserDetailsPage = () => {
     <>
       <PageHeader title="User Detail" />
       <Container>
-        <div className="mt-3" />
+        <div className="-mt-3" />
         <Card>
-          {user && <UserDetails user={user} />}
-          {isLoading && (
-            <div className="bg-slate-100 animate-pulse w-full min-h-[250px]"></div>
-          )}
-          {isError && (
-            <ErrorPage message={error?.message}>
-              <div>
-                <Button color="black" onClick={handleBackClick}>
-                  Go Back
-                </Button>
-              </div>
-            </ErrorPage>
-          )}
+          <article className="lg:py-8">
+            {user && <UserDetails user={user} />}
+            {isLoading && (
+              <div className="bg-slate-100 animate-pulse w-full min-h-[250px]"></div>
+            )}
+            {isError && (
+              <ErrorPage message={error?.message}>
+                <div>
+                  <Button color="black" onClick={handleBackClick}>
+                    Go Back
+                  </Button>
+                </div>
+              </ErrorPage>
+            )}
+          </article>
         </Card>
       </Container>
     </>

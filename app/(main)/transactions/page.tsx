@@ -72,7 +72,7 @@ const Transactions = () => {
       },
       {
         header: "Status",
-        accessorKey: "status"
+        accessorKey: "status",
       },
     ],
     []
@@ -98,13 +98,15 @@ const Transactions = () => {
 
   if (isLoading || session.status === "loading") {
     return (
-      <Card>
-        <div className="flex flex-col gap-2">
-          {placeholders.map((placeholder) => (
-            <TransactionLoader key={placeholder} />
-          ))}
-        </div>
-      </Card>
+      <Container>
+        <Card>
+          <div className="flex flex-col gap-2">
+            {placeholders.map((placeholder) => (
+              <TransactionLoader key={placeholder} />
+            ))}
+          </div>
+        </Card>
+      </Container>
     );
   }
 

@@ -71,21 +71,7 @@ const Transactions = () => {
   const [searchQuery, setSearchQuery] = useState(
     JSON.stringify(INITIAL_FILTER)
   );
-  const [customerId, setCustomerId] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
-  const [transactionId, setTransactionId] = useState("");
-
-  const handleCustomerIdChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setCustomerId(event.target.value);
-  };
-
-  const handleTransactionIdChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setTransactionId(event.target.value);
-  };
 
   const placeholders = new Array(6).fill("").map((_val, index) => index);
 
@@ -186,13 +172,12 @@ const Transactions = () => {
 
   const handleFilter = () => {
     const searchData = {
-      customerId,
+      ...INITIAL_FILTER,
       productId: selectedProduct?.value?.productId ?? "",
       startDate: startDate ? formatDate(startDate, "yyyy-MM-dd") : "",
       endDate: startDate ? formatDate(startDate, "yyyy-MM-dd") : "",
       accountNumber,
       ...dropDrowValue,
-      transactionId,
     };
     setSearchQuery(JSON.stringify(searchData));
   };
@@ -218,12 +203,13 @@ const Transactions = () => {
     <>
       <PageHeader title="Transactions" />
       <Container>
-        <div className="mt-2" />
+        <div className="-mt-3" />
         <Card>
           <article className="min-h-[40vh]">
             <header className="flex flex-col lg:flex-row items-stretch justify-between lg:items-end">
               <div className="flex flex-col gap-2 lg:flex-row lg:items-end justify-between my-2 lg:my-0">
                 <div>
+                  <h4 className="text-sm font-medium mb-1">Start Date:</h4>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -237,7 +223,7 @@ const Transactions = () => {
                         {startDate ? (
                           format(startDate, "PPP")
                         ) : (
-                          <span>Pick a date</span>
+                          <span>Start Date</span>
                         )}
                       </Button>
                     </PopoverTrigger>
@@ -252,6 +238,7 @@ const Transactions = () => {
                   </Popover>
                 </div>
                 <div>
+                  <h4 className="text-sm font-medium mb-1">End Date:</h4>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -265,7 +252,7 @@ const Transactions = () => {
                         {endDate ? (
                           format(endDate, "PPP")
                         ) : (
-                          <span>Pick a date</span>
+                          <span>End Date</span>
                         )}
                       </Button>
                     </PopoverTrigger>
@@ -280,56 +267,49 @@ const Transactions = () => {
                   </Popover>
                 </div>
                 <TextInput
-                  label="AccountNumber"
+                  label="Filter by Account Number"
+                  placeholder="Enter Account Number"
                   noError={true}
                   value={accountNumber}
                   onChange={handleAccountNumberChange}
                 />
               </div>
-              <div>
-                <TextInput
-                  noError={true}
-                  label="Customer Number"
-                  placeholder="Enter customer number..."
-                  value={customerId}
-                  onChange={handleCustomerIdChange}
-                />
+              <div className="flex flex-col lg:flex-row items-stretch justify-between lg:items-end mt-2 gap-2">
+                <div className="w-full lg:w-[180px]">
+                  <h4 className="text-sm font-medium mb-1">
+                    Filter by Transaction Type:
+                  </h4>
+                  <select
+                    value={dropDrowValue.transactionType}
+                    name="transactionType"
+                    onChange={handleDropdropChange}
+                    className="border-2 border-gray-200 px-2 py-1 inline-block w-full rounded-md"
+                  >
+                    {TRANSACTION_TYPES_OPTIONS.map((option) => (
+                      <option value={option.value} key={option.id}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="w-full lg:w-[180px]">
+                  <h4 className="text-sm font-medium mb-1">
+                    Filter by Transaction Status:
+                  </h4>
+                  <select
+                    value={dropDrowValue.transactionStatus}
+                    name="transactionStatus"
+                    onChange={handleDropdropChange}
+                    className="border-2 border-gray-200 px-2 py-1 inline-block w-full rounded-md"
+                  >
+                    {TRANSACTION_STATUS_OPTIONS.map((option) => (
+                      <option value={option.value} key={option.id}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-            </header>
-            <header className="flex flex-col lg:flex-row items-stretch justify-between lg:items-end mt-2 gap-2">
-              <div className="w-full max-w-[400px]">
-                <TextInput
-                  placeholder="TransactionId"
-                  label="Transaction ID"
-                  value={transactionId}
-                  onChange={handleTransactionIdChange}
-                  noError={true}
-                />
-              </div>
-              <select
-                value={dropDrowValue.transactionType}
-                name="transactionType"
-                onChange={handleDropdropChange}
-                className="border border-gray-100 px-2 py-1 inline-block w-[150px] rounded-md"
-              >
-                {TRANSACTION_TYPES_OPTIONS.map((option) => (
-                  <option value={option.value} key={option.id}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-              <select
-                value={dropDrowValue.transactionStatus}
-                name="transactionStatus"
-                onChange={handleDropdropChange}
-                className="border border-gray-100 px-2 py-1 inline-block w-[150px] rounded-md"
-              >
-                {TRANSACTION_STATUS_OPTIONS.map((option) => (
-                  <option value={option.value} key={option.id}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
             </header>
             <div className="mt-4 max-w-[200px]">
               <Button
