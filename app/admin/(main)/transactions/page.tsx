@@ -131,22 +131,6 @@ const Transactions = () => {
         },
       },
       {
-        header: "Start Date",
-        accessorKey: "startDate",
-        cell: ({ getValue }) => {
-          const value = (getValue() as number)?.toString();
-          return <span>{value ? dayjs(value).format("DD-MM-YYYY") : ""}</span>;
-        },
-      },
-      {
-        header: "End Date",
-        accessorKey: "endDate",
-        cell: ({ getValue }) => {
-          const value = (getValue() as number)?.toString();
-          return <span>{value ? dayjs(value).format("DD-MM-YYYY") : ""}</span>;
-        },
-      },
-      {
         header: "Status",
         accessorKey: "status",
       },
@@ -206,7 +190,7 @@ const Transactions = () => {
         <div className="-mt-3" />
         <Card>
           <article className="min-h-[40vh]">
-            <header className="flex flex-col lg:flex-row items-stretch justify-between lg:items-end">
+            <header className="flex flex-col lg:flex-row items-stretch justify-between gap-2 lg:items-end">
               <div className="flex flex-col gap-2 lg:flex-row lg:items-end justify-between my-2 lg:my-0">
                 <div>
                   <h4 className="text-sm font-medium mb-1">Start Date:</h4>
@@ -277,23 +261,6 @@ const Transactions = () => {
               <div className="flex flex-col lg:flex-row items-stretch justify-between lg:items-end mt-2 gap-2">
                 <div className="w-full lg:w-[180px]">
                   <h4 className="text-sm font-medium mb-1">
-                    Filter by Transaction Type:
-                  </h4>
-                  <select
-                    value={dropDrowValue.transactionType}
-                    name="transactionType"
-                    onChange={handleDropdropChange}
-                    className="border-2 border-gray-200 px-2 py-1 inline-block w-full rounded-md"
-                  >
-                    {TRANSACTION_TYPES_OPTIONS.map((option) => (
-                      <option value={option.value} key={option.id}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="w-full lg:w-[180px]">
-                  <h4 className="text-sm font-medium mb-1">
                     Filter by Transaction Status:
                   </h4>
                   <select
@@ -309,16 +276,17 @@ const Transactions = () => {
                     ))}
                   </select>
                 </div>
+                <div className="mt-4 max-w-[200px]">
+                  <Button
+                    className="text-white bg-black active:ring-black w-full hover:bg-black"
+                    onClick={handleFilter}
+                  >
+                    Search
+                  </Button>
+                </div>
               </div>
             </header>
-            <div className="mt-4 max-w-[200px]">
-              <Button
-                className="text-white bg-black active:ring-black w-full hover:bg-black"
-                onClick={handleFilter}
-              >
-                Search
-              </Button>
-            </div>
+
             <div className="mt-4" />
             <Card>
               {isLoadingAccounts ? (

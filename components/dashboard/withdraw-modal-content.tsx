@@ -242,7 +242,6 @@ export const WithdrawModalContent: React.FC<Props> = ({
         sourceAccountName: "",
       };
       const response = await transactionService.makeTransfer(payload);
-      console.log(response);
 
       if (response?.data?.code === STATUS_CODES.SUCCESS) {
         resetData();

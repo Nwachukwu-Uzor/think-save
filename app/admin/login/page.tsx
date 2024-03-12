@@ -90,7 +90,7 @@ const Login = () => {
       <main className="lg:col-span-6 min-h-screen">
         <article className="h-screen flex items-center justify-center bg-gray-100">
           <form
-            className="w-[95%] max-w-[400px] bg-white shadow-sm rounded-md py-3 px-2 relative z-50"
+            className="w-[95%] max-w-[400px] bg-white shadow-sm rounded-md p-3 lg:p-5 relative z-50"
             onSubmit={handleSubmit(onSubmit)}
           >
             <Image
@@ -101,7 +101,7 @@ const Login = () => {
               className="w-10 lg:w-20 h-auto mx-auto block"
             />
             <h2 className="text-lg font-semibold -mt-2 text-center">
-              Login as an Administrator
+              Administrator
             </h2>
             <div className="flex flex-col mt-3 gap-2">
               <TextInput

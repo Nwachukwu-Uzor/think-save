@@ -4,6 +4,7 @@ export type AccountInfoType = {
   Username: string;
   Email: string;
   Password?: string;
+  Fullname?: string;
   IsVerified: boolean;
   RoleId?: string;
   TransactionPin?: string;

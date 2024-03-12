@@ -12,7 +12,6 @@ import { MdLogout } from "react-icons/md";
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const { open } = useSidebarContext();
   const currentRoute = usePathname();
-  console.log(currentRoute.split("/"));
 
   const handleLogout = () => {
     signOut({

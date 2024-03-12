@@ -68,11 +68,11 @@ const AddAdminUser = () => {
   return (
     <>
       <PageHeader title="Add Admin User" />
-      <div className="mt-3" />
+      <div className="-mt-3" />
       <Container>
         <Card>
-          <article>
-            <h2 className="text-lg font-medium mb-2 text-center">
+          <article className="p-3 lg:p-5">
+            <h2 className="text-lg font-semibold mb-2 text-center">
               Provide Admin User Detail
             </h2>
             <form

@@ -32,12 +32,8 @@ const Users = () => {
   const columns = useMemo<ColumnDef<AdminAccountInfoType, any>[]>(
     () => [
       { header: "User Id", accessorKey: "userId" },
+      { header: "Name", accessorKey: "Username" },
       { header: "Email", accessorKey: "email" },
-      {
-        header: "Gender",
-        accessorKey: "role",
-        cell: ({ row }) => row.original?.customer?.gender ?? "",
-      },
       { header: "Status", accessorKey: "status" },
       { header: "Joined", accessorKey: "dateCreated" },
       {

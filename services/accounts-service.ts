@@ -33,7 +33,6 @@ class AccountService {
     const response = await axios.get<ApiResponseType<BankType[]>>(
       `${baseUrl}/Transfer/Banks`
     );
-    console.log(response?.data?.data);
     return response?.data?.data;
   }
 

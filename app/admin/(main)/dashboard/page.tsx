@@ -32,6 +32,7 @@ const Dashboard = () => {
   >(
     () => [
       { header: "Customer Id", accessorKey: "CustomerId" },
+      { header: "Name", accessorKey: "Fullname" },
       { header: "Email", accessorKey: "Email" },
       { header: "Status", accessorKey: "Status" },
       { header: "Date Joined", accessorKey: "DateCreated" },

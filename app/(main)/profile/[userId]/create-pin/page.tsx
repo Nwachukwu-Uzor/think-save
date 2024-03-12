@@ -43,7 +43,6 @@ const SetPin = () => {
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      console.log(data);
       if (data.confirmPin !== data.pin) {
         setError("root", { message: "Pin and confirm pin do not match" });
         return;

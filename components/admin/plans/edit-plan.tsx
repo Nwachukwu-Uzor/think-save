@@ -70,13 +70,11 @@ export const EditPlan: React.FC<Props> = ({ plan }) => {
   };
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      console.log(data);
       const payload = {
         ...plan,
         ...data,
       };
       const response = await productsService.addOrEditProduct(payload);
-      console.log(response);
     } catch (error: any) {
       const errorData = error?.response?.data?.errors;
       if (errorData) {

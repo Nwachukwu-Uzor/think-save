@@ -239,7 +239,6 @@ const CreatePlan = () => {
         productDescriptionItems: formattedProductDescriptionItems,
       };
       const response = await productsService.addOrEditProduct(payload);
-      console.log(response);
 
       if (response?.data?.code === STATUS_CODES.SUCCESS) {
         clearInputs();
@@ -262,187 +261,192 @@ const CreatePlan = () => {
     <>
       <PageHeader title="Create Plan" />
       <Container>
-        <div className="mt-3" />
+        <div className="-mt-3" />
         <Card>
-          <h2 className="text-center text-lg font-semibold mb-2">
-            Create Plan
-          </h2>
-          <form
-            className="max-w-[600px] mx-auto flex flex-col gap-3"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            {step === 1 && (
-              <>
-                <TextInput
-                  label="Product Name"
-                  {...register("productName")}
-                  error={errors?.productName?.message}
-                  disabled={isSubmitting}
-                />
-                <TextAreaInput
-                  label="Product Description"
-                  {...register("productDescription")}
-                  error={errors?.productDescription?.message}
-                  disabled={isSubmitting}
-                />
+          <article className="p-3 lg:p-5">
+            <h2 className="text-center text-lg font-semibold mb-2">
+              Create Plan
+            </h2>
+            <form
+              className="max-w-[600px] mx-auto flex flex-col gap-3"
+              onSubmit={handleSubmit(onSubmit)}
+            >
+              {step === 1 && (
                 <>
-                  <label
-                    htmlFor="productDescriptionItem"
-                    className="text-sm font-semibold mb-0.5"
-                  >
-                    Product Description Item:{" "}
-                  </label>
-                  <div className="flex justify-between items-start gap-1">
-                    <div className="flex-1">
-                      <TextAreaInput
-                        placeholder="Enter a description item"
-                        value={productDescriptionItem.value}
-                        error={productDescriptionItem.error}
-                        onChange={handleProductDescriptionItemChange}
-                        name="productDescriptionItem"
-                        id="productDescriptionItem"
+                  <TextInput
+                    label="Product Name"
+                    {...register("productName")}
+                    error={errors?.productName?.message}
+                    disabled={isSubmitting}
+                  />
+                  <TextAreaInput
+                    label="Product Description"
+                    {...register("productDescription")}
+                    error={errors?.productDescription?.message}
+                    disabled={isSubmitting}
+                  />
+                  <>
+                    <label
+                      htmlFor="productDescriptionItem"
+                      className="text-sm font-semibold mb-0.5"
+                    >
+                      Product Description Item:{" "}
+                    </label>
+                    <div className="flex justify-between items-start gap-1">
+                      <div className="flex-1">
+                        <TextAreaInput
+                          placeholder="Enter a description item"
+                          value={productDescriptionItem.value}
+                          error={productDescriptionItem.error}
+                          onChange={handleProductDescriptionItemChange}
+                          name="productDescriptionItem"
+                          id="productDescriptionItem"
+                          disabled={isSubmitting}
+                        />
+                      </div>
+                      <div className="max-w-[150px]">
+                        <Button
+                          color="success"
+                          type="button"
+                          onClick={handleAddProductDescriptionItem}
+                          disabled={isSubmitting}
+                        >
+                          Add
+                        </Button>
+                      </div>
+                    </div>
+                    {productDescriptionItems?.length > 0 && (
+                      <div className="my-2 bg-gray-100 p-1.5 rounded-md text-sm flex flex-col gap-0.5">
+                        {productDescriptionItems.map((item) => (
+                          <p
+                            key={item.id}
+                            className="flex justify-between gap-1"
+                          >
+                            <span className="flex-1">{item.item}</span>
+                            <span
+                              className="font-semibold text-xs italic"
+                              onClick={() =>
+                                handleDeleteProductDescriptionItem(item.id)
+                              }
+                            >
+                              Remove
+                            </span>
+                          </p>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                  <>
+                    <div className="flex gap-1 justify-between">
+                      <TextInput
+                        label="Duration (months)"
+                        placeholder="Enter duration in months"
+                        name="tenureRate"
+                        value={tenureInput.tenureRate}
+                        onChange={handleTenureInputChange}
+                        error={tenureErrors?.tenureRate}
+                        disabled={isSubmitting}
+                      />
+                      <TextInput
+                        label="Interest Rate (%)"
+                        placeholder="Enter interest rate in %"
+                        name="interestRate"
+                        value={tenureInput.interestRate}
+                        onChange={handleTenureInputChange}
+                        error={tenureErrors?.interestRate}
                         disabled={isSubmitting}
                       />
                     </div>
-                    <div className="max-w-[150px]">
+                    <p className="h-1 text-xs text-red-500 mt-1">
+                      {tenureErrors?.root}
+                    </p>
+                    <div className="mt-1 w-[90%] max-w-[150px]">
                       <Button
                         color="success"
                         type="button"
-                        onClick={handleAddProductDescriptionItem}
+                        onClick={handleAddTenure}
                         disabled={isSubmitting}
                       >
                         Add
                       </Button>
                     </div>
-                  </div>
-                  {productDescriptionItems?.length > 0 && (
-                    <div className="my-2 bg-gray-100 p-1.5 rounded-md text-sm flex flex-col gap-0.5">
-                      {productDescriptionItems.map((item) => (
-                        <p key={item.id} className="flex justify-between gap-1">
-                          <span className="flex-1">{item.item}</span>
+                    <div className="flex flex-col gap-1">
+                      {tenures?.map((tenure) => (
+                        <p
+                          key={tenure.id}
+                          className="bg-gray-100 p-2 rounded-md flex justify-between items-center text-sm"
+                        >
+                          <span>
+                            <strong>Interest Rate: </strong>
+                            {tenure?.interestRate} % <br />{" "}
+                            <strong>Tenure: </strong>
+                            {tenure?.tenureRate} months
+                          </span>
                           <span
-                            className="font-semibold text-xs italic"
-                            onClick={() =>
-                              handleDeleteProductDescriptionItem(item.id)
-                            }
+                            className="text-xs italic font-semibold cursor-pointer"
+                            onClick={() => handleRemoveTenure(tenure.id)}
                           >
                             Remove
                           </span>
                         </p>
                       ))}
                     </div>
-                  )}
-                </>
-                <>
-                  <div className="flex gap-1 justify-between">
-                    <TextInput
-                      label="Duration (months)"
-                      placeholder="Enter duration in months"
-                      name="tenureRate"
-                      value={tenureInput.tenureRate}
-                      onChange={handleTenureInputChange}
-                      error={tenureErrors?.tenureRate}
-                      disabled={isSubmitting}
-                    />
-                    <TextInput
-                      label="Interest Rate (%)"
-                      placeholder="Enter interest rate in %"
-                      name="interestRate"
-                      value={tenureInput.interestRate}
-                      onChange={handleTenureInputChange}
-                      error={tenureErrors?.interestRate}
-                      disabled={isSubmitting}
-                    />
-                  </div>
-                  <p className="h-1 text-xs text-red-500 mt-1">
-                    {tenureErrors?.root}
-                  </p>
-                  <div className="mt-1 w-[90%] max-w-[150px]">
+                  </>
+                  <div className="max-w-[250px] mt-2">
                     <Button
-                      color="success"
-                      type="button"
-                      onClick={handleAddTenure}
+                      onClick={handleNextClick}
                       disabled={isSubmitting}
+                      type="button"
                     >
-                      Add
+                      Next
                     </Button>
                   </div>
-                  <div className="flex flex-col gap-1">
-                    {tenures?.map((tenure) => (
-                      <p
-                        key={tenure.id}
-                        className="bg-gray-100 p-2 rounded-md flex justify-between items-center text-sm"
-                      >
-                        <span>
-                          <strong>Interest Rate: </strong>
-                          {tenure?.interestRate} % <br />{" "}
-                          <strong>Tenure: </strong>
-                          {tenure?.tenureRate} months
-                        </span>
-                        <span
-                          className="text-xs italic font-semibold cursor-pointer"
-                          onClick={() => handleRemoveTenure(tenure.id)}
-                        >
-                          Remove
-                        </span>
+                </>
+              )}
+              {step === 2 && (
+                <>
+                  <TextInput
+                    label="Minimum Amount"
+                    {...register("minimumAmount")}
+                    onChange={handleNumericInputChange}
+                    disabled={isSubmitting}
+                  />
+                  <TextInput
+                    label="Maximum Amount"
+                    {...register("maximumAmount")}
+                    onChange={handleNumericInputChange}
+                    disabled={isSubmitting}
+                  />
+                  <TextInput
+                    label="Withdrawal Limit"
+                    {...register("withdrawalLimit")}
+                    onChange={handleNumericInputChange}
+                    disabled={isSubmitting}
+                  />
+                  <div className="flex flex-col gap-0.5">
+                    {errors?.root?.message?.split(",").map((error) => (
+                      <p key={error} className="text-sm text-main-red">
+                        {error}
                       </p>
                     ))}
                   </div>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      color="red"
+                      onClick={handleBackClick}
+                      type="button"
+                      disabled={isSubmitting}
+                    >
+                      Back
+                    </Button>
+                    <Button disabled={isSubmitting}>
+                      {isSubmitting ? <PulseLoader color="#fff" /> : "Submit"}
+                    </Button>
+                  </div>
                 </>
-                <div className="max-w-[250px] mt-2">
-                  <Button
-                    onClick={handleNextClick}
-                    disabled={isSubmitting}
-                    type="button"
-                  >
-                    Next
-                  </Button>
-                </div>
-              </>
-            )}
-            {step === 2 && (
-              <>
-                <TextInput
-                  label="Minimum Amount"
-                  {...register("minimumAmount")}
-                  onChange={handleNumericInputChange}
-                  disabled={isSubmitting}
-                />
-                <TextInput
-                  label="Maximum Amount"
-                  {...register("maximumAmount")}
-                  onChange={handleNumericInputChange}
-                  disabled={isSubmitting}
-                />
-                <TextInput
-                  label="Withdrawal Limit"
-                  {...register("withdrawalLimit")}
-                  onChange={handleNumericInputChange}
-                  disabled={isSubmitting}
-                />
-                <div className="flex flex-col gap-0.5">
-                  {errors?.root?.message?.split(",").map((error) => (
-                    <p key={error} className="text-sm text-main-red">
-                      {error}
-                    </p>
-                  ))}
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    color="red"
-                    onClick={handleBackClick}
-                    type="button"
-                    disabled={isSubmitting}
-                  >
-                    Back
-                  </Button>
-                  <Button disabled={isSubmitting}>
-                    {isSubmitting ? <PulseLoader color="#fff" /> : "Submit"}
-                  </Button>
-                </div>
-              </>
-            )}
-          </form>
+              )}
+            </form>
+          </article>
         </Card>
       </Container>
     </>
