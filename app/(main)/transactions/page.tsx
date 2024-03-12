@@ -25,8 +25,53 @@ const Transactions = () => {
 
           return (
             <span
-              className={`h-8 w-8 lg:w-11 lg:h-11 font-bold inline-flex items-center justify-center rounded-full lg:text-xl  ${
+              className={`font-bold  ${
                 type.toLowerCase() === "credit"
+                  ? " text-[#0FC90C]"
+                  : " text-[#FE3032]"
+              }`}
+            >
+              {type}
+            </span>
+          );
+        },
+      },
+      {
+        accessorKey: "accountId",
+        header: "Account Id",
+      },
+      {
+        accessorKey: "customerId",
+        header: "Customer Id",
+      },
+      { header: "Description", accessorKey: "description" },
+
+      {
+        header: "Amount",
+        accessorKey: "amount",
+        cell: ({ getValue }) => {
+          const value = (getValue() as number)?.toString();
+          return <span>{formatNumberWithCommas(value)}</span>;
+        },
+      },
+      {
+        header: "Date Created",
+        accessorKey: "date",
+        cell: ({ getValue }) => {
+          const value = (getValue() as number)?.toString();
+          return <span>{value ? dayjs(value).format("DD-MM-YYYY") : ""}</span>;
+        },
+      },
+      {
+        header: "Status",
+        accessorKey: "status",
+        cell: ({ getValue }) => {
+          const type = getValue() as string;
+
+          return (
+            <span
+              className={`h-8 w-8 lg:w-11 lg:h-11 font-bold inline-flex items-center justify-center rounded-full lg:text-xl  ${
+                type?.toLowerCase() === "success"
                   ? "bg-[#D0FFC5] text-[#0FC90C]"
                   : "bg-[#FFD0D1] text-[#FE3032]"
               }`}
@@ -35,44 +80,6 @@ const Transactions = () => {
             </span>
           );
         },
-      },
-      { header: "Description", accessorKey: "description" },
-
-      {
-        header: "Amount",
-        accessorKey: "amount",
-        cell: ({ getValue }) => {
-          const value = (getValue() as number).toString();
-          return <span>{formatNumberWithCommas(value)}</span>;
-        },
-      },
-      {
-        header: "Date Created",
-        accessorKey: "date",
-        cell: ({ getValue }) => {
-          const value = (getValue() as number).toString();
-          return <span>{dayjs(value).format("DD-MM-YYYY")}</span>;
-        },
-      },
-      {
-        header: "Start Date",
-        accessorKey: "startDate",
-        cell: ({ getValue }) => {
-          const value = (getValue() as number).toString();
-          return <span>{dayjs(value).format("DD-MM-YYYY")}</span>;
-        },
-      },
-      {
-        header: "End Date",
-        accessorKey: "endDate",
-        cell: ({ getValue }) => {
-          const value = (getValue() as number).toString();
-          return <span>{dayjs(value).format("DD-MM-YYYY")}</span>;
-        },
-      },
-      {
-        header: "Status",
-        accessorKey: "status",
       },
     ],
     []

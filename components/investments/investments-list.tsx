@@ -35,15 +35,17 @@ export const InvestmentsList: React.FC<Props> = ({ customerId }) => {
       { header: "Name", accessorKey: "name" },
       { header: "Account Id", accessorKey: "accountId" },
       {
-        header: "Amount",
+        header: () => <div className="text-center">Amount</div>,
         accessorKey: "amount",
         cell: ({ getValue }) => {
           const value = (getValue() as number).toString();
-          return <span>{formatNumberWithCommas(value)}</span>;
+          return (
+            <div className="text-right">{formatNumberWithCommas(value)}</div>
+          );
         },
       },
       {
-        header: "Total Payout",
+        header: () => <div className="text-center"> Total Payout</div>,
         accessorKey: "totalPayout",
         cell: ({ getValue }) => {
           let value: number | string = getValue() as number;
@@ -51,7 +53,9 @@ export const InvestmentsList: React.FC<Props> = ({ customerId }) => {
             return null;
           }
           value = value.toString();
-          return <span>{formatNumberWithCommas(value)}</span>;
+          return (
+            <div className="text-right">{formatNumberWithCommas(value)}</div>
+          );
         },
       },
       { header: "Interest", accessorKey: "interest" },

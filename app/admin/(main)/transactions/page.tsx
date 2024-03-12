@@ -93,13 +93,13 @@ const Transactions = () => {
 
           return (
             <span
-              className={`h-8 w-8 lg:w-11 lg:h-11 font-bold inline-flex items-center justify-center rounded-full lg:text-xl  ${
+              className={`font-bold  ${
                 type.toLowerCase() === "credit"
-                  ? "bg-[#D0FFC5] text-[#0FC90C]"
-                  : "bg-[#FFD0D1] text-[#FE3032]"
+                  ? " text-[#0FC90C]"
+                  : " text-[#FE3032]"
               }`}
             >
-              <IoReceiptOutline />
+              {type}
             </span>
           );
         },
@@ -133,6 +133,21 @@ const Transactions = () => {
       {
         header: "Status",
         accessorKey: "status",
+        cell: ({ getValue }) => {
+          const type = getValue() as string;
+
+          return (
+            <span
+              className={`h-8 w-8 lg:w-11 lg:h-11 font-bold inline-flex items-center justify-center rounded-full lg:text-xl  ${
+                type?.toLowerCase() === "success"
+                  ? "bg-[#D0FFC5] text-[#0FC90C]"
+                  : "bg-[#FFD0D1] text-[#FE3032]"
+              }`}
+            >
+              <IoReceiptOutline />
+            </span>
+          );
+        },
       },
     ],
     []
@@ -296,7 +311,7 @@ const Transactions = () => {
                   columns={columns}
                   data={transactions}
                   isDownloadable={true}
-                  fileTitle="transactionsa"
+                  fileTitle="transactions"
                 />
               ) : (
                 <EmptyPage
