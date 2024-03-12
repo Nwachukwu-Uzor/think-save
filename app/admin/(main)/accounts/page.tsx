@@ -255,7 +255,12 @@ const Accounts = () => {
             {isLoadingAccounts ? (
               <ShowLoader />
             ) : accounts && accounts?.length > 0 ? (
-              <Table data={accounts} columns={columns} />
+              <Table
+                data={accounts}
+                columns={columns}
+                isDownloadable={true}
+                fileTitle="accounts"
+              />
             ) : (
               <EmptyPage title="No Transaction" />
             )}

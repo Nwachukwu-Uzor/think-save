@@ -130,9 +130,9 @@ export const Wallet: React.FC = () => {
             <div className="w-full text-right px-3">
               <p
                 className="text-xs lg:text-sm font-medium flex justify-end items-center gap-1 active:scale-y-75 active:opacity-85 duration-100 cursor-pointer"
-                onClick={() => handleCopy(walletAccount.accountId)}
+                onClick={() => handleCopy(walletAccount?.virtualAcountNumber ?? "")}
               >
-                {walletAccount.accountId}{" "}
+                {walletAccount?.virtualAcountNumber}{" "}
                 {isCopied ? (
                   <HiOutlineClipboardDocumentCheck className="text-green-700" />
                 ) : (
@@ -206,7 +206,7 @@ export const Wallet: React.FC = () => {
           {modalType === "ADD" && (
             <AddMoneyModalContent
               handleClose={handleCloseModal}
-              accountNumber={walletAccount?.accountId}
+              accountNumber={walletAccount?.virtualAcountNumber ?? ""}
             />
           )}
           {modalType === "WITHDRAW" && (

@@ -307,7 +307,7 @@ export const WithdrawModalContent: React.FC<Props> = ({
               placeholder="Narration"
             />
             <TextInput
-              label="Account Number"
+              label="Destination Account Number"
               {...register("beneficiaryAccountNumber")}
               name="beneficiaryAccountNumber"
               placeholder="Enter Account Number"

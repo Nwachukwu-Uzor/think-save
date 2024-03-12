@@ -324,7 +324,12 @@ const Transactions = () => {
               {isLoadingAccounts ? (
                 <ShowLoader />
               ) : transactions && transactions.length > 0 ? (
-                <Table columns={columns} data={transactions} />
+                <Table
+                  columns={columns}
+                  data={transactions}
+                  isDownloadable={true}
+                  fileTitle="transactionsa"
+                />
               ) : (
                 <EmptyPage
                   title="No Transactions"

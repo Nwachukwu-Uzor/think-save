@@ -11,10 +11,14 @@ import { Card, EmptyPage, Table } from "../shared";
 import { formatNumberWithCommas } from "@/utils/shared";
 import { TransactionLoader } from "../shared/skeleton-loaders";
 
-export const InvestmentsList = () => {
-  const session = useSession();
+type Props = {
+  customerId?: string;
+  role?: "admin" | "customer";
+};
+
+export const InvestmentsList: React.FC<Props> = ({ customerId }) => {
   const { data: transactions, isLoading } = useQuery({
-    queryKey: [FETCH_INVESTMENTS_BY_CUSTOMER_ID, session.data?.user.customerId],
+    queryKey: [FETCH_INVESTMENTS_BY_CUSTOMER_ID, customerId],
     queryFn: async ({ queryKey }) => {
       const [_first, second] = queryKey;
       if (!second) {
@@ -90,7 +94,7 @@ export const InvestmentsList = () => {
     []
   );
 
-  if (isLoading || session.status === "loading") {
+  if (isLoading) {
     return (
       <Card>
         <TransactionLoader />
@@ -105,7 +109,10 @@ export const InvestmentsList = () => {
         {transactions && transactions.length ? (
           <Table columns={columns} data={transactions} />
         ) : (
-          <EmptyPage title="No investments found" subtitle="You have not made any investments yet."/>
+          <EmptyPage
+            title="No investments found"
+            subtitle="You have not made any investments yet."
+          />
         )}
       </div>
     </section>

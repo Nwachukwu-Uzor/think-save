@@ -1,6 +1,7 @@
 "use client";
-import { AccountsList } from "@/components/accounts";
+import { AdminAccountsList } from "@/components/admin/accounts";
 import { PageHeader } from "@/components/admin/shared";
+import { InvestmentsList } from "@/components/investments";
 import { Card, Container } from "@/components/shared";
 import { useParams } from "next/navigation";
 import React from "react";
@@ -14,7 +15,11 @@ const UserTransactions = () => {
       <div className="-mt-3" />
       <Container>
         <Card>
-          <AccountsList userId={userId} />
+          <AdminAccountsList userId={userId} />
+          <div className="my-4"/>
+          <hr className="w-full h-1.5 block"/>
+          <div className="my-4"/>
+          <InvestmentsList customerId={userId}/>
         </Card>
       </Container>
     </>

@@ -12,6 +12,7 @@ import { MdLogout } from "react-icons/md";
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const { open } = useSidebarContext();
   const currentRoute = usePathname();
+  console.log(currentRoute.split("/"));
 
   const handleLogout = () => {
     signOut({
@@ -88,23 +89,33 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
             className="h-24 w-24 inline-block mx-auto object-cover"
           />
           <ul className="flex-1 overflow-auto flex flex-col lg:px-8 gap-4 lg:gap-8">
-            {navItems.map((navItem) => (
-              <li
-                key={navItem.id}
-                className={`${
-                  currentRoute === navItem.href
-                    ? "bg-accent-blue text-main-blue"
-                    : "bg-transparent text-black"
-                } py-2 lg:rounded-md duration-200`}
-              >
-                <Link
-                  href={navItem.href}
-                  className="flex items-center gap-2 px-4 font-semibold"
+            {navItems.map((navItem) => {
+              const navItemPage = navItem.href
+                .split("/")
+                .filter((item) => item.length > 0)[1];
+
+              return (
+                <li
+                  key={navItem.id}
+                  className={`${
+                    currentRoute === navItem.href ||
+                    currentRoute
+                      .split("/")
+                      .filter((item) => item.length > 0)
+                      .includes(navItemPage)
+                      ? "bg-accent-blue text-main-blue"
+                      : "bg-transparent text-black"
+                  } py-2 lg:rounded-md duration-200`}
                 >
-                  {navItem.content}
-                </Link>
-              </li>
-            ))}
+                  <Link
+                    href={navItem.href}
+                    className="flex items-center gap-2 px-4 font-semibold"
+                  >
+                    {navItem.content}
+                  </Link>
+                </li>
+              );
+            })}
             <li className="mt-auto py-4 px-2">
               <Button onClick={handleLogout}>
                 <MdLogout className="text-xl" /> Logout

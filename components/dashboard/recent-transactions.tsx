@@ -1,10 +1,8 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Transaction } from ".";
-import { TransactionType } from "@/types/dashboard";
 import { FETCH_TRANSACTION_BY_CUSTOMER_ID } from "@/constants";
 import { transactionService } from "@/services";
-import { FaMoneyCheck } from "react-icons/fa6";
 import { TransactionLoader } from "../shared/skeleton-loaders";
 import { EmptyPage } from "../shared";
 import { useSession } from "next-auth/react";
