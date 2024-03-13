@@ -7,4 +7,5 @@ export type TransactionType = {
   transactionId: string;
   accountId?: string;
   customerId?: string;
+  currency?: string;
 };

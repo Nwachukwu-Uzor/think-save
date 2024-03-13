@@ -117,13 +117,14 @@ const Transactions = () => {
       {
         header: "Amount",
         accessorKey: "amount",
-        cell: ({ getValue }) => {
+        cell: ({ getValue, row }) => {
+          const {currency } = row.original;
           const value = (getValue() as number)?.toString();
-          return <span>{formatNumberWithCommas(value)}</span>;
+          return <span>{currency ?? "NGN"} {formatNumberWithCommas(value)}</span>;
         },
       },
       {
-        header: "Date Created",
+        header: "Transaction Date",
         accessorKey: "date",
         cell: ({ getValue }) => {
           const value = (getValue() as number)?.toString();

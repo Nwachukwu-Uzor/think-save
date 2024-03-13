@@ -25,4 +25,5 @@ export type InvestmentType = {
   status?: string;
   dateCreated?: string;
   dateUpdated?: string;
+  currency?: string;
 };

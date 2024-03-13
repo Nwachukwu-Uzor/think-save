@@ -37,28 +37,46 @@ export const InvestmentsList: React.FC<Props> = ({ customerId }) => {
       {
         header: () => <div className="text-center">Amount</div>,
         accessorKey: "amount",
-        cell: ({ getValue }) => {
+        cell: ({ getValue, row }) => {
           const value = (getValue() as number).toString();
+          const { currency } = row.original;
           return (
-            <div className="text-right">{formatNumberWithCommas(value)}</div>
+            <div className="text-right">
+              {currency ?? "NGN"} {formatNumberWithCommas(value)}
+            </div>
           );
         },
       },
       {
         header: () => <div className="text-center"> Total Payout</div>,
         accessorKey: "totalPayout",
-        cell: ({ getValue }) => {
+        cell: ({ getValue, row }) => {
           let value: number | string = getValue() as number;
           if (!value) {
             return null;
           }
           value = value.toString();
+          const { currency } = row.original;
           return (
-            <div className="text-right">{formatNumberWithCommas(value)}</div>
+            <div className="text-right">
+              {currency ?? "NGN"} {formatNumberWithCommas(value)}
+            </div>
           );
         },
       },
-      { header: "Interest", accessorKey: "interest" },
+      {
+        header: "Interest",
+        accessorKey: "interest",
+        cell: ({ getValue, row }) => {
+          const value = (getValue() as number).toString();
+          const { currency } = row.original;
+          return (
+            <div className="text-right">
+              {currency ?? "NGN"} {formatNumberWithCommas(value)}
+            </div>
+          );
+        },
+      },
       { header: "Tenure", accessorKey: "tenure" },
       { header: "Lock Status", accessorKey: "lockStatus" },
       { header: "Investment Status", accessorKey: "status" },
